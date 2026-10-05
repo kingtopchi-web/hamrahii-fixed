@@ -1,9 +1,14 @@
 import admin from "firebase-admin";
 import fs from "fs";
 
-const serviceAccount = JSON.parse(
-  fs.readFileSync(new URL("./firebase-services.json", import.meta.url))
-);
+let serviceAccount;
+if (process.env.FIREBASE_SERVICES) {
+  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICES);
+} else {
+  serviceAccount = JSON.parse(
+    fs.readFileSync(new URL("./firebase-services.json", import.meta.url))
+  );
+}
 
 if (!admin.apps.length) {
   admin.initializeApp({
