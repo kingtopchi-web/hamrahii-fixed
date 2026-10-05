@@ -1,0 +1,28 @@
+Background (main):
+#FFFFFF → clean, professional
+
+Surface (cards, sections):
+#F7F7F7 → soft contrast
+
+Primary (brand red):
+#E10600 → buttons, highlights, CTA
+
+Text primary:
+#111111 → strong readability
+
+Text secondary:
+#555555
+
+Borders / dividers:
+#E5E5E5
+
+Optional premium accent (use rarely):
+Metallic Grey → #B8B8B8
+
+
+
+
+edit email while confirmation 
+country code on register time 
+enter rc details when it does not fetch details
+add 100 rs ebonus when user sign up with confietti

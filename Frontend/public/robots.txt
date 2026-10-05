@@ -1,0 +1,15 @@
+User-agent: *
+ 
+
+# Block old PHP / spam patterns (extra safety)
+Disallow: /*.php
+Disallow: /*slot*
+Disallow: /*casino*
+Disallow: /*pg*
+Disallow: /*demo*
+Disallow: /*thai*
+Disallow: /*bangkok*
+
+Allow: /
+
+Sitemap: https://humrahii.com/sitemap.xml

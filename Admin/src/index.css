@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(160, 160, 160, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(160, 160, 160, 0.45);
+}
+
+.hide-scrollbar {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Glassmorphism & Elevation Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 231, 235, 0.7);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+.shadow-card-subtle {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.shadow-card-hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 12px 24px -4px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-red-glow {
+  box-shadow: 0 4px 20px -2px rgba(225, 6, 0, 0.2);
+}
+
+/* Ambient Modern SaaS Dashboard Background */
+.dashboard-bg {
+  background-color: #F8F9FA;
+  background-image: 
+    radial-gradient(at 100% 0%, rgba(225, 6, 0, 0.03) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.02) 0px, transparent 50%);
+}

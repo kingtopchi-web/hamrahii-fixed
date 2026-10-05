@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<url>
+  <loc>https://humrahii.com/</loc>
+  <changefreq>daily</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/about</loc>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/blog</loc>
+  <priority>0.9</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/login</loc>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/careers</loc>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/press</loc>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/contact</loc>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/partners</loc>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/sustainability</loc>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/offer-ride</loc>
+  <priority>0.9</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/rides</loc>
+  <priority>0.9</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/how-it-works</loc>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/privacy</loc>
+  <priority>0.6</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/terms</loc>
+  <priority>0.6</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/cookies</loc>
+  <priority>0.6</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/safety</loc>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/help</loc>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://humrahii.com/forgot-password</loc>
+  <priority>0.5</priority>
+</url>
+
+</urlset>
