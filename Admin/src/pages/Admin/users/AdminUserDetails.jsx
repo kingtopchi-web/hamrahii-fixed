@@ -248,6 +248,40 @@ const AdminUserDetails = () => {
     );
   };
 
+  const getKycBadge = (kycStatus) => {
+    switch(kycStatus) {
+      case 'VERIFIED':
+        return (
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+            <Shield className="w-3 h-3 mr-1" />
+            KYC Verified
+          </span>
+        );
+      case 'PENDING':
+        return (
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+            <Clock className="w-3 h-3 mr-1" />
+            KYC Pending
+          </span>
+        );
+      case 'REJECTED':
+        return (
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+            <XCircle className="w-3 h-3 mr-1" />
+            KYC Rejected
+          </span>
+        );
+      case 'NOT_SUBMITTED':
+      default:
+        return (
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#F8FAFC] text-[#0F172A]">
+            <UserX className="w-3 h-3 mr-1" />
+            No KYC
+          </span>
+        );
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FFFFFF] p-4 md:p-8">
@@ -337,9 +371,10 @@ const AdminUserDetails = () => {
                 <p className="text-[#555555] mt-1">User ID: {user._id}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 flex-wrap gap-y-2">
               {getStatusBadge(user.status)}
               {getVerificationBadge(user.isVerified)}
+              {getKycBadge(user.kyc?.status)}
             </div>
           </div>
         </div>
@@ -405,13 +440,33 @@ const AdminUserDetails = () => {
             {/* Current Status */}
             <div className="flex-1 bg-[#FFFFFF] rounded-lg p-4 border border-[#E5E5E5]">
               <h3 className="font-medium text-[#111111] mb-2">
-                Current Status
+                Profile Status
               </h3>
               <div className="flex items-center space-x-3">
                 {getVerificationBadge(user.isVerified)}
                 {user.verificationMessage && (
                   <div className="text-sm text-[#555555] italic">
                     "{user.verificationMessage}"
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* KYC Status */}
+            <div className="flex-1 bg-[#FFFFFF] rounded-lg p-4 border border-[#E5E5E5]">
+              <h3 className="font-medium text-[#111111] mb-2">
+                Aadhaar KYC Status
+              </h3>
+              <div className="flex flex-col space-y-2">
+                <div>{getKycBadge(user.kyc?.status)}</div>
+                {user.kyc?.documentNumber && (
+                  <div className="text-sm text-[#555555]">
+                    Aadhaar: **** **** {user.kyc.documentNumber.slice(-4)}
+                  </div>
+                )}
+                {user.kyc?.verifiedAt && (
+                  <div className="text-xs text-[#888888]">
+                    Verified: {new Date(user.kyc.verifiedAt).toLocaleDateString()}
                   </div>
                 )}
               </div>

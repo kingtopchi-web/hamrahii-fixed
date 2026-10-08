@@ -258,7 +258,7 @@ const About = () => {
                 variants={itemVariants}
                 custom={stat.delay}
                 whileHover={{ y: -5 }}
-                className="rounded-xl p-4 text-center bg-white shadow-xs hover:shadow-md transition-all duration-300"
+                className="rounded-xl p-4 text-center bg-[var(--bg-surface)] shadow-xs hover:shadow-md transition-all duration-300"
                 style={{
                   backgroundColor: "#FFFFFF",
                   border: `1px solid ${colors.border}`,

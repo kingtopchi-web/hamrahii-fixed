@@ -146,7 +146,7 @@ const Cars = () => {
                   onClick={() => setViewMode('grid')}
                   className={`px-3 py-1.5 rounded-md transition-colors ${
                     viewMode === 'grid' 
-                      ? 'bg-white shadow-sm text-[#E10600]' 
+                      ? 'bg-[var(--bg-surface)] shadow-sm text-[#E10600]' 
                       : 'text-[#555555] hover:text-[#111111]'
                   }`}
                 >
@@ -156,7 +156,7 @@ const Cars = () => {
                   onClick={() => setViewMode('list')}
                   className={`px-3 py-1.5 rounded-md transition-colors ${
                     viewMode === 'list' 
-                      ? 'bg-white shadow-sm text-[#E10600]' 
+                      ? 'bg-[var(--bg-surface)] shadow-sm text-[#E10600]' 
                       : 'text-[#555555] hover:text-[#111111]'
                   }`}
                 >
@@ -180,7 +180,7 @@ const Cars = () => {
               onClick={() => setViewMode('grid')}
               className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
                 viewMode === 'grid' 
-                  ? 'bg-white shadow-sm text-[#E10600]' 
+                  ? 'bg-[var(--bg-surface)] shadow-sm text-[#E10600]' 
                   : 'text-[#555555] hover:text-[#111111]'
               }`}
             >
@@ -190,7 +190,7 @@ const Cars = () => {
               onClick={() => setViewMode('list')}
               className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
                 viewMode === 'list' 
-                  ? 'bg-white shadow-sm text-[#E10600]' 
+                  ? 'bg-[var(--bg-surface)] shadow-sm text-[#E10600]' 
                   : 'text-[#555555] hover:text-[#111111]'
               }`}
             >
@@ -214,7 +214,7 @@ const Cars = () => {
           ].map((stat, index) => (
             <div 
               key={index} 
-              className="bg-[#F7F7F7] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-[#E5E5E5]"
+              className="bg-[#F7F7F7] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-[var(--border-subtle)]"
             >
               <p className="text-xs sm:text-sm text-[#555555] mb-1 truncate">{stat.label}</p>
               <p className="text-lg sm:text-xl md:text-2xl font-bold text-[#111111]">
@@ -258,7 +258,7 @@ const Cars = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="bg-[#F7F7F7] rounded-xl sm:rounded-2xl overflow-hidden border border-[#E5E5E5] hover:shadow-lg transition-shadow group"
+                      className="bg-[#F7F7F7] rounded-xl sm:rounded-2xl overflow-hidden border border-[var(--border-subtle)] hover:shadow-lg transition-shadow group"
                     >
                       {/* Status Badge */}
                       <div className={`absolute top-2 sm:top-4 left-2 sm:left-4 ${status.color} px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1 z-10`}>
@@ -316,7 +316,7 @@ const Cars = () => {
                         </div>
 
                         {/* Plate Number */}
-                        <div className="bg-white rounded-lg p-2 sm:p-3 mb-3 sm:mb-4 border border-[#E5E5E5]">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-2 sm:p-3 mb-3 sm:mb-4 border border-[var(--border-subtle)]">
                           <div className="flex items-center justify-between">
                             <div className="min-w-0">
                               <p className="text-xs text-[#555555]">RC Number</p>
@@ -330,7 +330,7 @@ const Cars = () => {
 
                         {/* Car Specs - Hidden on very small screens */}
                         <div className="hidden xs:grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5">
-                          <div className="bg-white rounded-lg p-2 sm:p-3 border border-[#E5E5E5]">
+                          <div className="bg-[var(--bg-surface)] rounded-lg p-2 sm:p-3 border border-[var(--border-subtle)]">
                             <p className="text-xs text-[#555555] mb-1">Transmission</p>
                             <div className="flex items-center gap-1 sm:gap-2">
                               <Settings className="w-3 h-3 sm:w-4 sm:h-4 text-[#555555]" />
@@ -339,7 +339,7 @@ const Cars = () => {
                               </span>
                             </div>
                           </div>
-                          <div className="bg-white rounded-lg p-2 sm:p-3 border border-[#E5E5E5]">
+                          <div className="bg-[var(--bg-surface)] rounded-lg p-2 sm:p-3 border border-[var(--border-subtle)]">
                             <p className="text-xs text-[#555555] mb-1">Fuel Type</p>
                             <div className="flex items-center gap-1 sm:gap-2">
                               <span className="text-sm sm:text-lg">{getFuelIcon(car.fuelType)}</span>
@@ -354,7 +354,7 @@ const Cars = () => {
                         <div className="flex gap-2">
                           <button
                             onClick={() => setSelectedCar(car)}
-                            className="flex-1 bg-white border border-[#E5E5E5] hover:border-[#E10600] hover:bg-[#E10600]/5 text-[#111111] py-1.5 sm:py-2 rounded-lg font-medium flex items-center justify-center gap-1 sm:gap-2 transition-colors text-xs sm:text-sm"
+                            className="flex-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[#E10600] hover:bg-[#E10600]/5 text-[#111111] py-1.5 sm:py-2 rounded-lg font-medium flex items-center justify-center gap-1 sm:gap-2 transition-colors text-xs sm:text-sm"
                           >
                             <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span className="hidden xs:inline">View</span>
@@ -391,7 +391,7 @@ const Cars = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="bg-[#F7F7F7] rounded-xl overflow-hidden border border-[#E5E5E5] hover:shadow-md transition-shadow"
+                      className="bg-[#F7F7F7] rounded-xl overflow-hidden border border-[var(--border-subtle)] hover:shadow-md transition-shadow"
                     >
                       <div className="flex flex-col sm:flex-row">
                         {/* Car Image */}
@@ -423,7 +423,7 @@ const Cars = () => {
                                 <Calendar className="w-4 h-4" />
                                 <span>{car.year} • {car.transmission}</span>
                               </div>
-                              <div className="bg-white rounded-lg p-3 border border-[#E5E5E5] inline-block">
+                              <div className="bg-[var(--bg-surface)] rounded-lg p-3 border border-[var(--border-subtle)] inline-block">
                                 <p className="text-xs text-[#555555]">RC Number</p>
                                 <p className="font-mono font-bold text-[#111111]">{car.plateNumber}</p>
                               </div>
@@ -445,21 +445,21 @@ const Cars = () => {
 
                           {/* Specifications */}
                           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4 sm:mb-5">
-                            <div className="bg-white rounded-lg p-3 border border-[#E5E5E5]">
+                            <div className="bg-[var(--bg-surface)] rounded-lg p-3 border border-[var(--border-subtle)]">
                               <p className="text-xs text-[#555555] mb-1">Transmission</p>
                               <div className="flex items-center gap-2">
                                 <Settings className="w-4 h-4 text-[#555555]" />
                                 <span className="font-medium capitalize">{car.transmission}</span>
                               </div>
                             </div>
-                            <div className="bg-white rounded-lg p-3 border border-[#E5E5E5]">
+                            <div className="bg-[var(--bg-surface)] rounded-lg p-3 border border-[var(--border-subtle)]">
                               <p className="text-xs text-[#555555] mb-1">Fuel Type</p>
                               <div className="flex items-center gap-2">
                                 <span className="text-lg">{getFuelIcon(car.fuelType)}</span>
                                 <span className="font-medium capitalize">{car.fuelType}</span>
                               </div>
                             </div>
-                            <div className="col-span-2 sm:col-span-1 bg-white rounded-lg p-3 border border-[#E5E5E5]">
+                            <div className="col-span-2 sm:col-span-1 bg-[var(--bg-surface)] rounded-lg p-3 border border-[var(--border-subtle)]">
                               <p className="text-xs text-[#555555] mb-1">Status</p>
                               <div className="flex items-center gap-2">
                                 {status.icon}
@@ -472,7 +472,7 @@ const Cars = () => {
                           <div className="flex gap-2 sm:gap-3">
                             <button
                               onClick={() => setSelectedCar(car)}
-                              className="flex-1 sm:flex-none sm:w-32 bg-white border border-[#E5E5E5] hover:border-[#E10600] hover:bg-[#E10600]/5 text-[#111111] py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-sm"
+                              className="flex-1 sm:flex-none sm:w-32 bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[#E10600] hover:bg-[#E10600]/5 text-[#111111] py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-sm"
                             >
                               <Eye className="w-4 h-4" />
                               View Details
@@ -500,7 +500,7 @@ const Cars = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-[#E5E5E5]">
+              <div className="flex items-center justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-[var(--border-subtle)]">
                 <div className="text-sm text-[#555555]">
                   Showing {indexOfFirstCar + 1}-{Math.min(indexOfLastCar, cars.length)} of {cars.length} vehicles
                 </div>
@@ -508,7 +508,7 @@ const Cars = () => {
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="p-1.5 sm:p-2 rounded-lg border border-[#E5E5E5] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F7F7F7] transition-colors"
+                    className="p-1.5 sm:p-2 rounded-lg border border-[var(--border-subtle)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F7F7F7] transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
@@ -543,7 +543,7 @@ const Cars = () => {
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="p-1.5 sm:p-2 rounded-lg border border-[#E5E5E5] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F7F7F7] transition-colors"
+                    className="p-1.5 sm:p-2 rounded-lg border border-[var(--border-subtle)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F7F7F7] transition-colors"
                   >
                     <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
@@ -562,7 +562,7 @@ const Cars = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="bg-[#FFFFFF] rounded-xl sm:rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden hide-scrollbar"
           >
-            <div className="p-4 sm:p-6 border-b border-[#E5E5E5]">
+            <div className="p-4 sm:p-6 border-b border-[var(--border-subtle)]">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#111111] truncate">
                   {selectedCar.brand} {selectedCar.model}
@@ -623,7 +623,7 @@ const Cars = () => {
                         />
                       </div>
                       <div className="flex-1">
-                        <div className="bg-white rounded-lg p-3 sm:p-4 border border-[#E5E5E5]">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-3 sm:p-4 border border-[var(--border-subtle)]">
                           <p className="text-xs sm:text-sm text-[#555555] mb-1 sm:mb-2">
                             Registered RC Number
                           </p>
@@ -706,11 +706,11 @@ const Cars = () => {
               </div>
             </div>
 
-            <div className="p-3 sm:p-4 md:p-1   border-t border-[#E5E5E5] bg-[#F7F7F7] flex justify-end">
+            <div className="p-3 sm:p-4 md:p-1   border-t border-[var(--border-subtle)] bg-[#F7F7F7] flex justify-end">
               <div className=" ">
                 <button
                   onClick={() => setSelectedCar(null)}
-                  className="flex-1 bg-white border border-[#E5E5E5] hover:border-[#111111] text-[#111111] py-2.5 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base px-10 mb-10 items-center"
+                  className="flex-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[#111111] text-[#111111] py-2.5 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base px-10 mb-10 items-center"
                 >
                   Close
                 </button>

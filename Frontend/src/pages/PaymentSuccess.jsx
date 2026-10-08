@@ -63,7 +63,7 @@ const PaymentSuccess = () => {
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full text-center"
+        className="bg-[var(--bg-surface)] shadow-xl rounded-2xl p-8 max-w-md w-full text-center"
       >
         <div className="flex justify-center mb-4">
           <CheckCircle className="text-green-500 w-16 h-16" />

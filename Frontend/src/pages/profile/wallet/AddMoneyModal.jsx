@@ -228,10 +228,10 @@ const AddMoneyModal = ({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md"
+            className="relative bg-[var(--bg-surface)] rounded-2xl shadow-2xl w-full max-w-md"
           >
             {/* Header */}
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-6 border-b border-[var(--border-subtle)]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-purple-100 rounded-lg">
@@ -310,7 +310,7 @@ const AddMoneyModal = ({
                         onClick={() => handleQuickSelect(quickAmount)}
                         className={`p-3 rounded-lg border transition-all ${amount === quickAmount.toString()
                           ? "border-purple-500 bg-purple-50 text-purple-700 font-semibold"
-                          : "border-gray-200 hover:border-purple-300 hover:bg-purple-50"
+                          : "border-[var(--border-subtle)] hover:border-purple-300 hover:bg-purple-50"
                           }`}
                       >
                         ₹{quickAmount}
@@ -380,7 +380,7 @@ export default AddMoneyModal;
 const PaymentCancelledModal = ({ amount, closeModel }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-      <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-6 relative">
+      <div className="w-full max-w-sm bg-[var(--bg-surface)] rounded-xl shadow-lg p-6 relative">
         {/* Close button */}
         <button
           onClick={closeModel}

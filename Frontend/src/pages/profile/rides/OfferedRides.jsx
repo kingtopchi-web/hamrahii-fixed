@@ -35,7 +35,7 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
         return {
           color: "bg-[#E10600]",
           bgColor: "bg-gradient-to-r from-red-50 to-orange-50",
-          borderColor: "border-[#E5E5E5]",
+          borderColor: "border-[var(--border-subtle)]",
           text: "DEPARTING SOON",
           hours: hoursLeft,
           textColor: "text-[#E10600]",
@@ -44,7 +44,7 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
       return {
         color: "bg-blue-600",
         bgColor: "bg-gradient-to-r from-blue-50 to-cyan-50",
-        borderColor: "border-[#E5E5E5]",
+        borderColor: "border-[var(--border-subtle)]",
         text: "UPCOMING",
         hours: hoursLeft,
         textColor: "text-blue-600",
@@ -53,7 +53,7 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
     return {
       color: "bg-[#B8B8B8]",
       bgColor: "bg-gradient-to-r from-gray-50 to-slate-50",
-      borderColor: "border-[#E5E5E5]",
+      borderColor: "border-[var(--border-subtle)]",
       text: "COMPLETED",
       hours: 0,
       textColor: "text-[#555555]",
@@ -102,7 +102,7 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
       className="relative group"
     >
       {/* Main Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-[#E5E5E5] overflow-hidden transition-all duration-300 group-hover:shadow-md">
+      <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border-subtle)] overflow-hidden transition-all duration-300 group-hover:shadow-md">
         {/* Status Indicator */}
         <div className={`h-1 w-full ${status.color}`} />
 
@@ -115,7 +115,7 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
               <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-3 sm:mb-4">
                 {/* Car Image */}
                 <div
-                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-lg ${status.bgColor} border border-[#E5E5E5] overflow-hidden`}
+                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-lg ${status.bgColor} border border-[var(--border-subtle)] overflow-hidden`}
                 >
                   {ride?.carDetails?.images?.[0] ? (
                     <img
@@ -183,10 +183,10 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
               {/* Stats Grid - Responsive Layout */}
               <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
                 {/* Seats with Progress Bar */}
-                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[#E5E5E5] hover:border-[#B8B8B8] transition-colors">
+                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[var(--border-subtle)] hover:border-[#B8B8B8] transition-colors">
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2">
-                      <div className="p-1 sm:p-1.5 bg-white rounded-md border border-[#E5E5E5]">
+                      <div className="p-1 sm:p-1.5 bg-[var(--bg-surface)] rounded-md border border-[var(--border-subtle)]">
                         <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#111111]" />
                       </div>
                       {ride?.isFullSharing ? (
@@ -212,10 +212,10 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
                 </div>
 
                 {/* Price */}
-                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[#E5E5E5] hover:border-[#B8B8B8] transition-colors">
+                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[var(--border-subtle)] hover:border-[#B8B8B8] transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="p-1 sm:p-1.5 bg-white rounded-md border border-[#E5E5E5]">
+                      <div className="p-1 sm:p-1.5 bg-[var(--bg-surface)] rounded-md border border-[var(--border-subtle)]">
                         <IndianRupee className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#111111]" />
                       </div>
                       <div>
@@ -234,10 +234,10 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
                 </div>
 
                 {/* Distance */}
-                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[#E5E5E5] hover:border-[#B8B8B8] transition-colors">
+                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[var(--border-subtle)] hover:border-[#B8B8B8] transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="p-1 sm:p-1.5 bg-white rounded-md border border-[#E5E5E5]">
+                      <div className="p-1 sm:p-1.5 bg-[var(--bg-surface)] rounded-md border border-[var(--border-subtle)]">
                         <Navigation2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#111111]" />
                       </div>
                       <div>
@@ -256,10 +256,10 @@ const OfferedRideCard = ({ ride, index, onViewDetails }) => {
                 </div>
 
                 {/* Occupancy Rate */}
-                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[#E5E5E5] hover:border-[#B8B8B8] transition-colors">
+                <div className="bg-[#F7F7F7] p-2 sm:p-3 rounded-lg border border-[var(--border-subtle)] hover:border-[#B8B8B8] transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="p-1 sm:p-1.5 bg-white rounded-md border border-[#E5E5E5]">
+                      <div className="p-1 sm:p-1.5 bg-[var(--bg-surface)] rounded-md border border-[var(--border-subtle)]">
                         <Target className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#111111]" />
                       </div>
                       <div>
@@ -389,7 +389,7 @@ const OfferedRides = () => {
   // Loading State
   if (loading && rides.length === 0) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[var(--bg-page)] flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <motion.div
             animate={{
@@ -400,7 +400,7 @@ const OfferedRides = () => {
               rotate: { duration: 2, repeat: Infinity, ease: "linear" },
               scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
             }}
-            className="w-16 h-16 sm:w-20 sm:h-20 bg-[#F7F7F7] rounded-xl flex items-center justify-center mx-auto mb-4 sm:mb-6 border border-[#E5E5E5]"
+            className="w-16 h-16 sm:w-20 sm:h-20 bg-[#F7F7F7] rounded-xl flex items-center justify-center mx-auto mb-4 sm:mb-6 border border-[var(--border-subtle)]"
           >
             <Car className="w-8 h-8 sm:w-10 sm:h-10 text-[#E10600]" />
           </motion.div>
@@ -418,9 +418,9 @@ const OfferedRides = () => {
   const showingTo = Math.min(pagination.page * pagination.limit, totalRides);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--bg-page)]">
       {/* Header */}
-      <div className="bg-white border-b border-[#E5E5E5]">
+      <div className="bg-[var(--bg-surface)] border-b border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -477,7 +477,7 @@ const OfferedRides = () => {
                     setFilters((prev) => ({ ...prev, search: e.target.value }))
                   }
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  className="w-full pl-10 sm:pl-12 pr-10 py-2.5 sm:py-3 bg-[#F7F7F7] border border-[#E5E5E5] rounded-lg focus:border-[#E10600] focus:outline-none focus:ring-2 focus:ring-red-100 text-sm sm:text-base text-[#111111] placeholder-[#B8B8B8]"
+                  className="w-full pl-10 sm:pl-12 pr-10 py-2.5 sm:py-3 bg-[#F7F7F7] border border-[var(--border-subtle)] rounded-lg focus:border-[#E10600] focus:outline-none focus:ring-2 focus:ring-red-100 text-sm sm:text-base text-[#111111] placeholder-[#B8B8B8]"
                 />
                 {filters.search && (
                   <motion.button
@@ -512,7 +512,7 @@ const OfferedRides = () => {
                           tripType: e.target.value,
                         }))
                       }
-                      className="px-3 sm:px-4 py-2 border border-[#E5E5E5] rounded-lg text-sm sm:text-base text-[#111111] bg-white focus:border-[#E10600] focus:outline-none"
+                      className="px-3 sm:px-4 py-2 border border-[var(--border-subtle)] rounded-lg text-sm sm:text-base text-[#111111] bg-[var(--bg-surface)] focus:border-[#E10600] focus:outline-none"
                     >
                       <option value="">All Trip Types</option>
                       <option value="one-way">One Way</option>
@@ -587,7 +587,7 @@ const OfferedRides = () => {
             animate={{ opacity: 1 }}
             className="text-center py-8 sm:py-16 px-4"
           >
-            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-[#F7F7F7] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 border border-[#E5E5E5]">
+            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-[#F7F7F7] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 border border-[var(--border-subtle)]">
               <Car className="w-8 h-8 sm:w-12 sm:h-12 text-[#B8B8B8]" />
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-[#111111] mb-2 sm:mb-3">
@@ -629,7 +629,7 @@ const OfferedRides = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[#E5E5E5]"
+                className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[var(--border-subtle)]"
               >
                 {/* Page Info */}
                 <div className="text-sm text-[#555555]">
@@ -646,8 +646,8 @@ const OfferedRides = () => {
                     disabled={pagination.page === 1}
                     className={`p-2 rounded-lg border ${
                       pagination.page === 1
-                        ? "border-[#E5E5E5] text-[#B8B8B8] cursor-not-allowed"
-                        : "border-[#E5E5E5] text-[#555555] hover:border-[#E10600] hover:text-[#E10600]"
+                        ? "border-[var(--border-subtle)] text-[#B8B8B8] cursor-not-allowed"
+                        : "border-[var(--border-subtle)] text-[#555555] hover:border-[#E10600] hover:text-[#E10600]"
                     }`}
                   >
                     <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -699,8 +699,8 @@ const OfferedRides = () => {
                     disabled={pagination.page === pagination.totalPages}
                     className={`p-2 rounded-lg border ${
                       pagination.page === pagination.totalPages
-                        ? "border-[#E5E5E5] text-[#B8B8B8] cursor-not-allowed"
-                        : "border-[#E5E5E5] text-[#555555] hover:border-[#E10600] hover:text-[#E10600]"
+                        ? "border-[var(--border-subtle)] text-[#B8B8B8] cursor-not-allowed"
+                        : "border-[var(--border-subtle)] text-[#555555] hover:border-[#E10600] hover:text-[#E10600]"
                     }`}
                   >
                     <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />

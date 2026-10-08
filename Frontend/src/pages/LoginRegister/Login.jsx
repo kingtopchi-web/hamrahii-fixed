@@ -347,14 +347,14 @@ const Login = () => {
           {/* Stats */}
           <motion.div
             variants={itemVariants}
-            className="mt-12 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-gray-200/60 shadow-sm"
+            className="mt-12 p-6 bg-[var(--bg-surface)]/60 backdrop-blur-md rounded-2xl border border-[var(--border-subtle)]/60 shadow-sm"
           >
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-gray-900">50K+</div>
                 <div className="text-xs sm:text-sm text-gray-600">Rides Shared</div>
               </div>
-              <div className="text-center border-x border-gray-200">
+              <div className="text-center border-x border-[var(--border-subtle)]">
                 <div className="text-2xl font-bold text-gray-900">4.8★</div>
                 <div className="text-xs sm:text-sm text-gray-600">Average Rating</div>
               </div>
@@ -374,7 +374,7 @@ const Login = () => {
           className="flex items-center justify-center lg:justify-end w-full"
         >
           <div className="w-full max-w-md lg:max-w-[430px] lg:ml-auto">
-            <div className="bg-white rounded-3xl shadow-card-hover p-6 sm:p-8 md:p-10 border border-gray-100">
+            <div className="bg-[var(--bg-surface)] rounded-3xl shadow-card-hover p-6 sm:p-8 md:p-10 border border-[var(--border-subtle)]">
               <div className="text-center mb-5 sm:mb-8">
                 <div className="lg:hidden flex justify-center mb-4">
                   <Link to="/" className="inline-flex items-center">
@@ -419,14 +419,14 @@ const Login = () => {
                   </label>
 
                   <div
-                    className={`relative flex items-center rounded-xl border transition-all duration-200 bg-gray-50/50 hover:bg-white overflow-hidden ${
+                    className={`relative flex items-center rounded-xl border transition-all duration-200 bg-gray-50/50 hover:bg-[var(--bg-surface)] overflow-hidden ${
                       phoneError
                         ? "border-red-500 focus-within:ring-2 focus-within:ring-red-100"
                         : "border-gray-300 focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-100"
                     }`}
                   >
                     {/* Country Flag Selector */}
-                    <div className="relative flex items-center pl-3 pr-2.5 py-3.5 border-r border-gray-200 bg-gray-100/70 hover:bg-gray-200/60 transition-colors shrink-0 cursor-pointer">
+                    <div className="relative flex items-center pl-3 pr-2.5 py-3.5 border-r border-[var(--border-subtle)] bg-gray-100/70 hover:bg-gray-200/60 transition-colors shrink-0 cursor-pointer">
                       <div className="flex items-center gap-1">
                         <Flag size={40} code={selected?.code || "IN"} />
                         <ChevronDown size={14} className="text-gray-500" />
@@ -527,7 +527,7 @@ const Login = () => {
                             ? "border-red-400 bg-red-50/30"
                             : digit
                             ? "border-red-500 bg-red-50/20 text-gray-900"
-                            : "border-gray-300 bg-gray-50/50 hover:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                            : "border-gray-300 bg-gray-50/50 hover:bg-[var(--bg-surface)] focus:border-red-500 focus:ring-2 focus:ring-red-100"
                         }`}
                         disabled={isLoading}
                         aria-label={`Digit ${index + 1} of 6`}

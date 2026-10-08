@@ -102,9 +102,9 @@ const RiderAvailability = () => {
   }, [isLive]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-xs hover:shadow-sm transition-all p-4 sm:p-5 border border-gray-100 flex flex-col h-fit self-start w-full">
+    <div className="bg-[var(--bg-surface)] rounded-2xl shadow-xs hover:shadow-sm transition-all p-4 sm:p-5 border border-[var(--border-subtle)] flex flex-col h-fit self-start w-full">
       <div>
-        <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
+        <div className="flex items-center justify-between mb-3 pb-3 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2.5">
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${isLive ? "bg-emerald-50 text-emerald-600" : "bg-gray-100 text-gray-500"}`}>
               <Navigation className={`w-4 h-4 ${isLive ? "animate-pulse" : ""}`} />

@@ -366,7 +366,7 @@ const ForgotPassword = () => {
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-gray-800 bg-white"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all text-gray-800 bg-[var(--bg-surface)]"
               placeholder="9876543210"
               maxLength="10"
               disabled={loading}
@@ -474,7 +474,7 @@ const ForgotPassword = () => {
                 value={digit}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
                 onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                className="w-14 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all bg-white text-gray-800"
+                className="w-14 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all bg-[var(--bg-surface)] text-gray-800"
                 disabled={loading}
                 autoFocus={index === 0}
               />
@@ -585,7 +585,7 @@ const ForgotPassword = () => {
                 value={digit}
                 onChange={(e) => handlePasswordChange(index, e.target.value)}
                 onKeyDown={(e) => handlePasswordKeyDown(index, e)}
-                className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all bg-white text-gray-800"
+                className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all bg-[var(--bg-surface)] text-gray-800"
                 disabled={loading}
                 autoFocus={index === 0}
               />
@@ -782,7 +782,7 @@ const ForgotPassword = () => {
         )}
         
         {/* Form Container */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+        <div className="bg-[var(--bg-surface)] rounded-2xl shadow-lg p-6 md:p-8">
           {step === 1 && renderPhoneStep()}
           {step === 2 && renderOtpStep()}
           {step === 3 && renderPasswordStep()}

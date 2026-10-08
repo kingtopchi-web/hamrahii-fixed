@@ -252,7 +252,7 @@ const Press = () => {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="inline-flex items-center gap-4 bg-white rounded-full px-6 py-3 shadow-sm"
+              className="inline-flex items-center gap-4 bg-[var(--bg-surface)] rounded-full px-6 py-3 shadow-sm"
               style={{ border: `1px solid ${colors.border}` }}
             >
               <Quote className="w-5 h-5" style={{ color: colors.primary }} />

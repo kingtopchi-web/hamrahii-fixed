@@ -53,7 +53,7 @@ const NotFound = () => {
         </div>
         
         {/* Links */}
-        <div className="mt-8 pt-8 border-t border-gray-200">
+        <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
           <p className="text-gray-500 text-sm mb-3">Quick links:</p>
           <div className="flex flex-wrap gap-3 justify-center">
             {["/rides", "/offer-ride", "/login", "/register"].map((path) => (

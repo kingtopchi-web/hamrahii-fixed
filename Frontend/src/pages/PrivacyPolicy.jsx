@@ -77,7 +77,7 @@ const PrivacyPolicy = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-white"
+      className="min-h-screen bg-[var(--bg-page)]"
     >
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-[#F7F7F7] to-white">
@@ -143,7 +143,7 @@ const PrivacyPolicy = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="bg-white rounded-xl border border-[#E5E5E5] p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6 shadow-sm hover:shadow-md transition-all duration-300"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="mb-4">
@@ -168,8 +168,8 @@ const PrivacyPolicy = () => {
           transition={{ delay: 0.6 }}
           className="mb-16"
         >
-          <div className="bg-white rounded-xl border border-[#E5E5E5] shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#E5E5E5] bg-gradient-to-r from-[#F7F7F7] to-white">
+          <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm overflow-hidden">
+            <div className="px-6 py-4 border-b border-[var(--border-subtle)] bg-gradient-to-r from-[#F7F7F7] to-white">
               <h3 className="text-xl font-bold text-[#111111] flex items-center gap-3">
                 <Database className="text-[#E10600]" size={24} />
                 1. Data We Collect
@@ -179,7 +179,7 @@ const PrivacyPolicy = () => {
               <table className="w-full">
                 <thead>
                   <tr className="bg-[#F7F7F7]">
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-[#111111] border-r border-[#E5E5E5]">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-[#111111] border-r border-[var(--border-subtle)]">
                       Information Type
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-[#111111]">
@@ -190,7 +190,7 @@ const PrivacyPolicy = () => {
                 <tbody className="divide-y divide-[#E5E5E5]">
                   {dataWeCollect.map((item, index) => (
                     <tr key={index} className="hover:bg-[#F7F7F7] transition-colors duration-200">
-                      <td className="px-6 py-4 text-sm text-[#111111] border-r border-[#E5E5E5] font-medium">
+                      <td className="px-6 py-4 text-sm text-[#111111] border-r border-[var(--border-subtle)] font-medium">
                         {item.item}
                       </td>
                       <td className="px-6 py-4 text-sm text-[#555555]">
@@ -201,7 +201,7 @@ const PrivacyPolicy = () => {
                 </tbody>
               </table>
             </div>
-            <div className="px-6 py-4 bg-[#F7F7F7] border-t border-[#E5E5E5]">
+            <div className="px-6 py-4 bg-[#F7F7F7] border-t border-[var(--border-subtle)]">
               <p className="text-sm text-[#555555]">
                 <strong>Note:</strong> Personal data is "all data with which you can be personally identified" by law. 
                 We collect data when you provide it through forms and automatically through our IT systems when you visit our website.
@@ -217,7 +217,7 @@ const PrivacyPolicy = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="bg-white rounded-xl border border-[#E5E5E5] shadow-sm overflow-hidden"
+            className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm overflow-hidden"
           >
             <button
               onClick={() => toggleSection('dataUse')}
@@ -272,7 +272,7 @@ const PrivacyPolicy = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.75 }}
-            className="bg-white rounded-xl border border-[#E5E5E5] shadow-sm overflow-hidden"
+            className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm overflow-hidden"
           >
             <button
               onClick={() => toggleSection('dataSharing')}
@@ -339,7 +339,7 @@ const PrivacyPolicy = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="bg-white rounded-xl border border-[#E5E5E5] shadow-sm overflow-hidden"
+            className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm overflow-hidden"
           >
             <button
               onClick={() => toggleSection('dataProtection')}
@@ -399,7 +399,7 @@ const PrivacyPolicy = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.85 }}
-            className="bg-white rounded-xl border border-[#E5E5E5] shadow-sm overflow-hidden"
+            className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm overflow-hidden"
           >
             <button
               onClick={() => toggleSection('cookies')}
@@ -459,7 +459,7 @@ const PrivacyPolicy = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.9 }}
-            className="bg-white rounded-xl border border-[#E5E5E5] shadow-sm overflow-hidden"
+            className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm overflow-hidden"
           >
             <button
               onClick={() => toggleSection('changes')}
@@ -486,7 +486,7 @@ const PrivacyPolicy = () => {
                 className="px-6 py-4"
               >
                 <div className="space-y-4 text-[#555555]">
-                  <div className="p-4 bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                  <div className="p-4 bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                     <p className="text-sm">
                       <strong>Policy Updates:</strong> We may update this privacy policy from time to time. 
                       Any changes will be posted on this page, and we encourage you to review this policy periodically.
@@ -508,7 +508,7 @@ const PrivacyPolicy = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 1 }}
-          className="mt-16 bg-gradient-to-r from-[#F7F7F7] to-white rounded-xl border border-[#E5E5E5] p-8 shadow-sm"
+          className="mt-16 bg-gradient-to-r from-[#F7F7F7] to-white rounded-xl border border-[var(--border-subtle)] p-8 shadow-sm"
         >
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-[#111111] mb-2">7. Contact Us</h3>
@@ -564,7 +564,7 @@ const PrivacyPolicy = () => {
             </div>
           </div>
           
-          <div className="mt-8 pt-6 border-t border-[#E5E5E5]">
+          <div className="mt-8 pt-6 border-t border-[var(--border-subtle)]">
             <p className="text-sm text-[#555555] text-center">
               <strong>Note:</strong> The responsible body decides on the purposes and means of processing personal data 
               on this website, either alone or jointly with others.

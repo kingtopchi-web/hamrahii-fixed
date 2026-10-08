@@ -249,7 +249,7 @@ const Referrals = () => {
             <button
               onClick={refreshData}
               disabled={refreshing}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E5E5E5] rounded-lg text-[#111111] hover:bg-[#F7F7F7] transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-[#111111] hover:bg-[#F7F7F7] transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
               Refresh
@@ -260,7 +260,7 @@ const Referrals = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {/* Referral Code Card */}
-          <div className="bg-white rounded-xl border border-[#E5E5E5] p-5">
+          <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-[#E10600]/10 rounded-lg flex items-center justify-center">
@@ -294,7 +294,7 @@ const Referrals = () => {
           </div>
 
           {/* Total Referrals Card */}
-          <div className="bg-white rounded-xl border border-[#E5E5E5] p-5">
+          <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-5">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
@@ -312,7 +312,7 @@ const Referrals = () => {
           </div>
 
           {/* Earnings Card */}
-          <div className="bg-white rounded-xl border border-[#E5E5E5] p-5">
+          <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-5">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center">
@@ -330,7 +330,7 @@ const Referrals = () => {
           </div>
 
           {/* Balance Card */}
-          <div className="bg-white rounded-xl border border-[#E5E5E5] p-5">
+          <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-5">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
@@ -351,7 +351,7 @@ const Referrals = () => {
         {/* How It Works & Share Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* How It Works */}
-          <div className="lg:col-span-2 bg-white rounded-xl border border-[#E5E5E5] p-6">
+          <div className="lg:col-span-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6">
             <h2 className="text-lg font-bold text-[#111111] mb-4">How It Works</h2>
             
             <div className="space-y-4">
@@ -387,7 +387,7 @@ const Referrals = () => {
             </div>
 
             {/* Referral Link Box */}
-            <div className="mt-6 p-4 bg-[#F7F7F7] rounded-lg border border-[#E5E5E5]">
+            <div className="mt-6 p-4 bg-[#F7F7F7] rounded-lg border border-[var(--border-subtle)]">
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-[#555555] mb-1">Your Referral Link</p>
@@ -402,7 +402,7 @@ const Referrals = () => {
                   <button
                     onClick={() => setShowQR(!showQR)}
                     disabled={!referralData?.referralCode}
-                    className="p-2 hover:bg-white rounded-lg transition-colors disabled:opacity-50"
+                    className="p-2 hover:bg-[var(--bg-surface)] rounded-lg transition-colors disabled:opacity-50"
                     title="Show QR Code"
                   >
                     <QrCodeIcon className="w-5 h-5 text-[#555555]" />
@@ -410,7 +410,7 @@ const Referrals = () => {
                   <button
                     onClick={handleCopyLink}
                     disabled={!referralData?.referralCode}
-                    className="p-2 hover:bg-white rounded-lg transition-colors disabled:opacity-50"
+                    className="p-2 hover:bg-[var(--bg-surface)] rounded-lg transition-colors disabled:opacity-50"
                     title="Copy Link"
                   >
                     <Copy className="w-5 h-5 text-[#555555]" />
@@ -420,9 +420,9 @@ const Referrals = () => {
 
               {/* QR Code Section */}
               {showQR && referralData?.referralCode && (
-                <div className="mt-4 pt-4 border-t border-[#E5E5E5]">
+                <div className="mt-4 pt-4 border-t border-[var(--border-subtle)]">
                   <div className="flex flex-col items-center">
-                    <div className="p-4 bg-white rounded-lg mb-4">
+                    <div className="p-4 bg-[var(--bg-surface)] rounded-lg mb-4">
                       <QRCodeSVG
                         id="referral-qr"
                         value={referralLink}
@@ -435,7 +435,7 @@ const Referrals = () => {
                     </div>
                     <button
                       onClick={downloadQR}
-                      className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E5E5E5] rounded-lg text-[#111111] hover:bg-[#F7F7F7] transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-[#111111] hover:bg-[#F7F7F7] transition-colors"
                     >
                       <Download className="w-4 h-4" />
                       Download QR Code
@@ -447,7 +447,7 @@ const Referrals = () => {
           </div>
 
           {/* Share Options */}
-          <div className="bg-white rounded-xl border border-[#E5E5E5] p-6">
+          <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6">
             <h2 className="text-lg font-bold text-[#111111] mb-4">Share Via</h2>
             
             <div className="grid grid-cols-2 gap-3">
@@ -518,8 +518,8 @@ const Referrals = () => {
         </div>
 
         {/* Referrals List */}
-        <div className="bg-white rounded-xl border border-[#E5E5E5]">
-          <div className="p-6 border-b border-[#E5E5E5]">
+        <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)]">
+          <div className="p-6 border-b border-[var(--border-subtle)]">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-[#111111]">Your Referrals</h2>
@@ -637,7 +637,7 @@ const Referrals = () => {
               </div>
 
               {hasMore && (
-                <div className="p-6 border-t border-[#E5E5E5]">
+                <div className="p-6 border-t border-[var(--border-subtle)]">
                   <button
                     onClick={loadMore}
                     disabled={refreshing}
@@ -661,7 +661,7 @@ const Referrals = () => {
         {/* Stats Summary */}
         {referralData?.referrals?.length > 0 && (
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-white border border-[#E5E5E5] rounded-xl">
+            <div className="p-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center">
                   <Gift className="w-5 h-5 text-emerald-600" />
@@ -673,7 +673,7 @@ const Referrals = () => {
               </div>
             </div>
             
-            <div className="p-4 bg-white border border-[#E5E5E5] rounded-xl">
+            <div className="p-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-blue-600" />
@@ -687,7 +687,7 @@ const Referrals = () => {
               </div>
             </div>
             
-            <div className="p-4 bg-white border border-[#E5E5E5] rounded-xl">
+            <div className="p-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center">
                   <Star className="w-5 h-5 text-amber-600" />

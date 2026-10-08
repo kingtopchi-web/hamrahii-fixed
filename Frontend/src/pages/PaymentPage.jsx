@@ -105,7 +105,7 @@ const PaymentPage = () => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center"
+        className="bg-[var(--bg-surface)] rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center"
       >
         {/* ICON */}
         <div className="flex justify-center mb-4">

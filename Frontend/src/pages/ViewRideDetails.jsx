@@ -202,7 +202,7 @@ const ViewRideDetails = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-[#F7F7F7] to-white">
       {/* Header Section */}
-      <div className="bg-white border-b border-[#E5E5E5] px-4 py-4 md:px-6">
+      <div className="bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] px-4 py-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -229,18 +229,18 @@ const ViewRideDetails = () => {
             </div>
 
             {/* <div className="flex items-center gap-3">
-                            <div className="flex items-center px-3 py-1.5 bg-white border border-[#E5E5E5] rounded-lg">
+                            <div className="flex items-center px-3 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg">
                                 <Star className="w-4 h-4 mr-1 fill-amber-500 text-amber-500" />
                                 <span className="font-bold text-[#111111]">4.8</span>
                                 <span className="text-[#555555] text-sm ml-1">(124)</span>
                             </div>
                             <button
                                 onClick={() => setIsLiked(!isLiked)}
-                                className={`p-2 rounded-lg border ${isLiked ? 'bg-rose-50 border-rose-200' : 'bg-white border-[#E5E5E5]'}`}
+                                className={`p-2 rounded-lg border ${isLiked ? 'bg-rose-50 border-rose-200' : 'bg-[var(--bg-surface)] border-[var(--border-subtle)]'}`}
                             >
                                 <Heart className={`w-5 h-5 ${isLiked ? 'fill-rose-500 text-rose-500' : 'text-[#555555]'}`} />
                             </button>
-                            <button className="p-2 rounded-lg bg-white border border-[#E5E5E5]">
+                            <button className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
                                 <Share2 className="w-5 h-5 text-[#555555]" />
                             </button>
                         </div> */}
@@ -288,7 +288,7 @@ const ViewRideDetails = () => {
           ].map((stat, idx) => (
             <div
               key={idx}
-              className={`bg-white p-4 md:p-5 rounded-2xl border ${stat.border} shadow-card-subtle hover:shadow-card-hover transition-all duration-300`}
+              className={`bg-[var(--bg-surface)] p-4 md:p-5 rounded-2xl border ${stat.border} shadow-card-subtle hover:shadow-card-hover transition-all duration-300`}
             >
               <div className="flex items-center gap-2.5 md:gap-3.5">
                 <div
@@ -308,7 +308,7 @@ const ViewRideDetails = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex overflow-x-auto mb-6 pb-2 gap-2 scrollbar-hide border-b border-gray-100">
+        <div className="flex overflow-x-auto mb-6 pb-2 gap-2 scrollbar-hide border-b border-[var(--border-subtle)]">
           {["details", "driver", "vehicle", "preferences"].map((tab) => (
             <button
               key={tab}
@@ -332,7 +332,7 @@ const ViewRideDetails = () => {
             {activeTab === "details" && (
               <div className="space-y-6">
                 {/* Route Card */}
-                <div className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-card-subtle">
+                <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] p-6 md:p-8 shadow-card-subtle">
                   <div className="flex items-center justify-between mb-5">
                     <h2 className="text-xl md:text-2xl font-bold text-[#111111]">
                       Route Details
@@ -340,7 +340,7 @@ const ViewRideDetails = () => {
                   </div>
 
                   {/* Route Visualization */}
-                  <div className="relative p-5 sm:p-6 bg-gray-50/70 rounded-2xl border border-gray-100 mb-6">
+                  <div className="relative p-5 sm:p-6 bg-gray-50/70 rounded-2xl border border-[var(--border-subtle)] mb-6">
                     <div className="absolute left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#E10600] to-[#B8B8B8] rounded-full"></div>
 
                     <div className="space-y-6 pl-6">
@@ -399,7 +399,7 @@ const ViewRideDetails = () => {
                               >
                                 <div className="w-2 h-2 bg-[#B8B8B8] rounded-full mt-2"></div>
                                 <div
-                                  className="ml-4 flex-1 bg-white border border-[#E5E5E5] rounded-lg p-3 hover:border-[#E10600]/30 cursor-pointer transition-colors"
+                                  className="ml-4 flex-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-3 hover:border-[#E10600]/30 cursor-pointer transition-colors"
                                   onClick={() =>
                                     setExpandedStopIndex(
                                       expandedStopIndex === index
@@ -431,7 +431,7 @@ const ViewRideDetails = () => {
                                   </div>
 
                                   {expandedStopIndex === index && (
-                                    <div className="mt-3 pt-3 border-t border-[#E5E5E5]">
+                                    <div className="mt-3 pt-3 border-t border-[var(--border-subtle)]">
                                       <div className="flex items-center gap-4 text-xs">
                                         <span className="flex items-center gap-1 text-[#555555]">
                                           <Clock className="w-3 h-3" />
@@ -449,7 +449,7 @@ const ViewRideDetails = () => {
                             ))}
                           </div>
                         ) : (
-                          <div className="p-4 text-center bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                          <div className="p-4 text-center bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                             <Flag className="w-8 h-8 text-[#B8B8B8] mx-auto mb-2" />
                             <h4 className="font-medium text-[#555555] mb-1">
                               No Stops Added
@@ -488,7 +488,7 @@ const ViewRideDetails = () => {
 
                   {/* Date & Time Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-white p-4 rounded-lg border border-[#E5E5E5]">
+                    <div className="bg-[var(--bg-surface)] p-4 rounded-lg border border-[var(--border-subtle)]">
                       <div className="flex items-center mb-2">
                         <div className="p-2 bg-gradient-to-r from-[#E10600]/10 to-[#E10600]/5 rounded-lg mr-3">
                           <Calendar className="w-4 h-4 text-[#E10600]" />
@@ -502,7 +502,7 @@ const ViewRideDetails = () => {
                       </p>
                     </div>
 
-                    <div className="bg-white p-4 rounded-lg border border-[#E5E5E5]">
+                    <div className="bg-[var(--bg-surface)] p-4 rounded-lg border border-[var(--border-subtle)]">
                       <div className="flex items-center mb-2">
                         <div className="p-2 bg-gradient-to-r from-[#E10600]/10 to-[#E10600]/5 rounded-lg mr-3">
                           <Clock className="w-4 h-4 text-[#E10600]" />
@@ -521,13 +521,13 @@ const ViewRideDetails = () => {
                 {/* Pricing & Seats Card */}
 
 
-                {rideDetails?.isFullSharing ? null : <div className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-card-subtle">
+                {rideDetails?.isFullSharing ? null : <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] p-6 md:p-8 shadow-card-subtle">
                   <h2 className="text-xl md:text-2xl font-bold text-[#111111] mb-5">
                     Pricing & Availability
                   </h2>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="bg-gray-50/70 p-5 rounded-2xl border border-gray-100">
+                    <div className="bg-gray-50/70 p-5 rounded-2xl border border-[var(--border-subtle)]">
                       <div className="flex items-center mb-3">
                         <div className="p-2.5 bg-[#E10600]/10 rounded-xl mr-3">
                           <IndianRupee className="w-5 h-5 text-[#E10600]" />
@@ -546,7 +546,7 @@ const ViewRideDetails = () => {
                       </div>
                     </div>
 
-                    <div className="bg-gray-50/70 p-5 rounded-2xl border border-gray-100">
+                    <div className="bg-gray-50/70 p-5 rounded-2xl border border-[var(--border-subtle)]">
                       <div className="flex items-center mb-3">
                         <div className="p-2.5 bg-[#E10600]/10 rounded-xl mr-3">
                           <Users className="w-5 h-5 text-[#E10600]" />
@@ -579,7 +579,7 @@ const ViewRideDetails = () => {
             )}
 
             {activeTab === "driver" && (
-              <div className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-card-subtle">
+              <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] p-6 md:p-8 shadow-card-subtle">
                 <h2 className="text-xl md:text-2xl font-bold text-[#111111] mb-6">
                   Driver Information
                 </h2>
@@ -615,18 +615,18 @@ const ViewRideDetails = () => {
                         <p className="text-[#555555]">Professional Driver</p>
                       </div>
                       {/* <div className="flex items-center mt-3 md:mt-0 gap-2">
-                                                <button className="px-3 py-1.5 bg-white border border-[#E5E5E5] rounded-lg text-sm font-medium flex items-center gap-1.5">
+                                                <button className="px-3 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-sm font-medium flex items-center gap-1.5">
                                                     <PhoneCall className="w-4 h-4" />
                                                     Call
                                                 </button>
-                                                <button className="px-3 py-1.5 bg-white border border-[#E5E5E5] rounded-lg text-sm font-medium flex items-center gap-1.5">
+                                                <button className="px-3 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-sm font-medium flex items-center gap-1.5">
                                                     <MessageCircle className="w-4 h-4" />
                                                     Message
                                                 </button>
                                             </div> */}
                     </div>
 
-                    <div className="p-4 bg-[#F7F7F7] rounded-lg border border-[#E5E5E5] mb-6">
+                    <div className="p-4 bg-[#F7F7F7] rounded-lg border border-[var(--border-subtle)] mb-6">
                       <p className="text-[#111111]">
                         {rideDetails.driver?.bio ||
                           "Experienced driver with excellent safety record. Committed to providing a comfortable and safe journey for all passengers."}
@@ -648,7 +648,7 @@ const ViewRideDetails = () => {
                       ].map((item, idx) => (
                         <div
                           key={idx}
-                          className="bg-white p-3 rounded-lg border border-[#E5E5E5]"
+                          className="bg-[var(--bg-surface)] p-3 rounded-lg border border-[var(--border-subtle)]"
                         >
                           <div className="flex items-center text-[#555555] text-xs mb-1">
                             <item.icon className="w-3 h-3 mr-1.5" />
@@ -667,7 +667,7 @@ const ViewRideDetails = () => {
                                                 <h4 className="font-semibold text-[#111111] mb-3">Driver Preferences</h4>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     {Object.entries(rideDetails.driver.preferences).map(([key, value]) => (
-                                                        <div key={key} className="bg-white p-3 rounded-lg border border-[#E5E5E5]">
+                                                        <div key={key} className="bg-[var(--bg-surface)] p-3 rounded-lg border border-[var(--border-subtle)]">
                                                             <div className="text-xs text-[#555555] mb-1 capitalize">
                                                                 {key.replace(/([A-Z])/g, ' $1').trim()}
                                                             </div>
@@ -685,14 +685,14 @@ const ViewRideDetails = () => {
             )}
 
             {activeTab === "vehicle" && (
-              <div className="bg-white rounded-xl border border-[#E5E5E5] p-4 md:p-6">
+              <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-4 md:p-6">
                 <h2 className="text-xl font-bold text-[#111111] mb-6">
                   Vehicle Details
                 </h2>
 
                 <div className="space-y-6">
                   {/* Main Car Image */}
-                  <div className="relative h-64 md:h-80 bg-gradient-to-br from-[#F7F7F7] to-white rounded-xl border border-[#E5E5E5] overflow-hidden">
+                  <div className="relative h-64 md:h-80 bg-gradient-to-br from-[#F7F7F7] to-white rounded-xl border border-[var(--border-subtle)] overflow-hidden">
                     {carImages.length > 0 ? (
                       <img
                         src={getCarImageUrl(carImages[selectedCarImage])}
@@ -716,7 +716,7 @@ const ViewRideDetails = () => {
                           <button
                             key={index}
                             onClick={() => setSelectedCarImage(index)}
-                            className={`w-2 h-2 rounded-full transition-all ${selectedCarImage === index ? "bg-[#E10600] w-8" : "bg-white/70 hover:bg-white"}`}
+                            className={`w-2 h-2 rounded-full transition-all ${selectedCarImage === index ? "bg-[#E10600] w-8" : "bg-[var(--bg-surface)]/70 hover:bg-[var(--bg-surface)]"}`}
                           />
                         ))}
                       </div>
@@ -730,7 +730,7 @@ const ViewRideDetails = () => {
                         <button
                           key={index}
                           onClick={() => setSelectedCarImage(index)}
-                          className={`h-20 rounded-lg border-2 overflow-hidden ${selectedCarImage === index ? "border-[#E10600]" : "border-[#E5E5E5]"}`}
+                          className={`h-20 rounded-lg border-2 overflow-hidden ${selectedCarImage === index ? "border-[#E10600]" : "border-[var(--border-subtle)]"}`}
                         >
                           <img
                             src={getCarImageUrl(img)}
@@ -748,7 +748,7 @@ const ViewRideDetails = () => {
 
                   {/* Vehicle Specifications */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white p-4 md:p-6 rounded-xl border border-[#E5E5E5]">
+                    <div className="bg-[var(--bg-surface)] p-4 md:p-6 rounded-xl border border-[var(--border-subtle)]">
                       <div className="flex items-center mb-4">
                         <div className="p-2 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 rounded-lg mr-3">
                           <CarTaxiFront className="w-5 h-5 text-emerald-500" />
@@ -781,7 +781,7 @@ const ViewRideDetails = () => {
                         ].map((item, idx) => (
                           <div
                             key={idx}
-                            className="flex justify-between items-center py-2 border-b border-[#E5E5E5] last:border-b-0"
+                            className="flex justify-between items-center py-2 border-b border-[var(--border-subtle)] last:border-b-0"
                           >
                             <div className="flex items-center text-[#555555]">
                               {item.icon && (
@@ -797,7 +797,7 @@ const ViewRideDetails = () => {
                       </div>
                     </div>
 
-                    <div className="bg-white p-4 md:p-6 rounded-xl border border-[#E5E5E5]">
+                    <div className="bg-[var(--bg-surface)] p-4 md:p-6 rounded-xl border border-[var(--border-subtle)]">
                       <div className="flex items-center mb-4">
                         <div className="p-2 bg-gradient-to-r from-blue-500/10 to-blue-500/5 rounded-lg mr-3">
                           <Settings className="w-5 h-5 text-blue-500" />
@@ -829,7 +829,7 @@ const ViewRideDetails = () => {
                         ].map((item, idx) => (
                           <div
                             key={idx}
-                            className="flex justify-between items-center py-2 border-b border-[#E5E5E5] last:border-b-0"
+                            className="flex justify-between items-center py-2 border-b border-[var(--border-subtle)] last:border-b-0"
                           >
                             <div className="flex items-center text-[#555555]">
                               {item.icon && (
@@ -847,7 +847,7 @@ const ViewRideDetails = () => {
                   </div>
 
                   {/* Additional Details */}
-                  <div className="bg-white p-4 md:p-6 rounded-xl border border-[#E5E5E5]">
+                  <div className="bg-[var(--bg-surface)] p-4 md:p-6 rounded-xl border border-[var(--border-subtle)]">
                     <div className="flex items-center mb-4">
                       <div className="p-2 bg-gradient-to-r from-amber-500/10 to-amber-500/5 rounded-lg mr-3">
                         <Info className="w-5 h-5 text-amber-500" />
@@ -884,7 +884,7 @@ const ViewRideDetails = () => {
             )}
 
             {activeTab === "preferences" && (
-              <div className="bg-white rounded-xl border border-[#E5E5E5] p-4 md:p-6">
+              <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-4 md:p-6">
                 <h2 className="text-xl font-bold text-[#111111] mb-6">
                   Ride Preferences
                 </h2>
@@ -926,7 +926,7 @@ const ViewRideDetails = () => {
                   ].map((pref, index) => (
                     <div
                       key={index}
-                      className="p-4 rounded-lg border border-[#E5E5E5] bg-gradient-to-br from-white to-[#F7F7F7]"
+                      className="p-4 rounded-lg border border-[var(--border-subtle)] bg-gradient-to-br from-white to-[#F7F7F7]"
                     >
                       <div className="flex items-center mb-3">
                         <div className={`p-2 rounded-lg mr-3 ${pref.color}`}>
@@ -971,7 +971,7 @@ const ViewRideDetails = () => {
               <div className="absolute top-0 right-0 w-36 h-36 bg-[#E10600]/15 rounded-full blur-2xl pointer-events-none" />
               <div className="flex items-center justify-between mb-5 relative z-10">
                 <h3 className="text-lg md:text-xl font-bold">Booking Summary</h3>
-                <div className="p-2 bg-white/10 rounded-xl">
+                <div className="p-2 bg-[var(--bg-surface)]/10 rounded-xl">
                   <Sparkles className="w-4 h-4 text-[#FF3B30]" />
                 </div>
               </div>
@@ -1036,7 +1036,7 @@ const ViewRideDetails = () => {
             </div>
 
             {/* Seat Selection */}
-            {rideDetails?.isFullSharing ? null : <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-card-subtle">
+            {rideDetails?.isFullSharing ? null : <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] p-6 shadow-card-subtle">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h4 className="font-bold text-[#111111] text-base md:text-lg">Select Seats</h4>
@@ -1060,7 +1060,7 @@ const ViewRideDetails = () => {
                         setSelectedSeats((prev) => Math.max(1, prev - 1))
                       }
                       disabled={selectedSeats <= 1}
-                      className="w-9 h-9 rounded-full bg-gray-100 text-[#111111] flex items-center justify-center disabled:opacity-40 hover:bg-gray-200 border border-gray-200 transition-colors font-bold cursor-pointer"
+                      className="w-9 h-9 rounded-full bg-gray-100 text-[#111111] flex items-center justify-center disabled:opacity-40 hover:bg-gray-200 border border-[var(--border-subtle)] transition-colors font-bold cursor-pointer"
                     >
                       -
                     </button>
@@ -1076,7 +1076,7 @@ const ViewRideDetails = () => {
                       disabled={
                         selectedSeats >= (rideDetails.availableSeats || 3)
                       }
-                      className="w-9 h-9 rounded-full bg-gray-100 text-[#111111] flex items-center justify-center disabled:opacity-40 hover:bg-gray-200 border border-gray-200 transition-colors font-bold cursor-pointer"
+                      className="w-9 h-9 rounded-full bg-gray-100 text-[#111111] flex items-center justify-center disabled:opacity-40 hover:bg-gray-200 border border-[var(--border-subtle)] transition-colors font-bold cursor-pointer"
                     >
                       +
                     </button>
@@ -1122,7 +1122,7 @@ const ViewRideDetails = () => {
               <button
                 type="button"
                 onClick={() => navigate("/user/send-parcel", { state: { rideDetails } })}
-                className={`w-full py-3.5 md:py-4 rounded-2xl font-bold text-base md:text-lg flex items-center justify-center transition-all duration-200 cursor-pointer bg-white text-[#111111] border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50`}
+                className={`w-full py-3.5 md:py-4 rounded-2xl font-bold text-base md:text-lg flex items-center justify-center transition-all duration-200 cursor-pointer bg-[var(--bg-surface)] text-[#111111] border-2 border-[var(--border-subtle)] hover:border-gray-300 hover:bg-gray-50`}
               >
                 <Package className="mr-2 w-5 h-5 text-gray-600" />
                 Send a Parcel
@@ -1130,7 +1130,7 @@ const ViewRideDetails = () => {
             </div>
 
             {/* Quick Facts */}
-            <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-card-subtle">
+            <div className="bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] p-6 shadow-card-subtle">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="font-bold text-[#111111] text-base md:text-lg">Quick Facts</h4>
                 <div className="p-1.5 bg-red-50 rounded-xl">
@@ -1172,7 +1172,7 @@ const ViewRideDetails = () => {
                 ].map((fact, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-3 bg-gray-50/70 rounded-xl hover:bg-white hover:shadow-xs transition-all border border-gray-100/60"
+                    className="flex items-center justify-between p-3 bg-gray-50/70 rounded-xl hover:bg-[var(--bg-surface)] hover:shadow-xs transition-all border border-[var(--border-subtle)]/60"
                   >
                     <div className="flex items-center text-[#111111] text-sm">
                       <fact.icon className={`w-4 h-4 mr-2.5 ${fact.color}`} />

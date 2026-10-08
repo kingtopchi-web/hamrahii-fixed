@@ -158,7 +158,7 @@ const ParcelDelivery = () => {
       default:
         return {
           label: status,
-          color: "text-gray-700 bg-gray-50 border-gray-200",
+          color: "text-gray-700 bg-gray-50 border-[var(--border-subtle)]",
           step: 0,
         };
     }
@@ -186,7 +186,7 @@ const ParcelDelivery = () => {
           <h1 className="text-xl font-bold text-[#111111]">Parcel Delivery</h1>
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium shadow-sm text-gray-700"
+            className="px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-sm font-medium shadow-sm text-gray-700"
           >
             Menu
           </button>
@@ -199,9 +199,9 @@ const ParcelDelivery = () => {
           />
 
           <main className="lg:col-span-9 space-y-6 lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar pb-16 lg:px-0 px-4">
-            <div className="bg-white rounded-2xl border border-[#E5E5E5]/50 shadow-sm p-6 lg:p-8 min-h-[500px]">
+            <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm p-6 lg:p-8 min-h-[500px]">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-6 border-b border-gray-100">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-6 border-b border-[var(--border-subtle)]">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center">
                     <Truck size={24} />
@@ -220,7 +220,7 @@ const ParcelDelivery = () => {
                     onClick={() => setActiveTab("active")}
                     className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
                       activeTab === "active"
-                        ? "bg-white text-gray-900 shadow-sm"
+                        ? "bg-[var(--bg-surface)] text-gray-900 shadow-sm"
                         : "text-gray-500 hover:text-gray-900"
                     }`}
                   >
@@ -230,7 +230,7 @@ const ParcelDelivery = () => {
                     onClick={() => setActiveTab("completed")}
                     className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
                       activeTab === "completed"
-                        ? "bg-white text-gray-900 shadow-sm"
+                        ? "bg-[var(--bg-surface)] text-gray-900 shadow-sm"
                         : "text-gray-500 hover:text-gray-900"
                     }`}
                   >
@@ -244,8 +244,8 @@ const ParcelDelivery = () => {
                   <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
               ) : displayedDeliveries.length === 0 ? (
-                <div className="text-center py-16 px-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-gray-400">
+                <div className="text-center py-16 px-4 bg-gray-50 rounded-2xl border border-[var(--border-subtle)]">
+                  <div className="w-16 h-16 bg-[var(--bg-surface)] rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-gray-400">
                     <Truck size={32} />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">
@@ -270,11 +270,11 @@ const ParcelDelivery = () => {
                     return (
                       <div
                         key={parcel._id}
-                        className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all"
+                        className="border border-[var(--border-subtle)] rounded-2xl overflow-hidden bg-[var(--bg-surface)] shadow-sm hover:shadow-md transition-all"
                       >
                         {/* Summary Header */}
                         <div
-                          className="p-5 cursor-pointer flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white"
+                          className="p-5 cursor-pointer flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--bg-surface)]"
                           onClick={() => setExpandedId(isExpanded ? null : parcel._id)}
                         >
                           <div className="flex items-center gap-4">
@@ -329,7 +329,7 @@ const ParcelDelivery = () => {
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
-                              className="border-t border-gray-100 bg-gray-50/70 p-5 space-y-6"
+                              className="border-t border-[var(--border-subtle)] bg-gray-50/70 p-5 space-y-6"
                             >
                               {/* Step Progress Bar removed as requested */}
 
@@ -340,13 +340,13 @@ const ParcelDelivery = () => {
 
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Contact Information */}
-                                <div className="bg-white p-4 rounded-xl border border-gray-100 space-y-4">
+                                <div className="bg-[var(--bg-surface)] p-4 rounded-xl border border-[var(--border-subtle)] space-y-4">
                                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                                     Contact Information
                                   </h4>
 
                                   {/* Pickup Info */}
-                                  <div className="space-y-1 pb-3 border-b border-gray-100">
+                                  <div className="space-y-1 pb-3 border-b border-[var(--border-subtle)]">
                                     <div className="flex items-center justify-between">
                                       <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
                                         <MapPin size={14} /> Pickup Location
@@ -397,7 +397,7 @@ const ParcelDelivery = () => {
                                 </div>
 
                                 {/* Action & OTP Section */}
-                                <div className="bg-white p-4 rounded-xl border border-gray-100 flex flex-col justify-between">
+                                <div className="bg-[var(--bg-surface)] p-4 rounded-xl border border-[var(--border-subtle)] flex flex-col justify-between">
                                   <div>
                                     <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
                                       Driver Actions
@@ -581,7 +581,7 @@ const ParcelDelivery = () => {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-gray-100"
+              className="bg-[var(--bg-surface)] rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-[var(--border-subtle)]"
             >
               <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-4 border border-amber-200 shadow-xs">
                 <AlertTriangle size={28} />
@@ -602,7 +602,7 @@ const ParcelDelivery = () => {
               </p>
 
               {/* Fee Breakdown Card */}
-              <div className="bg-gray-50 rounded-2xl p-4 border border-gray-200/80 space-y-2.5 my-5 text-xs sm:text-sm">
+              <div className="bg-gray-50 rounded-2xl p-4 border border-[var(--border-subtle)]/80 space-y-2.5 my-5 text-xs sm:text-sm">
                 <div className="flex justify-between items-center text-gray-600">
                   <span>Platform Fee:</span>
                   <span className="font-bold text-gray-900">₹{insufficientData.platformFee}</span>
@@ -611,7 +611,7 @@ const ParcelDelivery = () => {
                   <span>Current Wallet Balance:</span>
                   <span className="font-bold text-gray-900">₹{insufficientData.currentBalance}</span>
                 </div>
-                <div className="pt-2 border-t border-gray-200 flex justify-between items-center font-bold">
+                <div className="pt-2 border-t border-[var(--border-subtle)] flex justify-between items-center font-bold">
                   <span className="text-amber-800">Additional Amount Required:</span>
                   <span className="text-base text-[#E10600]">₹{insufficientData.requiredAdditional}</span>
                 </div>

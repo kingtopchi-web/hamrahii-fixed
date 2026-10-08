@@ -62,7 +62,7 @@ const Bookings = () => {
             case 'completed':
                 return 'bg-blue-100 text-blue-800 border-blue-200'
             default:
-                return 'bg-gray-100 text-gray-800 border-gray-200'
+                return 'bg-gray-100 text-gray-800 border-[var(--border-subtle)]'
         }
     }
 
@@ -95,7 +95,7 @@ const Bookings = () => {
                 </div>
 
                 {newBookings.length === 0 ? (
-                    <div className="text-center py-16 bg-white rounded-2xl shadow-sm">
+                    <div className="text-center py-16 bg-[var(--bg-surface)] rounded-2xl shadow-sm">
                         <div className="text-6xl mb-4">🚗</div>
                         <h3 className="text-xl font-semibold text-gray-700 mb-2">No bookings yet</h3>
                         <p className="text-gray-500">Your upcoming rides will appear here</p>
@@ -110,7 +110,7 @@ const Bookings = () => {
                             return (
                                 <div
                                     key={booking._id}
-                                    className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-200"
+                                    className="group bg-[var(--bg-surface)] rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-[var(--border-subtle)] hover:border-indigo-200"
                                 >
                                     <div className="p-6">
                                         {/* Header with Route and Status */}
@@ -171,7 +171,7 @@ const Bookings = () => {
                                                             {user?.firstName} {user?.lastName}
                                                         </h3>
                                                         {user?.phone && (
-                                                            <span className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full">
+                                                            <span className="text-sm text-gray-500 bg-[var(--bg-surface)] px-3 py-1 rounded-full">
                                                                 📞 {user.phone}
                                                             </span>
                                                         )}
@@ -207,7 +207,7 @@ const Bookings = () => {
                                         </div>
 
                                         {/* Passenger Details & Seats */}
-                                        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-gray-100">
+                                        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[var(--border-subtle)]">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
@@ -245,7 +245,7 @@ const Bookings = () => {
 
                                         {/* Additional Passengers if more than 1 */}
                                         {booking.passengers && booking.passengers.length > 1 && (
-                                            <div className="mt-4 pt-3 border-t border-gray-100">
+                                            <div className="mt-4 pt-3 border-t border-[var(--border-subtle)]">
                                                 <details className="text-sm">
                                                     <summary className="text-indigo-600 cursor-pointer font-medium hover:text-indigo-700">
                                                         + {booking.passengers.length - 1} more passenger(s)

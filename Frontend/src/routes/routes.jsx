@@ -45,12 +45,14 @@ import PaymentPage from "../pages/PaymentPage";
 import PaymentSuccess from "../pages/PaymentSuccess";
 import PaymentFailed from "../pages/PaymentFailed";
 import Bookings from "../pages/profile/Bookings";
+import KycVerification from "../pages/profile/KycVerification";
 
 // New Epic Imports
 import UserDashboard from "../pages/Dashboard/UserDashboard";
 import MyParcels from "../pages/Parcel/MyParcels";
 import SendParcel from "../pages/Parcel/SendParcel";
 import ParcelDelivery from "../pages/Parcel/ParcelDelivery";
+import Vehicles from "../pages/Vehicles";
 
 const routes = createBrowserRouter([
   {
@@ -224,6 +226,10 @@ const routes = createBrowserRouter([
           {
             path : "/my-profile/bookings",
             element : <Bookings />
+          },
+          {
+            path: "/my-profile/kyc",
+            element: <KycVerification />
           }
         ],
       },
@@ -246,6 +252,10 @@ const routes = createBrowserRouter([
       {
         path: "/user/parcel-delivery",
         element: <ProtectUser><ParcelDelivery /></ProtectUser>,
+      },
+      {
+        path: "/vehicles",
+        element: <Vehicles />,
       },
       {
         path: "*",

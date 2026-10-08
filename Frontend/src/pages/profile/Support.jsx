@@ -403,7 +403,7 @@ const Support = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 mb-6">
+      <div className="flex border-b border-[var(--border-subtle)] mb-6">
         <button
           onClick={() => setActiveTab('tickets')}
           className={`px-6 py-3 font-medium border-b-2 transition-colors ${activeTab === 'tickets' ? 'border-[#E10600] text-[#E10600]' : 'border-transparent text-[#555555] hover:text-[#111111]'}`}
@@ -452,7 +452,7 @@ const Support = () => {
                   placeholder="Search tickets by subject or ID..."
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  className="pl-10 pr-4 py-2.5 border border-[#E5E5E5] rounded-xl focus:outline-none focus:border-[#E10600] w-full"
+                  className="pl-10 pr-4 py-2.5 border border-[var(--border-subtle)] rounded-xl focus:outline-none focus:border-[#E10600] w-full"
                 />
               </div>
               
@@ -563,7 +563,7 @@ const Support = () => {
                         key={ticket._id || ticket.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow"
+                        className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-5 hover:shadow-md transition-shadow"
                       >
                         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                           <div className="flex-1">
@@ -649,7 +649,7 @@ const Support = () => {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-gray-200">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-[var(--border-subtle)]">
                     <div className="text-sm text-gray-600">
                       Page {currentPage} of {totalPages}
                     </div>
@@ -752,7 +752,7 @@ const Support = () => {
             exit={{ opacity: 0 }}
             className="max-w-3xl mx-auto"
           >
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Raise New Support Ticket</h2>
               <p className="text-gray-600 mb-6">Fill in the details below to create a new support request</p>
               
@@ -904,7 +904,7 @@ const Support = () => {
               {faqs.map((faq) => (
                 <div
                   key={faq.id}
-                  className="bg-white border border-gray-200 rounded-xl overflow-hidden"
+                  className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl overflow-hidden"
                 >
                   <button
                     onClick={() => setActiveFaq(activeFaq === faq.id ? null : faq.id)}
@@ -926,7 +926,7 @@ const Support = () => {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="p-4 pt-0 border-t border-gray-100">
+                        <div className="p-4 pt-0 border-t border-[var(--border-subtle)]">
                           <p className="text-gray-700">{faq.answer}</p>
                         </div>
                       </motion.div>
@@ -953,7 +953,7 @@ const Support = () => {
             {contactInfo.map((contact, index) => (
               <div
                 key={index}
-                className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+                className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-6 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 rounded-lg bg-blue-50">

@@ -91,7 +91,7 @@ const LiveParcelTrackingModal = ({ isOpen, onClose, parcel, onPaymentSuccess }) 
           className="bg-gray-50 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl relative"
         >
           {/* Header */}
-          <div className="bg-white border-b border-gray-100 p-4 sm:p-5 flex items-center justify-between sticky top-0 z-10 shrink-0">
+          <div className="bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] p-4 sm:p-5 flex items-center justify-between sticky top-0 z-10 shrink-0">
             <div>
               <h2 className="text-lg font-bold text-gray-900 tracking-tight">Live Parcel Tracking</h2>
               <p className="text-xs text-gray-500">ID: #{parcel._id.slice(-6).toUpperCase()}</p>
@@ -137,7 +137,7 @@ const LiveParcelTrackingModal = ({ isOpen, onClose, parcel, onPaymentSuccess }) 
                   </p>
                 </div>
 
-                <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm flex items-center justify-between">
+                <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-3 shadow-sm flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
                       <User size={16} />
@@ -167,7 +167,7 @@ const LiveParcelTrackingModal = ({ isOpen, onClose, parcel, onPaymentSuccess }) 
               <div className="space-y-4">
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Payment & Status</h4>
 
-                <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm space-y-2">
+                <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-3 shadow-sm space-y-2">
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-gray-500">Payment Method</p>
                     <p className="text-sm font-medium text-gray-900">{parcel.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online Payment'}</p>
@@ -219,7 +219,7 @@ const LiveParcelTrackingModal = ({ isOpen, onClose, parcel, onPaymentSuccess }) 
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-xl shadow-xl w-full max-w-sm p-6"
+              className="bg-[var(--bg-surface)] rounded-xl shadow-xl w-full max-w-sm p-6"
             >
               <h3 className="text-lg font-bold text-gray-900 mb-2">Cancel Parcel Request?</h3>
               <p className="text-sm text-gray-600 mb-6">

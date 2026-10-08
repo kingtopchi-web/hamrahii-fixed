@@ -832,7 +832,7 @@ export function AddressForm({
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex items-center justify-center min-h-[600px] bg-white rounded-2xl shadow-sm border border-[#E5E5E5]"
+        className="flex items-center justify-center min-h-[600px] bg-[var(--bg-surface)] rounded-2xl shadow-sm border border-[var(--border-subtle)]"
       >
         <div className="text-center p-8">
           <motion.div
@@ -865,7 +865,7 @@ export function AddressForm({
           <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="bg-white rounded-2xl shadow-sm border border-[#E5E5E5] p-6"
+            className="bg-[var(--bg-surface)] rounded-2xl shadow-sm border border-[var(--border-subtle)] p-6"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-[#E10600]/10 rounded-lg">
@@ -915,7 +915,7 @@ export function AddressForm({
                         ref={fromInputRef}
                         type="text"
                         placeholder="Enter starting point..."
-                        className="w-full pl-12 pr-12 py-3 text-sm border border-[#E5E5E5] rounded-xl focus:ring-2 focus:ring-[#E10600] focus:border-transparent outline-none transition-all hover:border-[#B8B8B8] bg-white"
+                        className="w-full pl-12 pr-12 py-3 text-sm border border-[var(--border-subtle)] rounded-xl focus:ring-2 focus:ring-[#E10600] focus:border-transparent outline-none transition-all hover:border-[#B8B8B8] bg-[var(--bg-surface)]"
                         onFocus={() => setActiveInput("from")}
                       />
                     </Autocomplete>
@@ -940,7 +940,7 @@ export function AddressForm({
                         ref={fromInputRef}
                         type="text"
                         placeholder="Enter starting point..."
-                        className="w-full pl-12 pr-12 py-3 text-sm border border-[#E5E5E5] rounded-xl focus:ring-2 focus:ring-[#E10600] focus:border-transparent outline-none transition-all hover:border-[#B8B8B8] bg-white"
+                        className="w-full pl-12 pr-12 py-3 text-sm border border-[var(--border-subtle)] rounded-xl focus:ring-2 focus:ring-[#E10600] focus:border-transparent outline-none transition-all hover:border-[#B8B8B8] bg-[var(--bg-surface)]"
                         onFocus={() => setActiveInput("from")}
                       />
                     </Autocomplete>
@@ -969,7 +969,7 @@ export function AddressForm({
                   whileHover={{ scale: 1.1, rotate: 180 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={swapLocations}
-                  className="p-2 bg-white hover:bg-[#F7F7F7] rounded-full border border-[#E5E5E5] transition-colors shadow-sm"
+                  className="p-2 bg-[var(--bg-surface)] hover:bg-[#F7F7F7] rounded-full border border-[var(--border-subtle)] transition-colors shadow-sm"
                   title="Swap locations"
                 >
                   <ArrowDownUp size={18} className="text-[#555555]" />
@@ -1014,7 +1014,7 @@ export function AddressForm({
                         ref={toInputRef}
                         type="text"
                         placeholder="Enter destination..."
-                        className="w-full pl-12 pr-12 py-3 text-sm border border-[#E5E5E5] rounded-xl focus:ring-2 focus:ring-[#E10600] focus:border-transparent outline-none transition-all hover:border-[#B8B8B8] bg-white"
+                        className="w-full pl-12 pr-12 py-3 text-sm border border-[var(--border-subtle)] rounded-xl focus:ring-2 focus:ring-[#E10600] focus:border-transparent outline-none transition-all hover:border-[#B8B8B8] bg-[var(--bg-surface)]"
                         onFocus={() => setActiveInput("to")}
                       />
                     </Autocomplete>
@@ -1098,7 +1098,7 @@ export function AddressForm({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={clearRoute}
-                  className="px-4 py-3 bg-white hover:bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] transition-colors shadow-sm"
+                  className="px-4 py-3 bg-[var(--bg-surface)] hover:bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] transition-colors shadow-sm"
                   title="Clear all"
                 >
                   <Trash2 size={18} className="text-[#111111]" />
@@ -1114,7 +1114,7 @@ export function AddressForm({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="bg-white rounded-2xl shadow-sm border border-[#E5E5E5] p-6"
+                className="bg-[var(--bg-surface)] rounded-2xl shadow-sm border border-[var(--border-subtle)] p-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-[#10B981]/10 rounded-lg">
@@ -1144,7 +1144,7 @@ export function AddressForm({
                         className={`w-full p-4 rounded-xl border text-left transition-all ${
                           selectedRouteIndex === index
                             ? "border-[#E10600] bg-[#E10600]/5 shadow-sm"
-                            : "border-[#E5E5E5] hover:border-[#E10600]/30 hover:bg-[#F7F7F7]"
+                            : "border-[var(--border-subtle)] hover:border-[#E10600]/30 hover:bg-[#F7F7F7]"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -1191,9 +1191,9 @@ export function AddressForm({
           <motion.div
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="bg-white rounded-2xl shadow-sm border border-[#E5E5E5] overflow-hidden h-[60vh] md:h-[80vh] flex flex-col"
+            className="bg-[var(--bg-surface)] rounded-2xl shadow-sm border border-[var(--border-subtle)] overflow-hidden h-[60vh] md:h-[80vh] flex flex-col"
           >
-            <div className="p-4 border-b border-[#E5E5E5] bg-white">
+            <div className="p-4 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-[#E10600]/10 rounded-lg">
@@ -1344,7 +1344,7 @@ export function AddressForm({
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm  py-3 rounded-xl shadow-lg flex items-center gap-3 border border-[#E5E5E5]"
+                  className="absolute top-6 right-6 bg-[var(--bg-surface)]/90 backdrop-blur-sm  py-3 rounded-xl shadow-lg flex items-center gap-3 border border-[var(--border-subtle)]"
                 >
                   <Loader2 size={16} className="animate-spin text-[#E10600]" />
                   <span className="text-sm font-medium text-[#111111]">
@@ -1362,7 +1362,7 @@ export function AddressForm({
                     mapRef.current &&
                     mapRef.current.setZoom(mapRef.current.getZoom() + 1)
                   }
-                  className="p-3 bg-white rounded-xl border border-[#E5E5E5] shadow-lg hover:bg-[#F7F7F7] transition-colors"
+                  className="p-3 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-lg hover:bg-[#F7F7F7] transition-colors"
                 >
                   <ZoomIn size={20} className="text-[#111111]" />
                 </motion.button>
@@ -1373,7 +1373,7 @@ export function AddressForm({
                     mapRef.current &&
                     mapRef.current.setZoom(mapRef.current.getZoom() - 1)
                   }
-                  className="p-3 bg-white rounded-xl border border-[#E5E5E5] shadow-lg hover:bg-[#F7F7F7] transition-colors"
+                  className="p-3 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-lg hover:bg-[#F7F7F7] transition-colors"
                 >
                   <ZoomOut size={20} className="text-[#111111]" />
                 </motion.button>

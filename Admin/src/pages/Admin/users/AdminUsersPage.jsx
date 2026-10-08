@@ -17,6 +17,8 @@ import {
   PlusCircle,
   Wallet,
   Coins,
+  Clock,
+  XCircle,
 } from 'lucide-react';
 import { api } from '../../../services/api';
 import Axios from '../../../services/axios';
@@ -239,6 +241,40 @@ const AdminUsersList = () => {
     }
   };
 
+  const getKycBadge = (kycStatus) => {
+    switch(kycStatus) {
+      case 'VERIFIED':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+            <Shield className="w-3 h-3" />
+            KYC Verified
+          </span>
+        );
+      case 'PENDING':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-yellow-50 text-yellow-700 border border-yellow-200">
+            <Clock className="w-3 h-3" />
+            KYC Pending
+          </span>
+        );
+      case 'REJECTED':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-red-50 text-red-700 border border-red-200">
+            <XCircle className="w-3 h-3" />
+            KYC Rejected
+          </span>
+        );
+      case 'NOT_SUBMITTED':
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-gray-50 text-gray-700 border border-gray-200">
+            <UserX className="w-3 h-3" />
+            No KYC
+          </span>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -428,8 +464,9 @@ const AdminUsersList = () => {
                         <h3 className="font-bold text-sm text-[#0F172A] truncate" title={formatUserName(user)}>
                           {formatUserName(user)}
                         </h3>
-                        <div className="mt-1">
+                        <div className="mt-1 flex flex-col gap-1">
                           {getVerificationBadge(user.isVerified)}
+                          {getKycBadge(user.kyc?.status)}
                         </div>
                       </div>
                     </div>

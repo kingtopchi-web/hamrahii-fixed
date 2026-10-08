@@ -29,9 +29,9 @@ export const GoogleMapsProvider = ({ children }) => {
         // console.error('Error loading Google Maps:', error);
       }}
       loadingElement={
-        <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-[var(--bg-surface)] z-50">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 border-[#E5E5E5] border-t-[#E10600] rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="w-16 h-16 border-4 border-[var(--border-subtle)] border-t-[#E10600] rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-[#555555]">Loading Google Maps...</p>
           </div>
         </div>
@@ -96,9 +96,9 @@ export const GoogleMapsProvider = ({ children }) => {
 //   // Simple loading component
 //   if (!isLoaded && !loadError) {
 //     return (
-//       <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+//       <div className="fixed inset-0 flex items-center justify-center bg-[var(--bg-surface)] z-50">
 //         <div className="text-center">
-//           <div className="w-16 h-16 border-4 border-[#E5E5E5] border-t-[#E10600] rounded-full animate-spin mx-auto mb-4"></div>
+//           <div className="w-16 h-16 border-4 border-[var(--border-subtle)] border-t-[#E10600] rounded-full animate-spin mx-auto mb-4"></div>
 //           <p className="text-[#555555]">Loading Google Maps...</p>
 //         </div>
 //       </div>
@@ -107,7 +107,7 @@ export const GoogleMapsProvider = ({ children }) => {
 
 //   if (loadError) {
 //     return (
-//       <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+//       <div className="fixed inset-0 flex items-center justify-center bg-[var(--bg-surface)] z-50">
 //         <div className="text-center p-8">
 //           <div className="text-[#E10600] text-4xl mb-4">⚠️</div>
 //           <h2 className="text-xl font-bold text-[#111111] mb-2">Map Service Unavailable</h2>

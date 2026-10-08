@@ -91,5 +91,10 @@ export const api = {
         track: (parcelId) => base_url + `/parcel/${parcelId}/track`,
         getNearbyRiders: (parcelId) => base_url + `/parcel/${parcelId}/nearby-riders`,
         refreshSearch: (parcelId) => base_url + `/parcel/${parcelId}/refresh-search`,
+    },
+    kyc: {
+        status: base_url + "/kyc/status",
+        start: base_url + "/kyc/start",
+        mockComplete: base_url + "/kyc/mock-complete",
     }
 }

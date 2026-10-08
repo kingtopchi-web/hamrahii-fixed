@@ -145,7 +145,7 @@ const Contact = () => {
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-[var(--bg-surface)] rounded-2xl shadow-lg p-8">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">
               Send us a Message
             </h3>
@@ -315,7 +315,7 @@ const Contact = () => {
           {/* Contact Info & Stats */}
           <div className="space-y-8">
             {/* Contact Info */}
-            <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="bg-[var(--bg-surface)] rounded-2xl shadow-lg p-8">
               <h3 className="text-2xl font-bold text-gray-800 mb-6">
                 Contact Information
               </h3>
@@ -466,7 +466,7 @@ const Contact = () => {
             Frequently Asked Questions
           </h3>
           <div className="space-y-4">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-[var(--bg-surface)] rounded-lg shadow p-6">
               <h4 className="font-medium text-gray-800 mb-2">
                 How do I start carpooling with HamRahi?
               </h4>
@@ -475,7 +475,7 @@ const Contact = () => {
                 search for available rides in your route.
               </p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-[var(--bg-surface)] rounded-lg shadow p-6">
               <h4 className="font-medium text-gray-800 mb-2">
                 Is HamRahi safe?
               </h4>
@@ -484,7 +484,7 @@ const Contact = () => {
                 emergency features, and ride tracking.
               </p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-[var(--bg-surface)] rounded-lg shadow p-6">
               <h4 className="font-medium text-gray-800 mb-2">
                 How are ride costs calculated?
               </h4>

@@ -185,7 +185,7 @@ const Safety = () => {
       }, []) 
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--bg-page)]">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0">
@@ -224,7 +224,7 @@ const Safety = () => {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="bg-white rounded-xl border border-[#E5E5E5] p-5 hover:border-[#E10600]/30 hover:shadow-md transition-all duration-300"
+                  className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-5 hover:border-[#E10600]/30 hover:shadow-md transition-all duration-300"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-[#F7F7F7] flex items-center justify-center">
@@ -267,7 +267,7 @@ const Safety = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="bg-white rounded-2xl border border-[#E5E5E5] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
+                className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
               >
                 <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center mb-6`}>
                   <feature.icon className="w-7 h-7 text-white" />
@@ -289,7 +289,7 @@ const Safety = () => {
           </div>
 
           {/* Safety Steps */}
-          <div className="bg-white rounded-2xl border border-[#E5E5E5] p-5 md:p-8">
+          <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-5 md:p-8">
             <h3 className="text-3xl font-bold text-[#111111] text-center mb-12">
               Safety at Every Step
             </h3>
@@ -302,7 +302,7 @@ const Safety = () => {
                     {step.step}
                   </div>
                   
-                  <div className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] p-8 pt-12">
+                  <div className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] p-8 pt-12">
                     <h4 className="text-xl font-bold text-[#111111] mb-6 text-center">{step.title}</h4>
                     
                     <ul className="space-y-4">
@@ -344,7 +344,7 @@ const Safety = () => {
               {verificationSteps.map((step, index) => (
                 <div key={index} className="text-center">
                   <div className="relative mb-4">
-                    <div className="w-16 h-16 rounded-full bg-white border-4 border-[#E5E5E5] flex items-center justify-center mx-auto relative">
+                    <div className="w-16 h-16 rounded-full bg-[var(--bg-surface)] border-4 border-[var(--border-subtle)] flex items-center justify-center mx-auto relative">
                       <div className="w-12 h-12 rounded-full bg-[#F7F7F7] flex items-center justify-center">
                         <div className="text-lg font-bold text-[#111111]">{index + 1}</div>
                       </div>
@@ -366,7 +366,7 @@ const Safety = () => {
           </div>
 
           {/* Verification Details */}
-          <div className="mt-16 bg-[#F7F7F7] rounded-2xl p-8 border border-[#E5E5E5]">
+          <div className="mt-16 bg-[#F7F7F7] rounded-2xl p-8 border border-[var(--border-subtle)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <h3 className="text-2xl font-bold text-[#111111] mb-6">What We Verify</h3>
@@ -446,7 +446,7 @@ const Safety = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white rounded-xl border border-[#E5E5E5] p-8 hover:border-[#E10600] hover:shadow-md transition-all duration-300"
+                className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8 hover:border-[#E10600] hover:shadow-md transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-lg bg-[#E10600] flex items-center justify-center mb-6">
                   <feature.icon className="w-6 h-6 text-white" />
@@ -464,7 +464,7 @@ const Safety = () => {
           </div>
 
           {/* Safety Tools */}
-          <div className="bg-white rounded-2xl border border-[#E5E5E5] p-8">
+          <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h3 className="text-2xl font-bold text-[#111111] mb-6">Built-in Safety Tools</h3>
@@ -502,7 +502,7 @@ const Safety = () => {
                 </div>
               </div>
               
-              <div className="bg-[#F7F7F7] rounded-xl p-8 border border-[#E5E5E5]">
+              <div className="bg-[#F7F7F7] rounded-xl p-8 border border-[var(--border-subtle)]">
                 <div className="text-center">
                   <div className="w-20 h-20 rounded-full bg-[#E10600] flex items-center justify-center mx-auto mb-6">
                     <Shield className="w-10 h-10 text-white" />
@@ -522,7 +522,7 @@ const Safety = () => {
       <div className="py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#F7F7F7] border border-[#E5E5E5] text-[#111111] text-sm font-semibold mb-4">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#F7F7F7] border border-[var(--border-subtle)] text-[#111111] text-sm font-semibold mb-4">
               <Heart className="w-4 h-4 mr-2 text-[#E10600]" />
               Trusted by Thousands
             </div>
@@ -542,7 +542,7 @@ const Safety = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
                 whileHover={{ y: -5 }}
-                className="bg-white rounded-2xl border border-[#E5E5E5] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
+                className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div>
@@ -564,7 +564,7 @@ const Safety = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2 pt-6 border-t border-[#E5E5E5]">
+                <div className="flex items-center gap-2 pt-6 border-t border-[var(--border-subtle)]">
                   <UserCheck className="w-4 h-4 text-[#E10600]" />
                   <span className="text-sm text-[#555555]">Verified Safety Review</span>
                 </div>

@@ -164,7 +164,7 @@ const CommunityPage = () => {
       <div>
       {/* Header Section */}
       <motion.header 
-        className="py-6 px-4 md:px-8 border-b border-[#E5E5E5]"
+        className="py-6 px-4 md:px-8 border-b border-[var(--border-subtle)]"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -191,12 +191,12 @@ const CommunityPage = () => {
           {communityStats.map((stat, index) => (
             <motion.div 
               key={index}
-              className="bg-[#F7F7F7] p-6 rounded-xl border border-[#E5E5E5]"
+              className="bg-[#F7F7F7] p-6 rounded-xl border border-[var(--border-subtle)]"
               variants={itemVariants}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-white rounded-lg">
+                <div className="p-2 bg-[var(--bg-surface)] rounded-lg">
                   {stat.icon}
                 </div>
                 <div className="text-right">
@@ -204,7 +204,7 @@ const CommunityPage = () => {
                   <div className="text-[#555555] text-sm">{stat.label}</div>
                 </div>
               </div>
-              <div className="w-full bg-white h-1.5 rounded-full overflow-hidden">
+              <div className="w-full bg-[var(--bg-surface)] h-1.5 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-[#E10600] rounded-full" 
                   style={{ width: `${Math.min(100, 70 + index * 10)}%` }}
@@ -218,7 +218,7 @@ const CommunityPage = () => {
           {/* Left Column - Community Members */}
           <div className="lg:w-2/3">
             {/* Tabs */}
-            <div className="flex border-b border-[#E5E5E5] mb-8 overflow-x-auto">
+            <div className="flex border-b border-[var(--border-subtle)] mb-8 overflow-x-auto">
               {['all', 'drivers', 'riders', 'premium'].map((tab) => (
                 <button
                   key={tab}
@@ -234,10 +234,10 @@ const CommunityPage = () => {
                   <input 
                     type="text" 
                     placeholder="Search members..." 
-                    className="pl-10 pr-4 py-2 bg-[#F7F7F7] rounded-lg border border-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#E10600]/20"
+                    className="pl-10 pr-4 py-2 bg-[#F7F7F7] rounded-lg border border-[var(--border-subtle)] focus:outline-none focus:ring-2 focus:ring-[#E10600]/20"
                   />
                 </div>
-                <button className="ml-3 p-2 bg-[#F7F7F7] rounded-lg border border-[#E5E5E5]">
+                <button className="ml-3 p-2 bg-[#F7F7F7] rounded-lg border border-[var(--border-subtle)]">
                   <Filter size={20} />
                 </button>
               </div>
@@ -253,7 +253,7 @@ const CommunityPage = () => {
               {communityMembers.map((member) => (
                 <motion.div 
                   key={member.id}
-                  className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] overflow-hidden"
+                  className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] overflow-hidden"
                   variants={itemVariants}
                   whileHover={{ y: -8, boxShadow: "0 10px 25px rgba(0,0,0,0.05)" }}
                 >
@@ -266,7 +266,7 @@ const CommunityPage = () => {
                         </div>
                         <p className="text-[#555555] text-sm">{member.role}</p>
                       </div>
-                      <div className="flex items-center gap-1 bg-white px-2 py-1 rounded">
+                      <div className="flex items-center gap-1 bg-[var(--bg-surface)] px-2 py-1 rounded">
                         <Star className="text-yellow-500 fill-yellow-500" size={16} />
                         <span className="font-bold">{member.rating}</span>
                       </div>
@@ -291,7 +291,7 @@ const CommunityPage = () => {
                       {member.badges.map((badge, index) => (
                         <span 
                           key={index} 
-                          className={`px-2 py-1 text-xs rounded ${badge === 'Premium' || badge === 'Super Host' ? 'bg-[#B8B8B8] text-white' : 'bg-white text-[#555555]'}`}
+                          className={`px-2 py-1 text-xs rounded ${badge === 'Premium' || badge === 'Super Host' ? 'bg-[#B8B8B8] text-white' : 'bg-[var(--bg-surface)] text-[#555555]'}`}
                         >
                           {badge}
                         </span>
@@ -325,7 +325,7 @@ const CommunityPage = () => {
                 {communityPosts.map((post) => (
                   <motion.div 
                     key={post.id}
-                    className="bg-[#F7F7F7] p-6 rounded-xl border border-[#E5E5E5]"
+                    className="bg-[#F7F7F7] p-6 rounded-xl border border-[var(--border-subtle)]"
                     whileHover={{ boxShadow: "0 5px 15px rgba(0,0,0,0.05)" }}
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -344,7 +344,7 @@ const CommunityPage = () => {
                     
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag, index) => (
-                        <span key={index} className="px-3 py-1 bg-white text-[#555555] text-sm rounded-full">
+                        <span key={index} className="px-3 py-1 bg-[var(--bg-surface)] text-[#555555] text-sm rounded-full">
                           {tag}
                         </span>
                       ))}
@@ -359,7 +359,7 @@ const CommunityPage = () => {
           <div className="lg:w-1/3">
             {/* Safety Features */}
             <motion.div 
-              className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] p-6 mb-8"
+              className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] p-6 mb-8"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
@@ -368,7 +368,7 @@ const CommunityPage = () => {
               <div className="space-y-5">
                 {safetyFeatures.map((feature, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="p-2 bg-white rounded-lg">
+                    <div className="p-2 bg-[var(--bg-surface)] rounded-lg">
                       <div className="text-[#E10600]">
                         {feature.icon}
                       </div>
@@ -381,7 +381,7 @@ const CommunityPage = () => {
                 ))}
               </div>
               
-              <div className="mt-8 p-4 bg-white rounded-lg border border-[#E5E5E5]">
+              <div className="mt-8 p-4 bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)]">
                 <div className="flex items-center gap-3">
                   <Award className="text-[#E10600]" size={24} />
                   <div>
@@ -394,7 +394,7 @@ const CommunityPage = () => {
             
             {/* Upcoming Events */}
             <motion.div 
-              className="bg-gradient-to-br from-[#F7F7F7] to-white rounded-xl border border-[#E5E5E5] p-6"
+              className="bg-gradient-to-br from-[#F7F7F7] to-white rounded-xl border border-[var(--border-subtle)] p-6"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
@@ -402,7 +402,7 @@ const CommunityPage = () => {
               <h2 className="text-2xl font-bold mb-6">Community Events</h2>
               
               <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 bg-white rounded-lg border border-[#E5E5E5]">
+                <div className="flex items-center gap-4 p-4 bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)]">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-[#E10600]">15</div>
                     <div className="text-sm">MAR</div>
@@ -416,7 +416,7 @@ const CommunityPage = () => {
                   </button>
                 </div>
                 
-                <div className="flex items-center gap-4 p-4 bg-white rounded-lg border border-[#E5E5E5]">
+                <div className="flex items-center gap-4 p-4 bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)]">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-[#E10600]">22</div>
                     <div className="text-sm">MAR</div>
@@ -431,7 +431,7 @@ const CommunityPage = () => {
                 </div>
               </div>
               
-              <div className="mt-8 pt-6 border-t border-[#E5E5E5]">
+              <div className="mt-8 pt-6 border-t border-[var(--border-subtle)]">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-bold">Need help?</div>

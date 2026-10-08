@@ -177,14 +177,14 @@ const CookiesPolicy = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--bg-page)]">
       {/* Header */}
-      <div className="border-b border-[#E5E5E5]">
+      <div className="border-b border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[#F7F7F7] border border-[#E5E5E5] flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-[#F7F7F7] border border-[var(--border-subtle)] flex items-center justify-center">
                   <Cookie className="w-6 h-6 text-[#E10600]" />
                 </div>
                 <div>
@@ -205,7 +205,7 @@ const CookiesPolicy = () => {
           {/* Sidebar Navigation */}
           <div className="lg:w-1/4">
             <div className="sticky top-8">
-              <div className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] p-6 mb-6">
+              <div className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] p-6 mb-6">
                 <h3 className="font-bold text-[#111111] mb-4 flex items-center gap-2">
                   <Settings className="w-4 h-4" />
                   Quick Navigation
@@ -217,8 +217,8 @@ const CookiesPolicy = () => {
                       onClick={() => setActiveSection(section.id)}
                       className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors flex items-center justify-between ${
                         activeSection === section.id
-                          ? 'bg-white border border-[#E10600] text-[#E10600] font-semibold'
-                          : 'text-[#555555] hover:bg-white hover:border hover:border-[#E5E5E5]'
+                          ? 'bg-[var(--bg-surface)] border border-[#E10600] text-[#E10600] font-semibold'
+                          : 'text-[#555555] hover:bg-[var(--bg-surface)] hover:border hover:border-[var(--border-subtle)]'
                       }`}
                     >
                       <span>{section.title}</span>
@@ -231,7 +231,7 @@ const CookiesPolicy = () => {
               </div>
 
               {/* Quick Settings */}
-              <div className="bg-white rounded-xl border border-[#E5E5E5] p-6">
+              <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6">
                 <h3 className="font-bold text-[#111111] mb-4 flex items-center gap-2">
                   <Cookie className="w-4 h-4 text-[#E10600]" />
                   Quick Settings
@@ -246,7 +246,7 @@ const CookiesPolicy = () => {
                   </button>
                   <button
                     onClick={handleRejectAll}
-                    className="w-full px-4 py-3 bg-white border-2 border-[#E5E5E5] text-[#111111] rounded-lg font-semibold hover:border-[#111111] transition-colors flex items-center justify-center gap-2"
+                    className="w-full px-4 py-3 bg-[var(--bg-surface)] border-2 border-[var(--border-subtle)] text-[#111111] rounded-lg font-semibold hover:border-[#111111] transition-colors flex items-center justify-center gap-2"
                   >
                     <XCircle className="w-4 h-4" />
                     Reject Non-Essential
@@ -265,9 +265,9 @@ const CookiesPolicy = () => {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
               >
-                <div className="bg-white rounded-xl border border-[#E5E5E5] p-8">
+                <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-16 h-16 rounded-lg bg-[#F7F7F7] border border-[#E5E5E5] flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-lg bg-[#F7F7F7] border border-[var(--border-subtle)] flex items-center justify-center">
                       <HelpCircle className="w-8 h-8 text-[#E10600]" />
                     </div>
                     <div>
@@ -311,7 +311,7 @@ const CookiesPolicy = () => {
                   </div>
                 </div>
 
-                <div className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] p-8">
+                <div className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] p-8">
                   <h3 className="text-xl font-bold text-[#111111] mb-6 flex items-center gap-2">
                     <AlertCircle className="w-5 h-5 text-[#E10600]" />
                     Important Notice
@@ -356,7 +356,7 @@ const CookiesPolicy = () => {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
               >
-                <div className="bg-white rounded-xl border border-[#E5E5E5] p-8">
+                <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8">
                   <h2 className="text-2xl font-bold text-[#111111] mb-8">Types of Cookies We Use</h2>
                   
                   <div className="space-y-6">
@@ -366,7 +366,7 @@ const CookiesPolicy = () => {
                         className={`p-6 rounded-xl border ${
                           cookie.required 
                             ? 'border-[#E10600] bg-[#E10600]/5' 
-                            : 'border-[#E5E5E5] bg-white'
+                            : 'border-[var(--border-subtle)] bg-[var(--bg-surface)]'
                         }`}
                       >
                         <div className="flex items-start justify-between mb-4">
@@ -403,7 +403,7 @@ const CookiesPolicy = () => {
                                     cookiePreferences[cookie.id] ? 'bg-[#E10600]' : 'bg-gray-300'
                                   }`}
                                 >
-                                  <span className={`block w-4 h-4 rounded-full bg-white transform transition-transform ${
+                                  <span className={`block w-4 h-4 rounded-full bg-[var(--bg-surface)] transform transition-transform ${
                                     cookiePreferences[cookie.id] ? 'translate-x-7' : 'translate-x-1'
                                   } mt-1`} />
                                 </label>
@@ -412,7 +412,7 @@ const CookiesPolicy = () => {
                           </div>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-6 border-t border-[#E5E5E5]/50">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-6 border-t border-[var(--border-subtle)]/50">
                           <div>
                             <h4 className="text-sm font-semibold text-[#111111] mb-1">Purpose</h4>
                             <p className="text-sm text-[#555555]">{cookie.purpose}</p>
@@ -439,7 +439,7 @@ const CookiesPolicy = () => {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
               >
-                <div className="bg-white rounded-xl border border-[#E5E5E5] p-8">
+                <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8">
                   <h2 className="text-2xl font-bold text-[#111111] mb-6">Manage Your Cookie Preferences</h2>
                   
                   <div className="mb-8">
@@ -491,19 +491,19 @@ const CookiesPolicy = () => {
                         You can also manage cookies through your browser settings. Here's how:
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <div className="font-semibold text-[#111111] mb-2">Google Chrome</div>
                           <p className="text-sm text-[#555555]">
                             Settings → Privacy and security → Cookies and other site data
                           </p>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <div className="font-semibold text-[#111111] mb-2">Safari</div>
                           <p className="text-sm text-[#555555]">
                             Preferences → Privacy → Cookies and website data
                           </p>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <div className="font-semibold text-[#111111] mb-2">Firefox</div>
                           <p className="text-sm text-[#555555]">
                             Options → Privacy & Security → Cookies and Site Data
@@ -523,7 +523,7 @@ const CookiesPolicy = () => {
                             Note: This will log you out and reset your preferences
                           </p>
                         </div>
-                        <button className="px-4 py-2 bg-white border-2 border-[#E5E5E5] text-[#111111] rounded-lg font-semibold hover:border-[#E10600] transition-colors flex items-center gap-2">
+                        <button className="px-4 py-2 bg-[var(--bg-surface)] border-2 border-[var(--border-subtle)] text-[#111111] rounded-lg font-semibold hover:border-[#E10600] transition-colors flex items-center gap-2">
                           <Trash2 className="w-4 h-4" />
                           Clear All
                         </button>
@@ -541,7 +541,7 @@ const CookiesPolicy = () => {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
               >
-                <div className="bg-white rounded-xl border border-[#E5E5E5] p-8">
+                <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8">
                   <h2 className="text-2xl font-bold text-[#111111] mb-6">Detailed Cookie List</h2>
                   
                   <div className="overflow-x-auto">
@@ -633,7 +633,7 @@ const CookiesPolicy = () => {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
               >
-                <div className="bg-white rounded-xl border border-[#E5E5E5] p-8">
+                <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8">
                   <h2 className="text-2xl font-bold text-[#111111] mb-6">Your Privacy Rights</h2>
                   
                   <div className="space-y-6">
@@ -646,25 +646,25 @@ const CookiesPolicy = () => {
                         Under GDPR and other privacy regulations, you have specific rights regarding your data:
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <h4 className="font-semibold text-[#111111] mb-2">Right to Access</h4>
                           <p className="text-sm text-[#555555]">
                             Request a copy of your personal data we process
                           </p>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <h4 className="font-semibold text-[#111111] mb-2">Right to Rectification</h4>
                           <p className="text-sm text-[#555555]">
                             Correct inaccurate or incomplete personal data
                           </p>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <h4 className="font-semibold text-[#111111] mb-2">Right to Erasure</h4>
                           <p className="text-sm text-[#555555]">
                             Request deletion of your personal data
                           </p>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <h4 className="font-semibold text-[#111111] mb-2">Right to Object</h4>
                           <p className="text-sm text-[#555555]">
                             Object to processing of your personal data
@@ -676,7 +676,7 @@ const CookiesPolicy = () => {
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold text-[#111111]">How to Exercise Your Rights</h3>
                       
-                      <div className="bg-white border border-[#E5E5E5] rounded-lg p-6">
+                      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-6">
                         <h4 className="font-semibold text-[#111111] mb-4 flex items-center gap-2">
                           <Mail className="w-5 h-5 text-[#E10600]" />
                           Contact Our Privacy Team
@@ -694,7 +694,7 @@ const CookiesPolicy = () => {
                         </div>
                       </div>
 
-                      <div className="bg-white border border-[#E5E5E5] rounded-lg p-6">
+                      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-6">
                         <h4 className="font-semibold text-[#111111] mb-4 flex items-center gap-2">
                           <Smartphone className="w-5 h-5 text-[#E10600]" />
                           Through Our App
@@ -707,7 +707,7 @@ const CookiesPolicy = () => {
                             Go to Settings
                             <ChevronRight className="w-4 h-4" />
                           </button>
-                          <button className="px-4 py-2 bg-white border-2 border-[#E5E5E5] text-[#111111] rounded-lg font-semibold hover:border-[#E10600] transition-colors flex items-center gap-2">
+                          <button className="px-4 py-2 bg-[var(--bg-surface)] border-2 border-[var(--border-subtle)] text-[#111111] rounded-lg font-semibold hover:border-[#E10600] transition-colors flex items-center gap-2">
                             <Download className="w-4 h-4" />
                             Download Data
                           </button>
@@ -726,14 +726,14 @@ const CookiesPolicy = () => {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
               >
-                <div className="bg-white rounded-xl border border-[#E5E5E5] p-8">
+                <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8">
                   <h2 className="text-2xl font-bold text-[#111111] mb-6">Policy Updates</h2>
                   
                   <div className="space-y-6">
                     <div className="bg-[#F7F7F7] rounded-lg p-6">
                       <h3 className="text-lg font-semibold text-[#111111] mb-4">Update History</h3>
                       <div className="space-y-4">
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <div className="flex items-center justify-between mb-2">
                             <span className="font-semibold text-[#111111]">December 15, 2023</span>
                             <span className="px-2 py-1 bg-[#E10600]/10 text-[#E10600] text-xs font-semibold rounded">
@@ -744,13 +744,13 @@ const CookiesPolicy = () => {
                             Added detailed cookie descriptions and enhanced user control options
                           </p>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <div className="font-semibold text-[#111111] mb-2">September 1, 2023</div>
                           <p className="text-sm text-[#555555]">
                             Updated third-party cookie information and compliance requirements
                           </p>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-[var(--bg-surface)] rounded-lg p-4">
                           <div className="font-semibold text-[#111111] mb-2">June 15, 2023</div>
                           <p className="text-sm text-[#555555]">
                             Initial cookie policy published with basic cookie information
@@ -759,7 +759,7 @@ const CookiesPolicy = () => {
                       </div>
                     </div>
 
-                    <div className="bg-white border border-[#E5E5E5] rounded-lg p-6">
+                    <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-6">
                       <h3 className="text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
                         <RefreshCw className="w-5 h-5 text-[#E10600]" />
                         Stay Updated
@@ -784,7 +784,7 @@ const CookiesPolicy = () => {
                       </ul>
                     </div>
 
-                    <div className="text-center pt-8 border-t border-[#E5E5E5]">
+                    <div className="text-center pt-8 border-t border-[var(--border-subtle)]">
                       <h3 className="text-lg font-semibold text-[#111111] mb-4">Questions About Our Cookie Policy?</h3>
                       <p className="text-[#555555] mb-6">
                         If you have any questions about how we use cookies or your privacy rights, 

@@ -342,7 +342,7 @@ const Help = () => {
     : faqs.filter(faq => faq.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-white flex w-full md:w-[80%] justify-center items-center mx-auto">
+    <div className="min-h-screen bg-[var(--bg-page)] flex w-full md:w-[80%] justify-center items-center mx-auto">
       <div>
 
      
@@ -351,7 +351,7 @@ const Help = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-lg bg-white/10">
+              <div className="p-2 rounded-lg bg-[var(--bg-surface)]/10">
                 <Headphones className="w-8 h-8" />
               </div>
               <div>
@@ -374,7 +374,7 @@ const Help = () => {
                 placeholder="Search for help articles, FAQs, or topics..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-xl bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 shadow-lg"
+                className="w-full pl-12 pr-4 py-4 rounded-xl bg-[var(--bg-surface)] text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 shadow-lg"
               />
               <button className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-[#E10600] text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
                 Search
@@ -386,7 +386,7 @@ const Help = () => {
                 <button
                   key={term}
                   onClick={() => setSearchQuery(term)}
-                  className="px-3 py-1 bg-white/10 rounded-full text-sm hover:bg-white/20 transition-colors"
+                  className="px-3 py-1 bg-[var(--bg-surface)]/10 rounded-full text-sm hover:bg-[var(--bg-surface)]/20 transition-colors"
                 >
                   {term}
                 </button>
@@ -404,28 +404,28 @@ const Help = () => {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
         >
           <div className="bg-[#F7F7F7] rounded-xl p-6 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface)] mb-4">
               <CheckCircle className="w-6 h-6 text-[#E10600]" />
             </div>
             <p className="text-2xl font-bold text-[#111111]">98%</p>
             <p className="text-sm text-[#555555]">Issue Resolution Rate</p>
           </div>
           <div className="bg-[#F7F7F7] rounded-xl p-6 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface)] mb-4">
               <Clock className="w-6 h-6 text-[#E10600]" />
             </div>
             <p className="text-2xl font-bold text-[#111111]">2 min</p>
             <p className="text-sm text-[#555555]">Avg. Response Time</p>
           </div>
           <div className="bg-[#F7F7F7] rounded-xl p-6 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface)] mb-4">
               <Star className="w-6 h-6 text-[#E10600]" />
             </div>
             <p className="text-2xl font-bold text-[#111111]">4.8/5</p>
             <p className="text-sm text-[#555555]">Customer Satisfaction</p>
           </div>
           <div className="bg-[#F7F7F7] rounded-xl p-6 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface)] mb-4">
               <Users className="w-6 h-6 text-[#E10600]" />
             </div>
             <p className="text-2xl font-bold text-[#111111]">24/7</p>
@@ -453,7 +453,7 @@ const Help = () => {
                   className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                     activeCategory === category.id
                       ? 'border-[#E10600] bg-red-50'
-                      : 'border-[#E5E5E5] bg-[#F7F7F7] hover:border-[#B8B8B8]'
+                      : 'border-[var(--border-subtle)] bg-[#F7F7F7] hover:border-[#B8B8B8]'
                   }`}
                 >
                   <div className="flex flex-col items-center">
@@ -496,10 +496,10 @@ const Help = () => {
                   key={article.id}
                   variants={itemVariants}
                   whileHover={{ y: -5 }}
-                  className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] p-6 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
+                  className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] p-6 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="p-3 rounded-lg bg-white border border-[#E5E5E5]">
+                    <div className="p-3 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
                       <Icon className="w-6 h-6 text-[#E10600]" />
                     </div>
                     <div className="flex-1">
@@ -541,11 +541,11 @@ const Help = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] overflow-hidden"
+                className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] overflow-hidden"
               >
                 <div className="p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="p-2 rounded-lg bg-white">
+                    <div className="p-2 rounded-lg bg-[var(--bg-surface)]">
                       <HelpCircle className="w-5 h-5 text-[#E10600]" />
                     </div>
                     <div className="flex-1">
@@ -574,7 +574,7 @@ const Help = () => {
                 <motion.div
                   key={index}
                   whileHover={{ scale: 1.02 }}
-                  className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] p-6"
+                  className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] p-6"
                 >
                   <div className="flex items-start space-x-4 mb-4">
                     <div className={`p-3 rounded-lg ${method.color.split(' ')[0]}`}>
@@ -595,7 +595,7 @@ const Help = () => {
                       className={`px-4 py-2 rounded-lg font-medium ${
                         method.buttonText === 'Call Now' 
                           ? 'bg-[#E10600] text-white hover:bg-red-700'
-                          : 'bg-white border border-[#E5E5E5] text-[#111111] hover:border-[#E10600]'
+                          : 'bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[#111111] hover:border-[#E10600]'
                       } transition-colors`}
                     >
                       {method.buttonText}
@@ -614,9 +614,9 @@ const Help = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-[var(--bg-surface)] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             >
-              <div className="sticky top-0 bg-white border-b border-[#E5E5E5] p-6 flex items-center justify-between">
+              <div className="sticky top-0 bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] p-6 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <MessageCircle className="w-8 h-8 text-[#E10600]" />
                   <div>
@@ -644,7 +644,7 @@ const Help = () => {
                       value={contactForm.name}
                       onChange={handleContactFormChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-[#E5E5E5] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
+                      className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
                       placeholder="Enter your full name"
                     />
                   </div>
@@ -659,7 +659,7 @@ const Help = () => {
                       value={contactForm.email}
                       onChange={handleContactFormChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-[#E5E5E5] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
+                      className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
                       placeholder="your.email@example.com"
                     />
                   </div>
@@ -673,7 +673,7 @@ const Help = () => {
                       name="phone"
                       value={contactForm.phone}
                       onChange={handleContactFormChange}
-                      className="w-full px-4 py-3 rounded-lg border border-[#E5E5E5] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
+                      className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
                       placeholder="+1 (234) 567-8900"
                     />
                   </div>
@@ -687,7 +687,7 @@ const Help = () => {
                       value={contactForm.category}
                       onChange={handleContactFormChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-[#E5E5E5] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
+                      className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
                     >
                       {contactCategories.map((cat) => (
                         <option key={cat.value} value={cat.value}>
@@ -707,7 +707,7 @@ const Help = () => {
                     name="subject"
                     value={contactForm.subject}
                     onChange={handleContactFormChange}
-                    className="w-full px-4 py-3 rounded-lg border border-[#E5E5E5] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors"
                     placeholder="Brief description of your issue"
                   />
                 </div>
@@ -722,7 +722,7 @@ const Help = () => {
                     onChange={handleContactFormChange}
                     required
                     rows="6"
-                    className="w-full px-4 py-3 rounded-lg border border-[#E5E5E5] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors resize-none"
+                    className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] focus:border-[#E10600] focus:ring-2 focus:ring-red-100 outline-none transition-colors resize-none"
                     placeholder="Please describe your issue or question in detail..."
                   />
                 </div>
@@ -735,7 +735,7 @@ const Help = () => {
                     <button
                       type="button"
                       onClick={() => setShowContactForm(false)}
-                      className="px-6 py-3 rounded-lg border border-[#E5E5E5] text-[#111111] font-medium hover:border-[#E10600] transition-colors"
+                      className="px-6 py-3 rounded-lg border border-[var(--border-subtle)] text-[#111111] font-medium hover:border-[#E10600] transition-colors"
                     >
                       Cancel
                     </button>
@@ -771,7 +771,7 @@ const Help = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-xl border border-[#E5E5E5] p-8 mb-12"
+          className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-xl border border-[var(--border-subtle)] p-8 mb-12"
         >
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -784,7 +784,7 @@ const Help = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {helpTopics.map((topic, index) => (
               <div key={index}>
-                <h3 className="font-semibold text-[#111111] mb-4 pb-2 border-b border-[#E5E5E5]">
+                <h3 className="font-semibold text-[#111111] mb-4 pb-2 border-b border-[var(--border-subtle)]">
                   {topic.title}
                 </h3>
                 <ul className="space-y-3">
@@ -807,7 +807,7 @@ const Help = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="border-t border-[#E5E5E5] pt-12"
+          className="border-t border-[var(--border-subtle)] pt-12"
         >
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -833,10 +833,10 @@ const Help = () => {
               <h3 className="font-semibold text-[#111111] mb-2">Legal Documents</h3>
               <p className="text-[#555555] mb-4">Read our terms and policies</p>
               <div className="flex justify-center space-x-3">
-                <button onClick={() => navigate("/terms")} className="px-4 py-2 border border-[#E5E5E5] text-[#111111] rounded-lg text-sm hover:border-[#E10600] transition-colors">
+                <button onClick={() => navigate("/terms")} className="px-4 py-2 border border-[var(--border-subtle)] text-[#111111] rounded-lg text-sm hover:border-[#E10600] transition-colors">
                   Terms & Conditions
                 </button>
-                <button onClick={() => navigate("/privacy")} className="px-4 py-2 border border-[#E5E5E5] text-[#111111] rounded-lg text-sm hover:border-[#E10600] transition-colors">
+                <button onClick={() => navigate("/privacy")} className="px-4 py-2 border border-[var(--border-subtle)] text-[#111111] rounded-lg text-sm hover:border-[#E10600] transition-colors">
                   Privacy Policy
                 </button>
               </div>

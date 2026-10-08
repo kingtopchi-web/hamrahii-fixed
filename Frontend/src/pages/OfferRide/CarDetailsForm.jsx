@@ -125,7 +125,7 @@ export const CarDetailsForm = ({ data, updateData, nextStep, prevStep }) => {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col justify-center items-center py-16 bg-white rounded-2xl border border-[#E5E5E5] shadow-lg"
+            className="flex flex-col justify-center items-center py-16 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] shadow-lg"
           >
             <Loader2 className="w-12 h-12 text-[#E10600] animate-spin mb-4" />
             <p className="text-[#555555]">Loading your cars...</p>
@@ -147,7 +147,7 @@ export const CarDetailsForm = ({ data, updateData, nextStep, prevStep }) => {
                   className={`cursor-pointer rounded-2xl border-2 overflow-hidden transition-all duration-300 ${
                     selectedCar?._id === car._id
                       ? 'border-[#E10600] shadow-lg shadow-[#E10600]/10'
-                      : 'border-[#E5E5E5] hover:border-[#B8B8B8]'
+                      : 'border-[var(--border-subtle)] hover:border-[#B8B8B8]'
                   }`}
                   onClick={() => handleCarSelect(car)}
                 >
@@ -181,7 +181,7 @@ export const CarDetailsForm = ({ data, updateData, nextStep, prevStep }) => {
                   </div>
                   
                   {/* Car Details */}
-                  <div className="p-5 bg-white">
+                  <div className="p-5 bg-[var(--bg-surface)]">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <h3 className="text-xl font-bold text-[#111111]">{car.brand} {car.model}</h3>
@@ -245,7 +245,7 @@ export const CarDetailsForm = ({ data, updateData, nextStep, prevStep }) => {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white rounded-2xl border border-[#E5E5E5] p-12 text-center shadow-lg"
+            className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-12 text-center shadow-lg"
           >
             <div className="w-24 h-24 rounded-full bg-[#F7F7F7] flex items-center justify-center mx-auto mb-6">
               <Car className="w-12 h-12 text-[#B8B8B8]" />

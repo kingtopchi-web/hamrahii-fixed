@@ -34,7 +34,7 @@ const PaymentFailed = () => {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full text-center"
+        className="bg-[var(--bg-surface)] shadow-xl rounded-2xl p-8 max-w-md w-full text-center"
       >
         {/* Icon */}
         <div className="flex justify-center mb-4">

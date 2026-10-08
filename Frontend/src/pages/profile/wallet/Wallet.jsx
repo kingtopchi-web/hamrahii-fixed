@@ -323,7 +323,7 @@ const WalletPage = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full bg-white rounded-3xl shadow-card-hover p-8 text-center border border-gray-100"
+          className="max-w-md w-full bg-[var(--bg-surface)] rounded-3xl shadow-card-hover p-8 text-center border border-[var(--border-subtle)]"
         >
           <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-100">
             <AlertTriangle className="w-8 h-8 text-[#E10600]" />
@@ -372,7 +372,7 @@ const WalletPage = () => {
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="p-3 bg-white hover:bg-gray-50 rounded-2xl border border-gray-200 shadow-sm hover:shadow transition-all disabled:opacity-50"
+                className="p-3 bg-[var(--bg-surface)] hover:bg-gray-50 rounded-2xl border border-[var(--border-subtle)] shadow-sm hover:shadow transition-all disabled:opacity-50"
                 title="Refresh Wallet"
               >
                 <RefreshCw
@@ -407,19 +407,19 @@ const WalletPage = () => {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4 mt-6">
-                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+                    <div className="flex items-center gap-2 bg-[var(--bg-surface)]/5 border border-white/10 px-3 py-1.5 rounded-xl">
                       <ArrowUp className="w-4 h-4 text-emerald-400" />
                       <span className="text-xs text-gray-300 font-medium">
                         Credits: <strong className="text-emerald-400">{formatCurrency(stats.totalCredits)}</strong>
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+                    <div className="flex items-center gap-2 bg-[var(--bg-surface)]/5 border border-white/10 px-3 py-1.5 rounded-xl">
                       <ArrowDown className="w-4 h-4 text-red-400" />
                       <span className="text-xs text-gray-300 font-medium">
                         Debits: <strong className="text-red-400">{formatCurrency(stats.totalDebits)}</strong>
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+                    <div className="flex items-center gap-2 bg-[var(--bg-surface)]/5 border border-white/10 px-3 py-1.5 rounded-xl">
                       <History className="w-4 h-4 text-gray-400" />
                       <span className="text-xs text-gray-300 font-medium">
                         {stats.totalTransactions} transactions
@@ -451,7 +451,7 @@ const WalletPage = () => {
               <div className="p-6 text-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="p-3 bg-white/20 rounded-xl">
+                    <div className="p-3 bg-[var(--bg-surface)]/20 rounded-xl">
                       <Sparkles className="w-6 h-6 md:w-8 md:h-8" />
                     </div>
                     <div>
@@ -459,7 +459,7 @@ const WalletPage = () => {
                         <p className="text-amber-100 text-sm">
                           Virtual Balance
                         </p>
-                        <span className="text-xs bg-white/30 px-2 py-0.5 rounded-full">
+                        <span className="text-xs bg-[var(--bg-surface)]/30 px-2 py-0.5 rounded-full">
                           Bonus
                         </span>
                       </div>
@@ -474,7 +474,7 @@ const WalletPage = () => {
 
                   <button
                     onClick={() => setShowVirtualBalance(false)}
-                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                    className="p-2 hover:bg-[var(--bg-surface)]/20 rounded-lg transition-colors"
                     title="Hide virtual balance"
                   >
                     <span className="text-lg">×</span>
@@ -513,7 +513,7 @@ const WalletPage = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl shadow-card-subtle p-5 border border-gray-100"
+              className="bg-[var(--bg-surface)] rounded-2xl shadow-card-subtle p-5 border border-[var(--border-subtle)]"
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-100">
@@ -532,7 +532,7 @@ const WalletPage = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="bg-white rounded-2xl shadow-card-subtle p-5 border border-gray-100"
+              className="bg-[var(--bg-surface)] rounded-2xl shadow-card-subtle p-5 border border-[var(--border-subtle)]"
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-2.5 bg-red-50 rounded-xl border border-red-100">
@@ -551,10 +551,10 @@ const WalletPage = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl shadow-card-subtle p-5 border border-gray-100"
+              className="bg-[var(--bg-surface)] rounded-2xl shadow-card-subtle p-5 border border-[var(--border-subtle)]"
             >
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 bg-gray-50 rounded-xl border border-gray-200">
+                <div className="p-2.5 bg-gray-50 rounded-xl border border-[var(--border-subtle)]">
                   <Receipt className="w-4 h-4 text-gray-700" />
                 </div>
                 <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -570,7 +570,7 @@ const WalletPage = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 }}
-              className="bg-white rounded-2xl shadow-card-subtle p-5 border border-gray-100"
+              className="bg-[var(--bg-surface)] rounded-2xl shadow-card-subtle p-5 border border-[var(--border-subtle)]"
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-2.5 bg-amber-50 rounded-xl border border-amber-100">
@@ -629,7 +629,7 @@ const WalletPage = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="p-4 md:p-6 hover:bg-white/50 transition-colors group"
+                  className="p-4 md:p-6 hover:bg-[var(--bg-surface)]/50 transition-colors group"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                     <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -733,10 +733,10 @@ const WalletPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
+          className="bg-[var(--bg-surface)] rounded-2xl shadow-lg overflow-hidden border border-[var(--border-subtle)]"
         >
           {/* Header */}
-          <div className="p-4 md:p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+          <div className="p-4 md:p-6 border-b border-[var(--border-subtle)] bg-gradient-to-r from-gray-50 to-white">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-purple-100 rounded-lg">
@@ -903,7 +903,7 @@ const WalletPage = () => {
 
           {/* Footer */}
           {transactions.length > 0 && (
-            <div className="p-4 md:p-6 border-t border-gray-100 bg-gradient-to-r from-blue-50 to-purple-50">
+            <div className="p-4 md:p-6 border-t border-[var(--border-subtle)] bg-gradient-to-r from-blue-50 to-purple-50">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <Info className="w-5 h-5 text-blue-600 flex-shrink-0" />

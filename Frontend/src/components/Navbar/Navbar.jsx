@@ -160,10 +160,6 @@ const Navbar = () => {
     { name: "Find Rides", path: "/rides", icon: Search },
     { name: "Offer Ride", path: "/offer-ride", icon: CarIcon },
     { name: "Parcel", path: "/user/send-parcel", icon: Package },
-    { name: "How it Works", path: "/how-it-works", icon: HelpCircle },
-    { name: "Safety", path: "/safety", icon: Shield },
-    { name: "About", path: "/about", icon: Info },
-    { name: "Contact", path: "/contact", icon: Phone },
   ];
 
   const mobileNavItems = [
@@ -241,8 +237,8 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop & Tablet Navbar */}
-      <nav className={`hidden md:block fixed w-full z-50 glass-nav transition-all duration-300 ${
-        isScrolled ? "shadow-card-subtle border-b border-[#E5E5E5]/80 py-1.5" : "border-b border-gray-100/60 py-2.5"
+      <nav className={`hidden md:block fixed w-full z-50 transition-all duration-300 ${
+        isScrolled ? "glass-nav shadow-card-subtle border-b border-[var(--border-subtle)]/80 py-1.5" : "bg-transparent border-b border-transparent py-2.5"
       }`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
@@ -261,7 +257,7 @@ const Navbar = () => {
             </motion.div>
 
             {/* Navigation Links */}
-            <div className="flex items-center space-x-1 lg:space-x-1.5">
+            <div className="flex items-center space-x-6 lg:space-x-12">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname.startsWith(item.path);
@@ -270,18 +266,18 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    className={`btn-water btn-water-up btn-water-bg-gray relative flex items-center gap-2 px-4 py-2 rounded-xl text-lg font-bold transition-all duration-200 ${
                       isActive 
-                        ? "text-[#E10600] bg-red-50/70" 
-                        : "text-[#343030] hover:text-[#E10600] hover:bg-gray-50"
+                        ? "text-[#E10600] bg-red-50/70"
+                        : "text-black hover:text-[#E10600]"
                     }`}
                   >
-                    <Icon size={17} className={`transition-transform duration-200 ${isActive ? "text-[#E10600]" : "text-gray-500 group-hover:text-[#E10600]"}`} />
+                    <Icon size={20} className={`transition-transform duration-200 ${isActive ? "text-[#E10600]" : "text-black group-hover:text-[#E10600]"}`} />
                     <span>{item.name}</span>
                     {isActive && (
                       <motion.div 
                         layoutId="activeNavIndicator"
-                        className="absolute inset-0 rounded-xl border border-red-200/80 -z-10"
+                        className={`absolute inset-0 rounded-xl border -z-10 ${isScrolled ? "border-red-200/80" : "border-white/30"}`}
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}
@@ -291,7 +287,7 @@ const Navbar = () => {
             </div>
 
             {/* Auth Section */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 mr-8 lg:mr-24">
               {isLoggedIn ? (
                 <>
                   {/* Notification Bell */}
@@ -303,7 +299,7 @@ const Navbar = () => {
                         setShowNotificationDropdown(!showNotificationDropdown);
                         setShowUserDropdown(false);
                       }}
-                      className="relative p-2 rounded-full text-[#343030] hover:text-[#E10600] hover:bg-[#F7F7F7] transition-colors focus:outline-none"
+                      className={`relative p-2 rounded-full transition-colors focus:outline-none ${isScrolled ? "text-[#343030] hover:text-[#E10600] hover:bg-[#F7F7F7]" : "text-white hover:text-white hover:bg-[var(--bg-surface)]/10"}`}
                       title="Notifications"
                     >
                       <Bell size={20} />
@@ -322,9 +318,9 @@ const Navbar = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8, scale: 0.98 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50"
+                          className="absolute right-0 mt-2 w-80 sm:w-96 bg-[var(--bg-surface)] rounded-xl shadow-2xl border border-[var(--border-subtle)] overflow-hidden z-50"
                         >
-                          <div className="p-3 border-b border-[#E5E5E5] bg-[#F7F7F7] flex items-center justify-between">
+                          <div className="p-3 border-b border-[var(--border-subtle)] bg-[#F7F7F7] flex items-center justify-between">
                             <div className="flex items-center space-x-2">
                               <span className="text-sm font-semibold text-[#111111]">Notifications</span>
                               {unreadCount > 0 && (
@@ -359,14 +355,14 @@ const Navbar = () => {
                                   key={n._id}
                                   onClick={() => handleNotificationClick(n)}
                                   className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${
-                                    !n.isRead ? "bg-red-50/40" : "bg-white"
+                                    !n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
                                   }`}
                                 >
                                   {n.icon || n.image ? (
                                     <img
                                       src={n.icon || n.image}
                                       alt=""
-                                      className="w-9 h-9 rounded-full object-cover border border-gray-200 mt-0.5 shrink-0"
+                                      className="w-9 h-9 rounded-full object-cover border border-[var(--border-subtle)] mt-0.5 shrink-0"
                                       onError={(e) => { e.target.style.display = 'none'; }}
                                     />
                                   ) : (
@@ -407,7 +403,7 @@ const Navbar = () => {
                         setShowUserDropdown(!showUserDropdown);
                         setShowNotificationDropdown(false);
                       }}
-                      className="flex items-center space-x-2.5 px-3 py-1.5 rounded-xl hover:bg-[#F7F7F7] border border-gray-200/60 transition-all duration-200"
+                      className={`flex items-center space-x-2.5 px-3 py-1.5 rounded-xl transition-all duration-200 border ${isScrolled ? "hover:bg-[#F7F7F7] border-[var(--border-subtle)]/60" : "hover:bg-[var(--bg-surface)]/10 border-white/20"}`}
                     >
                       <div className="w-8 h-8 rounded-full bg-red-100 ring-2 ring-red-200/60 flex items-center justify-center overflow-hidden">
                         {(user?.profilePhotos?.length || user?.profilePhoto) ? (
@@ -425,14 +421,14 @@ const Navbar = () => {
                           </span>
                         )}
                       </div>
-                      <span className="text-sm font-semibold text-[#111111]">
+                      <span className={`text-sm font-semibold ${isScrolled ? "text-[#111111]" : "text-white"}`}>
                         {getUserFullName().split(" ")[0]}
                       </span>
                       <ChevronDown 
                         size={15} 
-                        className={`text-[#555555] transition-transform duration-200 ${
+                        className={`transition-transform duration-200 ${
                           showUserDropdown ? "rotate-180" : ""
-                        }`}
+                        } ${isScrolled ? "text-[#555555]" : "text-white/80"}`}
                       />
                     </motion.button>
 
@@ -444,7 +440,7 @@ const Navbar = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8, scale: 0.98 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-card-hover border border-gray-100 overflow-hidden z-50 p-1.5"
+                          className="absolute right-0 mt-2 w-56 bg-[var(--bg-surface)] rounded-2xl shadow-card-hover border border-[var(--border-subtle)] overflow-hidden z-50 p-1.5"
                         >
                           <div className="p-3 bg-[#F7F7F7] rounded-xl mb-1">
                             <div className="text-sm font-bold text-[#111111]">
@@ -459,7 +455,7 @@ const Navbar = () => {
                               <Link
                                 to="/user/dashboard"
                                 onClick={() => setShowUserDropdown(false)}
-                                className="group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:bg-red-50/60 hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
                               >
                                 <Home size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
                                 <span>My Dashboard</span>
@@ -467,7 +463,7 @@ const Navbar = () => {
                               <Link
                                 to="/my-profile"
                                 onClick={() => setShowUserDropdown(false)}
-                                className="group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:bg-red-50/60 hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
                               >
                                 <UserCircle size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
                                 <span>My Profile</span>
@@ -475,7 +471,7 @@ const Navbar = () => {
                               <Link
                                 to="/user/my-parcels"
                                 onClick={() => setShowUserDropdown(false)}
-                                className="group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:bg-red-50/60 hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
                               >
                                 <MapMinus size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
                                 <span>My Parcels</span>
@@ -483,16 +479,16 @@ const Navbar = () => {
                               <Link
                                 to="/my-profile/wallet"
                                 onClick={() => setShowUserDropdown(false)}
-                                className="group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:bg-red-50/60 hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
                               >
                                 <Wallet size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
                                 <span>Wallet</span>
                               </Link>
                             
-                            <div className="pt-1 mt-1 border-t border-gray-100">
+                            <div className="pt-1 mt-1 border-t border-[var(--border-subtle)]">
                               <button
                                 onClick={handleSignOut}
-                                className="group flex items-center space-x-2.5 w-full px-3 py-2 text-sm text-[#E10600] hover:bg-red-50 rounded-xl transition-colors font-semibold"
+                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 w-full px-3 py-2 text-sm text-[#E10600] rounded-xl transition-colors font-semibold"
                               >
                                 <LogOut size={17} />
                                 <span>Sign out</span>
@@ -508,7 +504,7 @@ const Navbar = () => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={handleSignIn}
-                    className="px-4 py-2 text-sm font-semibold text-[#555555] hover:text-[#111111] hover:bg-gray-50 rounded-xl transition-all"
+                    className="btn-water btn-water-up btn-water-bg-gray px-5 py-2.5 text-lg font-bold text-black hover:text-[#E10600] rounded-xl transition-all"
                   >
                     Login
                   </button>
@@ -516,7 +512,7 @@ const Navbar = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate("/register")}
-                    className="px-5 py-2 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow-red-glow transition-all flex items-center gap-1"
+                    className="btn-water btn-water-right btn-water-bg-red px-6 py-2.5 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white text-base font-bold rounded-xl shadow-sm hover:shadow-red-glow transition-all flex items-center gap-1"
                   >
                     Get Started
                   </motion.button>
@@ -528,7 +524,9 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Top Bar */}
-      <nav className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-[#E5E5E5]">
+      <nav className={`md:hidden fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        isScrolled ? "glass-nav border-b border-[var(--border-subtle)]/80" : "bg-transparent border-b border-transparent"
+      }`}>
         <div className="max-w-[90%] mx-auto px-4 h-14 flex items-center justify-between">
           <motion.div
             whileTap={{ scale: 0.95 }}
@@ -555,7 +553,7 @@ const Navbar = () => {
               <div className="relative notification-dropdown-container">
                 <button
                   onClick={() => setShowNotificationDropdown(!showNotificationDropdown)}
-                  className="relative p-2 rounded-full text-[#343030] hover:bg-[#F7F7F7] focus:outline-none"
+                  className={`relative p-2 rounded-full focus:outline-none ${isScrolled ? "text-[#343030] hover:bg-[#F7F7F7]" : "text-white hover:bg-[var(--bg-surface)]/10"}`}
                   title="Notifications"
                 >
                   <Bell size={20} />
@@ -574,9 +572,9 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.15 }}
-                      className="fixed left-4 right-4 top-16 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-[75vh] flex flex-col"
+                      className="fixed left-4 right-4 top-16 bg-[var(--bg-surface)] rounded-xl shadow-2xl border border-[var(--border-subtle)] overflow-hidden z-50 max-h-[75vh] flex flex-col"
                     >
-                      <div className="p-3 border-b border-[#E5E5E5] bg-[#F7F7F7] flex items-center justify-between">
+                      <div className="p-3 border-b border-[var(--border-subtle)] bg-[#F7F7F7] flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <span className="text-sm font-semibold text-[#111111]">Notifications</span>
                           {unreadCount > 0 && (
@@ -610,14 +608,14 @@ const Navbar = () => {
                               key={n._id}
                               onClick={() => handleNotificationClick(n)}
                               className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${
-                                !n.isRead ? "bg-red-50/40" : "bg-white"
+                                !n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
                               }`}
                             >
                               {n.icon || n.image ? (
                                 <img
                                   src={n.icon || n.image}
                                   alt=""
-                                  className="w-9 h-9 rounded-full object-cover border border-gray-200 mt-0.5 shrink-0"
+                                  className="w-9 h-9 rounded-full object-cover border border-[var(--border-subtle)] mt-0.5 shrink-0"
                                   onError={(e) => { e.target.style.display = 'none'; }}
                                 />
                               ) : (
@@ -671,7 +669,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-[var(--border-subtle)]/80 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
         <div className="flex items-center justify-around h-14 max-w-lg mx-auto px-2">
           {mobileNavItems.map((item) => {
             const Icon = item.icon;
@@ -740,7 +738,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 20 }}
-              className="md:hidden fixed inset-y-0 right-0 w-64 bg-white z-50 shadow-lg"
+              className="md:hidden fixed inset-y-0 right-0 w-64 bg-[var(--bg-surface)] z-50 shadow-lg"
             >
               <div className="p-4">
                 <div className="flex items-center justify-between mb-6">
@@ -822,7 +820,7 @@ const Navbar = () => {
                   <div className="space-y-2">
                     <button
                       onClick={handleSignIn}
-                      className="flex items-center justify-center space-x-2 w-full py-2.5 text-sm font-medium text-[#111111] border border-[#E5E5E5] rounded-lg hover:border-[#111111] transition-colors"
+                      className="btn-water btn-water-right btn-water-bg-gray flex items-center justify-center space-x-2 w-full py-2.5 text-sm font-medium text-[#111111] border border-[var(--border-subtle)] rounded-lg hover:border-[#111111] transition-colors"
                     >
                       <User size={16} />
                       <span>Login</span>
@@ -832,7 +830,7 @@ const Navbar = () => {
                         setIsMenuOpen(false);
                         navigate("/register");
                       }}
-                      className="flex items-center justify-center space-x-2 w-full py-2.5 text-sm font-medium text-white bg-[#E10600] rounded-lg hover:bg-[#D00500] transition-colors"
+                      className="btn-water btn-water-up btn-water-bg-red flex items-center justify-center space-x-2 w-full py-2.5 text-sm font-medium text-white bg-[#E10600] rounded-lg hover:bg-[#D00500] transition-colors"
                     >
                       <Car size={16} />
                       <span>Get Started</span>
@@ -845,9 +843,13 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Spacers */}
-       <div className="hidden md:block h-20"></div>
-      <div className="md:hidden h-14 mb-1"></div> 
+      {/* Spacers - Hidden on Home page so the hero background sits directly under the transparent navbar */}
+      {location.pathname !== "/" && (
+        <>
+          <div className="hidden md:block h-20"></div>
+          <div className="md:hidden h-14 mb-1"></div> 
+        </>
+      )}
     </>
   );
 };

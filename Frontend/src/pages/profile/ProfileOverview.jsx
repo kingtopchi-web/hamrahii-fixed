@@ -53,7 +53,7 @@ const ProfileOverview = () => {
     >
       {/* Hero Welcome Section */}
       <motion.div variants={itemVariants} className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-600 via-orange-500 to-amber-500 shadow-xl shadow-red-500/20">
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white/10 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-[var(--bg-surface)]/10 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 rounded-full bg-black/10 blur-2xl pointer-events-none" />
         
         <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -71,7 +71,7 @@ const ProfileOverview = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/find-ride')}
-              className="px-6 py-3 bg-white text-red-600 font-bold rounded-xl shadow-lg flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-[var(--bg-surface)] text-red-600 font-bold rounded-xl shadow-lg flex items-center justify-center gap-2"
             >
               <Search size={18} />
               Find a Ride
@@ -97,7 +97,7 @@ const ProfileOverview = () => {
             <motion.div
               key={index}
               whileHover={{ y: -5, scale: 1.02 }}
-              className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
+              className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
             >
               {/* Decorative gradient blur in background */}
               <div className={`absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br ${stat.color} rounded-full opacity-10 blur-xl group-hover:opacity-20 transition-opacity duration-300`} />
@@ -120,7 +120,7 @@ const ProfileOverview = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Verification Status */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm relative overflow-hidden h-full">
+          <div className="bg-[var(--bg-surface)] rounded-3xl p-6 md:p-8 border border-[var(--border-subtle)] shadow-sm relative overflow-hidden h-full">
             <div className="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-blue-50/50 to-transparent pointer-events-none" />
             
             <div className="flex items-center gap-4 mb-6">
@@ -136,7 +136,7 @@ const ProfileOverview = () => {
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-gray-100">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-[var(--border-subtle)]">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${user?.phoneVerified ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-200 text-gray-400'}`}>
                     <CheckCircle size={20} />
@@ -150,7 +150,7 @@ const ProfileOverview = () => {
                 )}
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-gray-100">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-[var(--border-subtle)]">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${user?.emailVerified ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-200 text-gray-400'}`}>
                     <CheckCircle size={20} />
@@ -164,7 +164,7 @@ const ProfileOverview = () => {
                 )}
               </div>
               
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-gray-100">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-[var(--border-subtle)]">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${user?.dlVerified ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-200 text-gray-400'}`}>
                     <CheckCircle size={20} />
@@ -183,7 +183,7 @@ const ProfileOverview = () => {
 
         {/* Quick Actions Grid */}
         <motion.div variants={itemVariants}>
-          <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm h-full flex flex-col">
+          <div className="bg-[var(--bg-surface)] rounded-3xl p-6 md:p-8 border border-[var(--border-subtle)] shadow-sm h-full flex flex-col">
             <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
               <Zap className="text-amber-500" /> Quick Actions
             </h3>
@@ -197,9 +197,9 @@ const ProfileOverview = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate(action.link)}
-                    className={`${action.bg} rounded-2xl p-4 flex flex-col items-center justify-center gap-3 border border-transparent hover:border-gray-200 transition-all group`}
+                    className={`${action.bg} rounded-2xl p-4 flex flex-col items-center justify-center gap-3 border border-transparent hover:border-[var(--border-subtle)] transition-all group`}
                   >
-                    <div className={`w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center ${action.color} group-hover:scale-110 transition-transform`}>
+                    <div className={`w-12 h-12 rounded-full bg-[var(--bg-surface)] shadow-sm flex items-center justify-center ${action.color} group-hover:scale-110 transition-transform`}>
                       <Icon size={22} strokeWidth={2.5} />
                     </div>
                     <span className="text-sm font-bold text-gray-700 text-center">{action.label}</span>
@@ -220,7 +220,7 @@ const ProfileOverview = () => {
           
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-5 text-center md:text-left">
-              <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0 mx-auto md:mx-0 border border-white/10">
+              <div className="w-16 h-16 rounded-2xl bg-[var(--bg-surface)]/10 backdrop-blur-md flex items-center justify-center shrink-0 mx-auto md:mx-0 border border-white/10">
                 <HelpCircle size={32} className="text-red-400" />
               </div>
               <div>
@@ -241,7 +241,7 @@ const ProfileOverview = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all backdrop-blur-sm border border-white/10 w-full sm:w-auto"
+                className="px-8 py-3.5 bg-[var(--bg-surface)]/10 hover:bg-[var(--bg-surface)]/20 text-white font-bold rounded-xl transition-all backdrop-blur-sm border border-white/10 w-full sm:w-auto"
               >
                 View FAQs
               </motion.button>

@@ -362,6 +362,11 @@ export const handleUpdateParcelStatus = async (req, res) => {
     const isSender = parcel.sender?.toString() === req.userId.toString();
     const isDriver = parcel.driver?.toString() === req.userId.toString();
 
+    // Prevent any further updates if the parcel is already cancelled
+    if (parcel.status === "CANCELLED" && status !== "CANCELLED") {
+      return res.status(400).json({ success: false, message: "This parcel has been cancelled by the user." });
+    }
+
     // Cancellation: Sender or assigned driver can cancel
     if (status === "CANCELLED") {
       if (!isSender && !isDriver) {
@@ -511,6 +516,10 @@ export const handleAcceptParcel = async (req, res) => {
     const parcel = await parcelModel.findById(parcelId);
     if (!parcel) {
       return res.status(404).json({ success: false, message: "Parcel not found" });
+    }
+
+    if (parcel.status === "CANCELLED") {
+      return res.status(400).json({ success: false, message: "This parcel has been cancelled by the sender and is no longer available." });
     }
 
     if (parcel.driver) {

@@ -202,7 +202,7 @@ const UploadProfilePic = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-[#F7F7F7]">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-white border-b border-[#E5E5E5] px-4 md:px-6 py-4">
+      <div className="sticky top-0 z-20 bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] px-4 md:px-6 py-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-4">
@@ -236,7 +236,7 @@ const UploadProfilePic = () => {
           {/* Left Column - Upload Section */}
           <div className="space-y-6">
             {/* Upload Card */}
-            <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-sm">
+            <div className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-sm">
               <h2 className="text-lg font-semibold text-[#111111] mb-4">
                 Select Photo
               </h2>
@@ -298,7 +298,7 @@ const UploadProfilePic = () => {
                       <button
                         onClick={removePhoto}
                         disabled={isUploadingImage}
-                        className="px-4 py-2 bg-white/90 backdrop-blur-sm text-red-600 rounded-lg hover:bg-white font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                        className="px-4 py-2 bg-[var(--bg-surface)]/90 backdrop-blur-sm text-red-600 rounded-lg hover:bg-[var(--bg-surface)] font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                       >
                         Remove
                       </button>
@@ -307,7 +307,7 @@ const UploadProfilePic = () => {
                 ) : (
                   <label className="block cursor-pointer">
                     <div className={`border-2 border-dashed rounded-2xl p-8 hover:border-[#E10600] transition-all duration-200 ${
-                      fileError ? 'border-red-500 bg-red-50' : 'border-[#E5E5E5]'
+                      fileError ? 'border-red-500 bg-red-50' : 'border-[var(--border-subtle)]'
                     }`}>
                       <div className="flex flex-col items-center justify-center py-12">
                         <div className={`w-20 h-20 rounded-full ${
@@ -409,7 +409,7 @@ const UploadProfilePic = () => {
             </div>
 
             {/* Instructions */}
-            <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-sm">
+            <div className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-sm">
               <h3 className="text-lg font-semibold text-[#111111] mb-4">
                 How It Works
               </h3>
@@ -457,7 +457,7 @@ const UploadProfilePic = () => {
           {/* Right Column - Preview & Actions */}
           <div className="space-y-6">
             {/* Photo Preview */}
-            <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-sm">
+            <div className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-[#111111] flex items-center gap-2">
                   <User size={20} />
@@ -481,7 +481,7 @@ const UploadProfilePic = () => {
 
               {photoPreview ? (
                 <div className="space-y-6">
-                  <div className="relative rounded-xl overflow-hidden border border-[#E5E5E5] shadow-md">
+                  <div className="relative rounded-xl overflow-hidden border border-[var(--border-subtle)] shadow-md">
                     <img
                       src={photoPreview}
                       alt="Profile preview"
@@ -528,7 +528,7 @@ const UploadProfilePic = () => {
                 </div>
               ) : hasExistingPhoto ? (
                 <div className="space-y-6">
-                  <div className="relative rounded-xl overflow-hidden border border-[#E5E5E5] shadow-md">
+                  <div className="relative rounded-xl overflow-hidden border border-[var(--border-subtle)] shadow-md">
                     <img
                       src={currentPhotoUrl}
                       alt="Current profile"
@@ -546,7 +546,7 @@ const UploadProfilePic = () => {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                  <div className="p-4 bg-gray-50 border border-[var(--border-subtle)] rounded-xl">
                     <p className="text-sm text-[#555555]">
                       This is your current profile photo. Select a new photo on the left to update it.
                     </p>
@@ -566,7 +566,7 @@ const UploadProfilePic = () => {
             </div>
 
             {/* Actions Card */}
-            <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-sm">
+            <div className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-sm">
               <h3 className="text-lg font-semibold text-[#111111] mb-4">
                 Final Step
               </h3>
@@ -597,7 +597,7 @@ const UploadProfilePic = () => {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={handleGoBack}
-                    className="px-6 py-3 border border-[#E5E5E5] text-[#555555] rounded-lg hover:border-[#E10600] hover:text-[#E10600] transition-all duration-200 flex-1"
+                    className="px-6 py-3 border border-[var(--border-subtle)] text-[#555555] rounded-lg hover:border-[#E10600] hover:text-[#E10600] transition-all duration-200 flex-1"
                   >
                     Cancel
                   </button>
@@ -626,7 +626,7 @@ const UploadProfilePic = () => {
                 </div>
 
                 {(uploadedUrl || photoFile) && (
-                  <div className="pt-4 border-t border-gray-100">
+                  <div className="pt-4 border-t border-[var(--border-subtle)]">
                     <p className="text-xs text-center text-[#555555]">
                       <span className="font-medium">Note:</span> This will set the uploaded photo as your default profile picture
                     </p>
@@ -636,7 +636,7 @@ const UploadProfilePic = () => {
             </div>
 
             {/* Quick Info */}
-            <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-sm">
+            <div className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-sm">
               <h4 className="text-sm font-semibold text-[#111111] mb-3">
                 🔒 Supported Formats
               </h4>

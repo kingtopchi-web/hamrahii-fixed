@@ -71,7 +71,7 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
         };
       default:
         return {
-          color: "bg-gray-100 text-gray-800 border border-gray-200",
+          color: "bg-gray-100 text-gray-800 border border-[var(--border-subtle)]",
           label: status || "Unknown",
           icon: <Clock size={16} />
         };
@@ -185,10 +185,10 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl bg-white shadow-2xl"
+          className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl bg-[var(--bg-surface)] shadow-2xl"
         >
           {/* Header */}
-          <div className="sticky top-0 z-10 p-6 border-b border-gray-200 bg-white">
+          <div className="sticky top-0 z-10 p-6 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-[#E10600]/10">
@@ -276,7 +276,7 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
           </div>
 
           {/* Tabs */}
-          <div className="border-b border-gray-200 bg-gray-50 ">
+          <div className="border-b border-[var(--border-subtle)] bg-gray-50 ">
             <div className="flex overflow-x-auto ">
               {tabs.map((tab) => (
                 <button
@@ -473,7 +473,7 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
                 {booking.stops && booking.stops.length > 0 ? (
                   <div className="space-y-3">
                     {booking.stops.map((stop, index) => (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                      <div key={index} className="flex items-start gap-3 p-3 bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)]">
                         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                           <span className="text-sm font-medium text-blue-600">{index + 1}</span>
                         </div>
@@ -502,7 +502,7 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
                 {booking.preferences ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(booking.preferences).map(([key, value]) => (
-                      <div key={key} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                      <div key={key} className="flex items-center gap-3 p-3 bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)]">
                         <div className="p-2 rounded-lg bg-gray-100">
                           {getPreferenceIcon(key) || <Info size={18} className="text-gray-600" />}
                         </div>
@@ -524,7 +524,7 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
           </div>
 
           {/* Footer */}
-          {/* <div className="sticky bottom-0 p-6 border-t border-gray-200 bg-white">
+          {/* <div className="sticky bottom-0 p-6 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="text-sm text-gray-500">
                 Last updated: {formatDate(booking.updatedAt)}

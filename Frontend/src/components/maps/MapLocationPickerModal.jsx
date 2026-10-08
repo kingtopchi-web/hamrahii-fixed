@@ -392,10 +392,10 @@ const MapLocationPickerModal = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-200 w-full max-w-4xl h-[92vh] sm:h-[88vh] flex flex-col overflow-hidden relative"
+          className="bg-[var(--bg-surface)] rounded-2xl sm:rounded-3xl shadow-2xl border border-[var(--border-subtle)] w-full max-w-4xl h-[92vh] sm:h-[88vh] flex flex-col overflow-hidden relative"
         >
           {/* Header */}
-          <div className="px-4 sm:px-6 py-3.5 bg-white border-b border-gray-100 flex items-center justify-between shrink-0 z-20">
+          <div className="px-4 sm:px-6 py-3.5 bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] flex items-center justify-between shrink-0 z-20">
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <div
                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 shadow-xs"
@@ -430,7 +430,7 @@ const MapLocationPickerModal = ({
           <div className="relative flex-1 w-full bg-gray-100 overflow-hidden">
             {/* In-Map Floating Search Bar */}
             <div className="absolute top-3 left-3 right-3 sm:left-4 sm:right-auto sm:w-96 z-10">
-              <div className="relative bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/90 flex items-center">
+              <div className="relative bg-[var(--bg-surface)]/95 backdrop-blur-md rounded-xl shadow-lg border border-[var(--border-subtle)]/90 flex items-center">
                 <Search size={18} className="absolute left-3.5 text-gray-400 pointer-events-none" />
                 <input
                   type="text"
@@ -456,7 +456,7 @@ const MapLocationPickerModal = ({
 
               {/* Suggestions Dropdown */}
               {showPredictions && predictions.length > 0 && (
-                <div className="mt-1.5 bg-white rounded-xl shadow-xl border border-gray-200 max-h-56 overflow-y-auto divide-y divide-gray-100 z-30">
+                <div className="mt-1.5 bg-[var(--bg-surface)] rounded-xl shadow-xl border border-[var(--border-subtle)] max-h-56 overflow-y-auto divide-y divide-gray-100 z-30">
                   {predictions.map((p) => (
                     <div
                       key={p.place_id}
@@ -491,7 +491,7 @@ const MapLocationPickerModal = ({
                 className={`p-2.5 sm:p-3 rounded-xl shadow-lg border backdrop-blur-md transition-all flex items-center justify-center cursor-pointer ${
                   isDetectingGps
                     ? "bg-red-50 border-red-200 text-[#E10600] animate-pulse"
-                    : "bg-white/95 border-gray-200/90 text-gray-700 hover:bg-red-50 hover:text-[#E10600] hover:scale-105 active:scale-95"
+                    : "bg-[var(--bg-surface)]/95 border-[var(--border-subtle)]/90 text-gray-700 hover:bg-red-50 hover:text-[#E10600] hover:scale-105 active:scale-95"
                 }`}
               >
                 {isDetectingGps ? (
@@ -506,13 +506,13 @@ const MapLocationPickerModal = ({
                 type="button"
                 onClick={() => setMapTypeId((prev) => (prev === "roadmap" ? "hybrid" : "roadmap"))}
                 title={mapTypeId === "roadmap" ? "Switch to Satellite" : "Switch to Roadmap"}
-                className="p-2.5 sm:p-3 bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/90 text-gray-700 hover:bg-gray-100 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                className="p-2.5 sm:p-3 bg-[var(--bg-surface)]/95 backdrop-blur-md rounded-xl shadow-lg border border-[var(--border-subtle)]/90 text-gray-700 hover:bg-gray-100 hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
                 <Layers size={19} />
               </button>
 
               {/* Zoom Controls */}
-              <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/90 flex flex-col divide-y divide-gray-100 overflow-hidden">
+              <div className="bg-[var(--bg-surface)]/95 backdrop-blur-md rounded-xl shadow-lg border border-[var(--border-subtle)]/90 flex flex-col divide-y divide-gray-100 overflow-hidden">
                 <button
                   type="button"
                   onClick={handleZoomIn}
@@ -611,7 +611,7 @@ const MapLocationPickerModal = ({
           </div>
 
           {/* Bottom Confirmation Card */}
-          <div className="p-4 sm:p-5 bg-white border-t border-gray-100 shrink-0 z-20 space-y-3">
+          <div className="p-4 sm:p-5 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)] shrink-0 z-20 space-y-3">
             <div className="flex items-start gap-3">
               <div
                 className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0 mt-0.5 shadow-xs"
@@ -668,7 +668,7 @@ const MapLocationPickerModal = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 sm:flex-initial px-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs sm:text-sm font-bold transition cursor-pointer"
+                className="flex-1 sm:flex-initial px-4 py-2.5 sm:py-3 rounded-xl border border-[var(--border-subtle)] text-gray-700 hover:bg-gray-50 text-xs sm:text-sm font-bold transition cursor-pointer"
               >
                 Cancel
               </button>

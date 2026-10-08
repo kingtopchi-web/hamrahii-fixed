@@ -370,7 +370,7 @@ const VerifyPhone = () => {
               </div>
 
               {/* Indian Phone Guidelines */}
-              <div className="bg-[#F7F7F7] rounded-2xl p-6 border border-[#E5E5E5]">
+              <div className="bg-[#F7F7F7] rounded-2xl p-6 border border-[var(--border-subtle)]">
                 <h3 className="text-lg font-semibold text-[#111111] mb-4">
                   Indian Mobile Number Guidelines
                 </h3>
@@ -395,7 +395,7 @@ const VerifyPhone = () => {
               </div>
 
               {/* Security Info */}
-              <div className="bg-gradient-to-br from-[#E10600]/10 to-[#C10500]/10 rounded-2xl p-6 border border-[#E5E5E5]">
+              <div className="bg-gradient-to-br from-[#E10600]/10 to-[#C10500]/10 rounded-2xl p-6 border border-[var(--border-subtle)]">
                 <h3 className="text-lg font-semibold text-[#111111] mb-3">
                   <Shield className="w-5 h-5 inline mr-2" />
                   Security Assurance
@@ -409,7 +409,7 @@ const VerifyPhone = () => {
           </div>
 
           {/* Right Column - Verification Form */}
-          <div className="bg-[#FFFFFF] rounded-2xl border border-[#E5E5E5] p-8 shadow-sm">
+          <div className="bg-[#FFFFFF] rounded-2xl border border-[var(--border-subtle)] p-8 shadow-sm">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-[#111111] mb-2">
                 Mobile Number Verification
@@ -446,7 +446,7 @@ const VerifyPhone = () => {
               </div>
               
               <div className="relative">
-                <div className="flex items-center gap-3 p-4 bg-[#F7F7F7] rounded-xl border border-[#E5E5E5]">
+                <div className="flex items-center gap-3 p-4 bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)]">
                   <div className="flex items-center gap-2 text-[#555555]">
                     <Phone className="w-5 h-5" />
                     <span className="font-medium">+91</span>
@@ -510,7 +510,7 @@ const VerifyPhone = () => {
                     value={verificationCode}
                     onChange={handleOtpChange}
                     placeholder="Enter 6-digit OTP"
-                    className="w-full px-4 py-3 bg-[#F7F7F7] border border-[#E5E5E5] rounded-xl focus:outline-none focus:border-[#E10600] focus:ring-2 focus:ring-[#E10600]/20 text-[#111111] placeholder-[#B8B8B8] text-center text-2xl tracking-widest"
+                    className="w-full px-4 py-3 bg-[#F7F7F7] border border-[var(--border-subtle)] rounded-xl focus:outline-none focus:border-[#E10600] focus:ring-2 focus:ring-[#E10600]/20 text-[#111111] placeholder-[#B8B8B8] text-center text-2xl tracking-widest"
                     maxLength={6}
                     disabled={verificationStatus === 'verifying'}
                     inputMode="numeric"
@@ -572,7 +572,7 @@ const VerifyPhone = () => {
                   <button
                     onClick={handleResendCode}
                     disabled={countdown > 0 || loading || !userId || !isValidPhone}
-                    className="w-full bg-transparent border border-[#E5E5E5] text-[#555555] hover:bg-[#F7F7F7] py-3 px-6 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-transparent border border-[var(--border-subtle)] text-[#555555] hover:bg-[#F7F7F7] py-3 px-6 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {countdown > 0 ? (
                       <>
@@ -617,7 +617,7 @@ const VerifyPhone = () => {
               )}
 
               {showOtpInput && (
-                <div className="pt-4 border-t border-[#E5E5E5]">
+                <div className="pt-4 border-t border-[var(--border-subtle)]">
                   <p className="text-center text-sm text-[#555555]">
                     Didn't receive the SMS?{' '}
                     <button
@@ -652,7 +652,7 @@ const VerifyPhone = () => {
             </div>
 
             {/* Help Text */}
-            <div className="mt-8 p-4 bg-[#F7F7F7] rounded-xl border border-[#E5E5E5]">
+            <div className="mt-8 p-4 bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)]">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-[#555555] mt-0.5 flex-shrink-0" />
                 <div>
@@ -691,7 +691,7 @@ const VerifyPhone = () => {
 
           {/* Guidelines for Mobile */}
           {verificationStatus !== 'verified' && (
-            <div className="bg-[#F7F7F7] rounded-2xl p-6 border border-[#E5E5E5] mb-6">
+            <div className="bg-[#F7F7F7] rounded-2xl p-6 border border-[var(--border-subtle)] mb-6">
               <h3 className="text-lg font-semibold text-[#111111] mb-3">
                 Indian Mobile Guidelines
               </h3>

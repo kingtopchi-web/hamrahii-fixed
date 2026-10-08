@@ -181,7 +181,7 @@ const EditPreference = () => {
     ],
     music: [
       { value: 'allowed', label: 'Allowed', icon: Volume2, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-      { value: 'not-allowed', label: 'Not Allowed', icon: VolumeX, color: 'text-gray-600', bg: 'bg-gray-50', border: 'border-gray-200' }
+      { value: 'not-allowed', label: 'Not Allowed', icon: VolumeX, color: 'text-gray-600', bg: 'bg-gray-50', border: 'border-[var(--border-subtle)]' }
     ],
     pets: [
       { value: 'allowed', label: 'Allowed', icon: PawPrint, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
@@ -295,15 +295,15 @@ const EditPreference = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
+              <div className="bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-xl p-4 border border-[var(--border-subtle)]/50 shadow-sm">
                 <div className="text-2xl font-bold text-gray-900">Better Matches</div>
                 <div className="text-sm text-gray-600">Find compatible riders</div>
               </div>
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
+              <div className="bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-xl p-4 border border-[var(--border-subtle)]/50 shadow-sm">
                 <div className="text-2xl font-bold text-gray-900">Comfortable Rides</div>
                 <div className="text-sm text-gray-600">Personalized experience</div>
               </div>
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
+              <div className="bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-xl p-4 border border-[var(--border-subtle)]/50 shadow-sm">
                 <div className="text-2xl font-bold text-gray-900">Save Time</div>
                 <div className="text-sm text-gray-600">Quick booking process</div>
               </div>
@@ -322,9 +322,9 @@ const EditPreference = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:col-span-3"
           >
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-200/50 p-6 lg:p-8 shadow-lg">
+            <div className="bg-[var(--bg-surface)]/90 backdrop-blur-sm rounded-2xl border border-[var(--border-subtle)]/50 p-6 lg:p-8 shadow-lg">
               {/* Header with Save Button */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--border-subtle)]">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Customize Your Ride Experience</h2>
                   <p className="text-gray-600 mt-2">
@@ -410,7 +410,7 @@ const EditPreference = () => {
                             className={`p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${
                               preferences?.smoking === option.value
                                 ? `${option.bg} ${option.border} border-2 scale-[1.02]`
-                                : 'bg-white border-gray-200 hover:border-gray-300'
+                                : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-gray-300'
                             }`}
                           >
                             <div className={`w-10 h-10 rounded-lg ${option.bg} flex items-center justify-center`}>
@@ -461,7 +461,7 @@ const EditPreference = () => {
                             className={`p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${
                               preferences?.music === option.value
                                 ? `${option.bg} ${option.border} border-2 scale-[1.02]`
-                                : 'bg-white border-gray-200 hover:border-gray-300'
+                                : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-gray-300'
                             }`}
                           >
                             <div className={`w-10 h-10 rounded-lg ${option.bg} flex items-center justify-center`}>
@@ -512,7 +512,7 @@ const EditPreference = () => {
                             className={`p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${
                               preferences?.pets === option.value
                                 ? `${option.bg} ${option.border} border-2 scale-[1.02]`
-                                : 'bg-white border-gray-200 hover:border-gray-300'
+                                : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-gray-300'
                             }`}
                           >
                             <div className={`w-10 h-10 rounded-lg ${option.bg} flex items-center justify-center`}>
@@ -563,7 +563,7 @@ const EditPreference = () => {
                             className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-3 ${
                               preferences?.conversation === option.value
                                 ? `${option.bg} ${option.border} border-2 scale-[1.02]`
-                                : 'bg-white border-gray-200 hover:border-gray-300'
+                                : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-gray-300'
                             }`}
                           >
                             <div className={`w-12 h-12 rounded-lg ${option.bg} flex items-center justify-center`}>
@@ -616,7 +616,7 @@ const EditPreference = () => {
                             className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-3 ${
                               preferences?.luggageSpace?.[item.size]
                                 ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 scale-[1.02]'
-                                : 'bg-white border-gray-200 hover:border-gray-300'
+                                : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-gray-300'
                             }`}
                           >
                             <div className={`w-12 h-12 rounded-lg ${
@@ -659,7 +659,7 @@ const EditPreference = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="mt-8 pt-8 border-t border-gray-200"
+                  className="mt-8 pt-8 border-t border-[var(--border-subtle)]"
                 >
                   <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div className="text-sm text-gray-600">
@@ -674,7 +674,7 @@ const EditPreference = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => navigate(-1)}
-                        className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:border-gray-400 transition-all"
+                        className="px-6 py-3 bg-[var(--bg-surface)] border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:border-gray-400 transition-all"
                       >
                         Cancel
                       </motion.button>

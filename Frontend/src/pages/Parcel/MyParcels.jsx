@@ -71,7 +71,7 @@ const MyParcels = () => {
           <h1 className="text-xl font-bold text-[#111111]">My Parcels</h1>
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium shadow-sm text-gray-700"
+            className="px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-sm font-medium shadow-sm text-gray-700"
           >
             Menu
           </button>
@@ -103,12 +103,12 @@ const MyParcels = () => {
                 }}
               />
             ) : selectedFindingParcelId && isLoading ? (
-              <div className="bg-white rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[400px] border border-gray-100 shadow-sm">
+              <div className="bg-[var(--bg-surface)] rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[400px] border border-[var(--border-subtle)] shadow-sm">
                 <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-3" />
                 <p className="text-sm font-semibold text-gray-700">Connecting to live driver search...</p>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl border border-[#E5E5E5]/50 shadow-sm p-6 lg:p-8 min-h-[500px]">
+              <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm p-6 lg:p-8 min-h-[500px]">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                   <div>
                     <h1 className="text-2xl font-bold text-[#111111]">My Parcels</h1>
@@ -121,8 +121,8 @@ const MyParcels = () => {
                   <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
               ) : parcels.length === 0 ? (
-                <div className="text-center py-16 px-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-gray-400">
+                <div className="text-center py-16 px-4 bg-gray-50 rounded-2xl border border-[var(--border-subtle)]">
+                  <div className="w-16 h-16 bg-[var(--bg-surface)] rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-gray-400">
                     <Package size={32} />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">No parcels found</h3>
@@ -136,7 +136,7 @@ const MyParcels = () => {
                     const isExpanded = expandedId === parcel._id;
 
                     return (
-                      <div key={parcel._id} className="border border-gray-200 rounded-xl overflow-hidden bg-white transition-all hover:border-gray-300 shadow-sm hover:shadow">
+                      <div key={parcel._id} className="border border-[var(--border-subtle)] rounded-xl overflow-hidden bg-[var(--bg-surface)] transition-all hover:border-gray-300 shadow-sm hover:shadow">
                         {/* Header / Summary */}
                         <div
                           className="p-5 cursor-pointer flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center"
@@ -194,7 +194,7 @@ const MyParcels = () => {
                               animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="border-t border-gray-100 bg-gray-50/50"
+                              className="border-t border-[var(--border-subtle)] bg-gray-50/50"
                             >
                               <div className="p-5 space-y-6">
 
@@ -229,7 +229,7 @@ const MyParcels = () => {
                                       </p>
                                     </div>
 
-                                    <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm flex items-center justify-between">
+                                    <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-3 shadow-sm flex items-center justify-between">
                                       <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
                                           <User size={16} />
@@ -259,7 +259,7 @@ const MyParcels = () => {
                                   <div className="space-y-4">
                                     <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Payment & Status</h4>
 
-                                    <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm space-y-2">
+                                    <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-3 shadow-sm space-y-2">
                                       <div className="flex items-center justify-between">
                                         <p className="text-xs text-gray-500">Payment Method</p>
                                         <p className="text-sm font-medium text-gray-900">{parcel.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online Payment'}</p>

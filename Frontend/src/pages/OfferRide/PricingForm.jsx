@@ -512,7 +512,7 @@ export const PricingForm = ({
         <motion.div
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="bg-white rounded-xl border border-[#E5E5E5] p-6 shadow-sm"
+          className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6 shadow-sm"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E10600] to-[#C10500] flex items-center justify-center">
@@ -543,7 +543,7 @@ export const PricingForm = ({
                   className={`w-full px-3 py-2.5 text-sm rounded-lg border ${
                     errors.departureDate
                       ? "border-[#E10600]"
-                      : "border-[#E5E5E5]"
+                      : "border-[var(--border-subtle)]"
                   } bg-[#F7F7F7] text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#E10600]/20 focus:border-[#E10600] transition-all duration-200`}
                 />
               </div>
@@ -636,7 +636,7 @@ export const PricingForm = ({
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5] p-4"
+                className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)] p-4"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -729,7 +729,7 @@ export const PricingForm = ({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl border border-[#E5E5E5] p-6 shadow-sm"
+              className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6 shadow-sm"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E10600] to-[#C10500] flex items-center justify-center">
@@ -786,7 +786,7 @@ export const PricingForm = ({
                       className={`w-full px-3 py-2.5 text-sm rounded-lg border ${
                         errors.totalSeats
                           ? "border-[#E10600]"
-                          : "border-[#E5E5E5]"
+                          : "border-[var(--border-subtle)]"
                       } bg-[#F7F7F7] text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#E10600]/20 focus:border-[#E10600] transition-all duration-200`}
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1.5">
@@ -859,7 +859,7 @@ export const PricingForm = ({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="bg-white rounded-xl border border-[#E5E5E5] p-6 shadow-sm"
+            className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6 shadow-sm"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E10600] to-[#C10500] flex items-center justify-center">
@@ -901,7 +901,7 @@ export const PricingForm = ({
                     className={`w-full pl-8 pr-3 py-2.5 text-sm rounded-lg border ${
                       errors.pricePerSeat
                         ? "border-[#E10600]"
-                        : "border-[#E5E5E5]"
+                        : "border-[var(--border-subtle)]"
                     } bg-[#F7F7F7] text-[#111111] placeholder-[#B8B8B8] focus:outline-none focus:ring-2 focus:ring-[#E10600]/20 focus:border-[#E10600] transition-all duration-200`}
                   />
                 </div>
@@ -936,7 +936,7 @@ export const PricingForm = ({
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5] p-4"
+                  className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)] p-4"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">

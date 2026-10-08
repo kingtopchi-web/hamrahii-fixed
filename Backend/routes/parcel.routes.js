@@ -1,5 +1,6 @@
 import express from "express";
 import { auth } from "../middleware/auth.js";
+import { requireKyc } from "../middleware/requireKyc.js";
 import {
   handleCreateParcel,
   handleGetMyParcels,
@@ -22,7 +23,7 @@ const router = express.Router();
 router.use(auth);
 
 router.post("/calculate-fare", handleCalculateFare);
-router.post("/create", handleCreateParcel);
+router.post("/create", requireKyc, handleCreateParcel);
 router.get("/my-parcels", handleGetMyParcels);
 router.get("/requests", handleGetParcelRequests);
 router.get("/deliveries", handleGetRiderDeliveries);
@@ -31,7 +32,7 @@ router.get("/:parcelId/track", handleGetParcelTracking);
 router.get("/:parcelId/nearby-riders", handleGetNearbyRiders);
 router.post("/:parcelId/refresh-search", handleRefreshParcelSearch);
 router.patch("/:parcelId/status", handleUpdateParcelStatus);
-router.post("/:parcelId/accept", handleAcceptParcel);
+router.post("/:parcelId/accept", requireKyc, handleAcceptParcel);
 router.post("/:parcelId/reject", handleRejectParcel);
 router.post("/:parcelId/verify-payment", handleVerifyOnlinePayment);
 router.post("/:parcelId/cash-received", handleCashReceived);

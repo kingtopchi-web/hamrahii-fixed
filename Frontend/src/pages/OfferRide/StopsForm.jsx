@@ -267,7 +267,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
         <motion.div
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="bg-white rounded-xl border border-[#E5E5E5] p-6 shadow-sm"
+          className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6 shadow-sm"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E10600] to-[#C10500] flex items-center justify-center">
@@ -284,7 +284,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
           </div>
 
           {/* Route Info */}
-          <div className="mb-6 p-4 bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+          <div className="mb-6 p-4 bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
             <div className="flex items-center gap-2 mb-2">
               <Navigation className="text-[#E10600]" size={16} />
               <div className="text-sm font-semibold text-[#111111]">Route Info</div>
@@ -323,7 +323,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
                     <span className="text-xs font-medium text-[#111111]">{city}</span>
                     <button
                       onClick={() => removeSelectedCity(city)}
-                      className="ml-1 p-0.5 hover:bg-white/50 rounded-full"
+                      className="ml-1 p-0.5 hover:bg-[var(--bg-surface)]/50 rounded-full"
                     >
                       <X size={10} className="text-[#555555]" />
                     </button>
@@ -359,10 +359,10 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
                         className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${isSelected
                           ? 'border-[#E10600] bg-gradient-to-r from-[#E10600]/10 to-[#E10600]/5'
                           : isInStops
-                            ? 'border-[#E5E5E5] bg-[#F7F7F7] opacity-50 cursor-not-allowed'
+                            ? 'border-[var(--border-subtle)] bg-[#F7F7F7] opacity-50 cursor-not-allowed'
                             : isDisabled
-                              ? 'border-[#E5E5E5] bg-[#F7F7F7] opacity-50 cursor-not-allowed'
-                              : 'border-[#E5E5E5] bg-white hover:border-[#B8B8B8]'
+                              ? 'border-[var(--border-subtle)] bg-[#F7F7F7] opacity-50 cursor-not-allowed'
+                              : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[#B8B8B8]'
                           }`}
                         onClick={() => !isDisabled && !isInStops && toggleCitySelection(city)}
                       >
@@ -370,7 +370,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
                           <div className="flex items-center gap-2">
                             <div className={`w-5 h-5 rounded border flex items-center justify-center ${isSelected || isInStops
                               ? 'border-[#E10600] bg-[#E10600]'
-                              : 'border-[#E5E5E5]'
+                              : 'border-[var(--border-subtle)]'
                               }`}>
                               {(isSelected || isInStops) && (
                                 <Check className="text-white" size={12} />
@@ -412,7 +412,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
                 value={customCity}
                 onChange={(e) => setCustomCity(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 px-4 py-2 text-sm rounded-lg border border-[#E5E5E5] bg-[#F7F7F7] text-[#111111] placeholder-[#B8B8B8] focus:outline-none focus:ring-2 focus:ring-[#E10600]/20 focus:border-[#E10600] transition-all duration-200"
+                className="flex-1 px-4 py-2 text-sm rounded-lg border border-[var(--border-subtle)] bg-[#F7F7F7] text-[#111111] placeholder-[#B8B8B8] focus:outline-none focus:ring-2 focus:ring-[#E10600]/20 focus:border-[#E10600] transition-all duration-200"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -452,7 +452,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
                   setCustomCity("");
                   setError("");
                 }}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#E5E5E5] bg-white text-[#555555] hover:bg-[#F7F7F7] transition-all duration-200 font-medium text-sm"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[#555555] hover:bg-[#F7F7F7] transition-all duration-200 font-medium text-sm"
               >
                 <X size={16} />
                 Cancel Edit
@@ -499,7 +499,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white rounded-xl border border-[#E5E5E5] p-6 shadow-sm"
+              className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-6 shadow-sm"
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -536,7 +536,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
                       <div className="absolute left-5 top-12 bottom-0 w-0.5 bg-gradient-to-b from-[#E5E5E5] to-transparent"></div>
                     )}
 
-                    <div className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5] p-4 hover:border-[#B8B8B8] transition-all duration-200">
+                    <div className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)] p-4 hover:border-[#B8B8B8] transition-all duration-200">
                       <div className="flex items-start gap-4">
                         {/* Stop Number */}
                         <div className="flex-shrink-0">
@@ -615,7 +615,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl border border-[#E5E5E5] p-8 text-center shadow-sm"
+              className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-8 text-center shadow-sm"
             >
               <div className="w-16 h-16 rounded-full bg-[#F7F7F7] flex items-center justify-center mx-auto mb-4">
                 <Route className="w-8 h-8 text-[#B8B8B8]" />
@@ -625,7 +625,7 @@ export const StopsForm = ({ data, updateData, prevStep, onSubmit, formData, setF
                 Select cities from your route above or add custom cities.
                 This is optional - you can proceed without stops for a direct ride.
               </p>
-              <div className="p-4 bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5] inline-block">
+              <div className="p-4 bg-gradient-to-r from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)] inline-block">
                 <div className="flex items-center gap-2 text-sm text-[#555555]">
                   <MapPin size={14} />
                   <span>{routeCities.length} cities available on your route</span>

@@ -83,7 +83,7 @@ const PersonalDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--bg-page)]">
       <div className="px-4 md:px-6 py-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Profile Card */}
@@ -93,7 +93,7 @@ const PersonalDetails = () => {
               variants={fadeInUp}
               initial="hidden"
               animate="visible"
-              className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+              className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
             >
               <div className="p-6">
                 <div className="flex flex-col sm:flex-row items-start gap-6">
@@ -244,10 +244,10 @@ const PersonalDetails = () => {
               initial="hidden"
               animate="visible"
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+              className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
             >
               {/* Section Header */}
-              <div className="border-b border-[#E5E5E5] px-6 py-4 bg-[#F7F7F7]/50">
+              <div className="border-b border-[var(--border-subtle)] px-6 py-4 bg-[#F7F7F7]/50">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-[#E10600] rounded-lg">
@@ -328,7 +328,7 @@ const PersonalDetails = () => {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <div
-                            className={`p-2 rounded-lg bg-white ${field.color}`}
+                            className={`p-2 rounded-lg bg-[var(--bg-surface)] ${field.color}`}
                           >
                             <field.icon size={16} />
                           </div>
@@ -360,7 +360,7 @@ const PersonalDetails = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+                className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -382,7 +382,7 @@ const PersonalDetails = () => {
                       <span>Edit</span>
                     </motion.button>
                   </div>
-                  <div className="bg-[#F7F7F7] border border-[#E5E5E5] rounded-xl p-5">
+                  <div className="bg-[#F7F7F7] border border-[var(--border-subtle)] rounded-xl p-5">
                     <p className="text-[#555555] leading-relaxed">{user.bio}</p>
                   </div>
                 </div>
@@ -392,7 +392,7 @@ const PersonalDetails = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+                className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -430,7 +430,7 @@ const PersonalDetails = () => {
               variants={scaleIn}
               initial="hidden"
               animate="visible"
-              className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+              className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
             >
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-6">
@@ -530,7 +530,7 @@ const PersonalDetails = () => {
                 initial="hidden"
                 animate="visible"
                 transition={{ delay: 0.1 }}
-                className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+                className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-6">

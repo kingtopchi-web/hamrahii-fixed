@@ -253,6 +253,29 @@ const userSchema = mongoose.Schema({
             large: { type: Boolean, default: false }
         }
     },
+    kyc: {
+        status: {
+            type: String,
+            enum: ["NOT_SUBMITTED", "PENDING", "VERIFIED", "REJECTED"],
+            default: "NOT_SUBMITTED"
+        },
+        provider: {
+            type: String,
+            default: null
+        },
+        verificationReference: {
+            type: String,
+            default: null
+        },
+        verifiedAt: {
+            type: Date,
+            default: null
+        },
+        rejectionReason: {
+            type: String,
+            default: null
+        }
+    },
     wallet: {
         balance: {
             type: Number,
@@ -365,6 +388,16 @@ const userSchema = mongoose.Schema({
     maxParcelWeight: {
         type: Number,
         default: 0
+    },
+    weatherPreferences: {
+        location: {
+            name: { type: String, default: "" },
+            lat: { type: Number },
+            lon: { type: Number }
+        },
+        notificationsEnabled: { type: Boolean, default: false },
+        dailyUpdates: { type: Boolean, default: false },
+        severeAlerts: { type: Boolean, default: false }
     }
 }, { timestamps: true })
 

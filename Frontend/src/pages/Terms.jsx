@@ -200,7 +200,7 @@ const Terms = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white w-full md:w-[80%] flex justify-center items-center mx-auto">
+    <div className="min-h-screen bg-[var(--bg-page)] w-full md:w-[80%] flex justify-center items-center mx-auto">
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <motion.div 
@@ -237,7 +237,7 @@ const Terms = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-xl p-8 mb-12 border border-[#E5E5E5]"
+          className="bg-gradient-to-r from-[#F7F7F7] to-white rounded-xl p-8 mb-12 border border-[var(--border-subtle)]"
         >
           <div className="flex items-start space-x-4">
             <Home className="w-8 h-8 text-[#E10600] mt-1" />
@@ -249,21 +249,21 @@ const Terms = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white mb-4 border border-[#E5E5E5]">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface)] mb-4 border border-[var(--border-subtle)]">
                     <Car className="w-6 h-6 text-[#E10600]" />
                   </div>
                   <h3 className="font-semibold text-[#111111] mb-1">Car Sharing</h3>
                   <p className="text-sm text-[#555555]">Comfortable car rides</p>
                 </div>
                 <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white mb-4 border border-[#E5E5E5]">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface)] mb-4 border border-[var(--border-subtle)]">
                     <Bike className="w-6 h-6 text-[#E10600]" />
                   </div>
                   <h3 className="font-semibold text-[#111111] mb-1">Bike Sharing</h3>
                   <p className="text-sm text-[#555555]">Quick and affordable</p>
                 </div>
                 <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white mb-4 border border-[#E5E5E5]">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface)] mb-4 border border-[var(--border-subtle)]">
                     <Navigation className="w-6 h-6 text-[#E10600]" />
                   </div>
                   <h3 className="font-semibold text-[#111111] mb-1">Auto Sharing</h3>
@@ -287,11 +287,11 @@ const Terms = () => {
               <motion.div
                 key={section.id}
                 variants={itemVariants}
-                className="bg-white rounded-xl border border-[#E5E5E5] overflow-hidden shadow-sm"
+                className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] overflow-hidden shadow-sm"
               >
                 <div className="p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="p-3 rounded-lg bg-gradient-to-br from-[#F7F7F7] to-white border border-[#E5E5E5]">
+                    <div className="p-3 rounded-lg bg-gradient-to-br from-[#F7F7F7] to-white border border-[var(--border-subtle)]">
                       <div className="relative">
                         <IconComponent className="w-6 h-6 text-[#E10600]" />
                       </div>
@@ -353,7 +353,7 @@ const Terms = () => {
                       {section.id === 'responsibilities' && (
                         <div className="mt-6">
                           <div className="grid md:grid-cols-2 gap-6">
-                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                               <h4 className="font-bold text-[#111111] mb-3 flex items-center">
                                 <UserCheck className="w-5 h-5 mr-2 text-[#E10600]" />
                                 Drivers
@@ -367,7 +367,7 @@ const Terms = () => {
                                 ))}
                               </div>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                               <h4 className="font-bold text-[#111111] mb-3 flex items-center">
                                 <Users className="w-5 h-5 mr-2 text-[#E10600]" />
                                 Passengers
@@ -392,7 +392,7 @@ const Terms = () => {
                           <div>
                             <h4 className="font-bold text-[#111111] mb-3">Commission Structure</h4>
                             <div className="grid md:grid-cols-2 gap-4">
-                              <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                              <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                                 <h5 className="font-semibold text-[#111111] mb-2">{section.commissionStructure.localTrips.title}</h5>
                                 <div className="space-y-1">
                                   <div className="flex items-center">
@@ -405,7 +405,7 @@ const Terms = () => {
                                   </div>
                                 </div>
                               </div>
-                              <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                              <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                                 <h5 className="font-semibold text-[#111111] mb-2">{section.commissionStructure.longDistance.title}</h5>
                                 <div className="space-y-1">
                                   <div className="flex items-center">
@@ -429,13 +429,13 @@ const Terms = () => {
                             <div className="mb-4">
                               <h5 className="font-semibold text-[#111111] mb-2">{section.fareStructure.longRoute.title}</h5>
                               <div className="grid md:grid-cols-2 gap-4">
-                                <div className="p-3 bg-white rounded-lg border border-[#E5E5E5]">
+                                <div className="p-3 bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)]">
                                   <div className="flex items-center">
                                     <Car className="w-4 h-4 mr-2 text-[#555555]" />
                                     <span className="text-sm text-[#555555]">{section.fareStructure.longRoute.car}</span>
                                   </div>
                                 </div>
-                                <div className="p-3 bg-white rounded-lg border border-[#E5E5E5]">
+                                <div className="p-3 bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)]">
                                   <div className="flex items-center">
                                     <Bike className="w-4 h-4 mr-2 text-[#555555]" />
                                     <span className="text-sm text-[#555555]">{section.fareStructure.longRoute.bikeAuto}</span>
@@ -448,7 +448,7 @@ const Terms = () => {
                             <div className="mb-4">
                               <h5 className="font-semibold text-[#111111] mb-2">{section.fareStructure.intercity.title}</h5>
                               <div className="grid md:grid-cols-2 gap-4">
-                                <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                                <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                                   <h6 className="font-medium text-[#111111] mb-2 flex items-center">
                                     <Bike className="w-4 h-4 mr-2 text-[#E10600]" />
                                     Bike
@@ -459,7 +459,7 @@ const Terms = () => {
                                     ))}
                                   </div>
                                 </div>
-                                <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                                <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                                   <h6 className="font-medium text-[#111111] mb-2 flex items-center">
                                     <Navigation className="w-4 h-4 mr-2 text-[#E10600]" />
                                     Auto
@@ -493,14 +493,14 @@ const Terms = () => {
                       {section.id === 'cancellation' && (
                         <div className="mt-4">
                           <div className="grid md:grid-cols-2 gap-6">
-                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                               <h4 className="font-bold text-[#111111] mb-2 flex items-center">
                                 <UserCheck className="w-5 h-5 mr-2 text-[#E10600]" />
                                 Driver Cancellation
                               </h4>
                               <p className="text-[#555555]">{section.driverCancellation}</p>
                             </div>
-                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[#E5E5E5]">
+                            <div className="p-4 bg-gradient-to-br from-[#F7F7F7] to-white rounded-lg border border-[var(--border-subtle)]">
                               <h4 className="font-bold text-[#111111] mb-2 flex items-center">
                                 <Users className="w-5 h-5 mr-2 text-[#E10600]" />
                                 Passenger Cancellation/No Show
@@ -549,15 +549,15 @@ const Terms = () => {
                 agreement between you and HumRahii.
               </p>
               <div className="flex flex-wrap gap-4">
-                <div className="px-4 py-2 bg-white border border-[#E5E5E5] rounded-lg">
+                <div className="px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg">
                   <span className="text-sm font-medium text-[#111111]">Applicable Law:</span>
                   <span className="text-sm text-[#555555] ml-2">Indian Laws</span>
                 </div>
-                <div className="px-4 py-2 bg-white border border-[#E5E5E5] rounded-lg">
+                <div className="px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg">
                   <span className="text-sm font-medium text-[#111111]">Vehicle Types:</span>
                   <span className="text-sm text-[#555555] ml-2">Car, Bike, Auto</span>
                 </div>
-                <div className="px-4 py-2 bg-white border border-[#E5E5E5] rounded-lg">
+                <div className="px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg">
                   <span className="text-sm font-medium text-[#111111]">Version:</span>
                   <span className="text-sm text-[#555555] ml-2">1.0</span>
                 </div>
@@ -571,13 +571,13 @@ const Terms = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="text-center border-t border-[#E5E5E5] pt-12"
+          className="text-center border-t border-[var(--border-subtle)] pt-12"
         >
           <h2 className="text-2xl font-bold text-[#111111] mb-8">For More Information</h2>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#F7F7F7] to-white mb-4 border border-[#E5E5E5]">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#F7F7F7] to-white mb-4 border border-[var(--border-subtle)]">
                 <Mail className="w-6 h-6 text-[#E10600]" />
               </div>
               <h3 className="font-medium text-[#111111] mb-1">Email Support</h3>
@@ -585,7 +585,7 @@ const Terms = () => {
               <p className="text-sm text-[#555555] mt-1">For inquiries and support</p>
             </div>
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#F7F7F7] to-white mb-4 border border-[#E5E5E5]">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#F7F7F7] to-white mb-4 border border-[var(--border-subtle)]">
                 <Phone className="w-6 h-6 text-[#E10600]" />
               </div>
               <h3 className="font-medium text-[#111111] mb-1">Phone Support</h3>
@@ -594,7 +594,7 @@ const Terms = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-[#F7F7F7] to-white rounded-xl p-8 max-w-2xl mx-auto border border-[#E5E5E5]">
+          <div className="bg-gradient-to-br from-[#F7F7F7] to-white rounded-xl p-8 max-w-2xl mx-auto border border-[var(--border-subtle)]">
             <h3 className="text-xl font-semibold text-[#111111] mb-4">Need Assistance?</h3>
             <p className="text-[#555555] mb-6">
               Our support team is available to help you with any questions regarding our Terms & Conditions, 

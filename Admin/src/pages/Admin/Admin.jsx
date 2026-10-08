@@ -193,31 +193,31 @@ const Admin = () => {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-68 sm:w-72 bg-[#0F172A] border-r border-[#1E293B] flex flex-col shadow-xl lg:shadow-none transition-transform duration-300 ease-in-out shrink-0 ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-68 sm:w-72 bg-[#FFFFFF] border-r border-[#E2E8F0] flex flex-col shadow-xl lg:shadow-none transition-transform duration-300 ease-in-out shrink-0 ${
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* Brand Header */}
-        <div className="p-5 border-b border-[#1E293B] flex items-center justify-between">
+        <div className="p-5 border-b border-[#E2E8F0] flex items-center justify-between">
           <Link to="/admin" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#98E9E9] to-[#1A1A1A] flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
               <img src={logo} alt="HumRahii" className="w-full h-full object-cover rounded-xl" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xl font-bold bg-gradient-to-r from-[#E2E8F0] to-[#94A3B8] bg-clip-text text-transparent">
+                <span className="text-xl font-bold bg-gradient-to-r from-[#0F172A] to-[#475569] bg-clip-text text-transparent">
                   HumRahii
                 </span>
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20">
                   PRO
                 </span>
               </div>
-              <p className="text-[11px] text-[#94A3B8] font-medium">Administration Console</p>
+              <p className="text-[11px] text-[#64748B] font-medium">Administration Console</p>
             </div>
           </Link>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="lg:hidden p-1.5 text-[#94A3B8] hover:text-[#FFFFFF] rounded-lg hover:bg-[#1E293B]"
+            className="lg:hidden p-1.5 text-[#64748B] hover:text-[#0F172A] rounded-lg hover:bg-[#F1F5F9]"
           >
             <X size={18} />
           </button>
@@ -227,7 +227,7 @@ const Admin = () => {
         <nav className="flex-1 px-3 py-4 space-y-6 overflow-y-auto hide-scrollbar">
           {navSections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-1">
-              <p className="px-3 text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider mb-2">
+              <p className="px-3 text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-2">
                 {section.title}
               </p>
               {section.items.map((item) => {
@@ -239,8 +239,8 @@ const Admin = () => {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`relative flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all duration-200 group text-sm font-medium ${
                       isActive
-                        ? 'bg-[#1E293B] text-[#EF4444] font-semibold'
-                        : 'text-[#E2E8F0] hover:text-[#FFFFFF] hover:bg-[#1E293B]'
+                        ? 'bg-[#F1F5F9] text-[#EF4444] font-semibold'
+                        : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F8FAFC]'
                     }`}
                   >
                     {/* Active Left Indicator Bar */}
@@ -249,7 +249,7 @@ const Admin = () => {
                     )}
                     
                     <div className="flex items-center space-x-3">
-                      <div className={`transition-colors ${isActive ? 'text-[#EF4444]' : 'text-[#94A3B8] group-hover:text-[#FFFFFF]'}`}>
+                      <div className={`transition-colors ${isActive ? 'text-[#EF4444]' : 'text-[#64748B] group-hover:text-[#0F172A]'}`}>
                         {item.icon}
                       </div>
                       <span>{item.label}</span>
@@ -259,7 +259,7 @@ const Admin = () => {
                       <span className={`px-2 py-0.5 text-xs font-bold rounded-full transition-colors ${
                         isActive
                           ? 'bg-[#EF4444] text-[#FFFFFF] shadow-xs'
-                          : 'bg-[#1E293B] text-[#94A3B8] group-hover:text-[#FFFFFF]'
+                          : 'bg-[#F1F5F9] text-[#64748B] group-hover:text-[#0F172A]'
                       }`}>
                         {item.badge}
                       </span>
@@ -272,23 +272,23 @@ const Admin = () => {
         </nav>
 
         {/* Super Administration Card */}
-        <div className="p-3.5 border-t border-[#1E293B] bg-[#0F172A]">
-          <div className="bg-[#1E293B] p-3 rounded-2xl border border-[#334155] shadow-sm transition-colors duration-200 hover:border-[#475569]">
+        <div className="p-3.5 border-t border-[#E2E8F0] bg-[#FFFFFF]">
+          <div className="bg-[#F8FAFC] p-3 rounded-2xl border border-[#E2E8F0] shadow-sm transition-colors duration-200 hover:border-[#CBD5E1]">
             <div className="flex items-center space-x-3">
               <div className="relative shrink-0">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#EF4444] to-[#DC2626] flex items-center justify-center text-[#FFFFFF] font-bold text-sm shadow-xs ring-2 ring-[#0F172A]">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#EF4444] to-[#DC2626] flex items-center justify-center text-[#FFFFFF] font-bold text-sm shadow-xs ring-2 ring-[#FFFFFF]">
                   {adminInitial}
                 </div>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#10B981] border-2 border-[#0F172A] rounded-full" title="Online"></span>
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#10B981] border-2 border-[#FFFFFF] rounded-full" title="Online"></span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-xs text-[#FFFFFF] truncate" title={adminName}>
+                <p className="font-bold text-xs text-[#0F172A] truncate" title={adminName}>
                   {adminName}
                 </p>
-                <p className="text-[11px] text-[#94A3B8] truncate" title={adminEmail}>
+                <p className="text-[11px] text-[#64748B] truncate" title={adminEmail}>
                   {adminEmail}
                 </p>
-                <div className="inline-flex items-center gap-1 mt-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#450A0A] text-[#FCA5A5]">
+                <div className="inline-flex items-center gap-1 mt-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#EF4444]/10 text-[#EF4444]">
                   <Shield size={9} />
                   <span>Super Admin</span>
                 </div>
@@ -297,7 +297,7 @@ const Admin = () => {
 
             <button
               onClick={handleLogOut}
-              className="mt-3 w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-xl text-xs font-semibold text-[#CBD5E1] hover:text-[#FFFFFF] bg-transparent hover:bg-[#334155] border border-[#334155] transition-all cursor-pointer"
+              className="mt-3 w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-xl text-xs font-semibold text-[#64748B] hover:text-[#EF4444] bg-[#FFFFFF] hover:bg-[#FEE2E2] border border-[#E2E8F0] hover:border-[#FEE2E2] transition-all cursor-pointer"
             >
               <LogOut size={13} />
               <span>Sign Out</span>

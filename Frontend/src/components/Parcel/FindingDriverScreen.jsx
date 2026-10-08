@@ -249,13 +249,13 @@ const FindingDriverScreen = ({ parcel: initialParcel, onBack, onDriverAssigned, 
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-10rem)] max-w-xl mx-auto flex flex-col justify-between bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
+    <div className="relative min-h-[calc(100vh-10rem)] max-w-xl mx-auto flex flex-col justify-between bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl overflow-hidden">
       
       {/* Top Navigation Bar */}
-      <div className="p-4 sm:p-5 flex items-center justify-between border-b border-gray-100 bg-white/90 backdrop-blur-md z-10">
+      <div className="p-4 sm:p-5 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-md z-10">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-xl border border-gray-200 transition cursor-pointer"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-xl border border-[var(--border-subtle)] transition cursor-pointer"
         >
           <ArrowLeft size={16} />
           <span>My Parcel</span>
@@ -349,7 +349,7 @@ const FindingDriverScreen = ({ parcel: initialParcel, onBack, onDriverAssigned, 
         {/* Pulse Radar Overlay on Map */}
         {!isAccepted && (
           <div className="absolute top-3 left-3 pointer-events-none">
-            <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-gray-200/80 shadow-xs">
+            <div className="flex items-center gap-2 bg-[var(--bg-surface)]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-[var(--border-subtle)]/80 shadow-xs">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
@@ -363,7 +363,7 @@ const FindingDriverScreen = ({ parcel: initialParcel, onBack, onDriverAssigned, 
       </div>
 
       {/* Bottom Content / Status & Actions */}
-      <div className="p-5 sm:p-6 bg-white space-y-4">
+      <div className="p-5 sm:p-6 bg-[var(--bg-surface)] space-y-4">
         
         {/* State A: Still Finding Driver */}
         {!isAccepted && (
@@ -387,7 +387,7 @@ const FindingDriverScreen = ({ parcel: initialParcel, onBack, onDriverAssigned, 
             </div>
 
             {/* Parcel Route Summary Mini Card */}
-            <div className="p-3 bg-gray-50 rounded-2xl border border-gray-100 text-xs text-gray-600 space-y-1.5">
+            <div className="p-3 bg-gray-50 rounded-2xl border border-[var(--border-subtle)] text-xs text-gray-600 space-y-1.5">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                 <p className="truncate font-semibold text-gray-800">
@@ -407,7 +407,7 @@ const FindingDriverScreen = ({ parcel: initialParcel, onBack, onDriverAssigned, 
             {/* Cancel Request Button */}
             <button
               onClick={() => setCancelModalOpen(true)}
-              className="w-full py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 border border-gray-200/80 hover:border-red-200 rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs active:scale-[0.99]"
+              className="w-full py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 border border-[var(--border-subtle)]/80 hover:border-red-200 rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs active:scale-[0.99]"
             >
               Cancel Request
             </button>
@@ -438,9 +438,9 @@ const FindingDriverScreen = ({ parcel: initialParcel, onBack, onDriverAssigned, 
             </div>
 
             {/* Driver Profile Card */}
-            <div className="p-4 bg-white border border-gray-200 rounded-2xl shadow-xs flex items-center justify-between">
+            <div className="p-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-xs flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden border border-gray-200 flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden border border-[var(--border-subtle)] flex items-center justify-center shrink-0">
                   {assignedDriver.profilePhoto ? (
                     <img
                       src={assignedDriver.profilePhoto}
@@ -497,7 +497,7 @@ const FindingDriverScreen = ({ parcel: initialParcel, onBack, onDriverAssigned, 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-gray-100 text-center"
+              className="bg-[var(--bg-surface)] rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-[var(--border-subtle)] text-center"
             >
               <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-3 border border-amber-200">
                 <AlertTriangle size={24} />

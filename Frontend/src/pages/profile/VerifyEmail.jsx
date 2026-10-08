@@ -245,7 +245,7 @@ const VerifyEmail = () => {
               </div>
 
               {/* Security Features */}
-              <div className="bg-[#F7F7F7] rounded-2xl p-6 border border-[#E5E5E5]">
+              <div className="bg-[#F7F7F7] rounded-2xl p-6 border border-[var(--border-subtle)]">
                 <h3 className="text-lg font-semibold text-[#111111] mb-4">
                   Why Verify Your Email?
                 </h3>
@@ -272,7 +272,7 @@ const VerifyEmail = () => {
           </div>
 
           {/* Right Column - Verification Form */}
-          <div className="bg-[#FFFFFF] rounded-2xl border border-[#E5E5E5] p-8 shadow-sm">
+          <div className="bg-[#FFFFFF] rounded-2xl border border-[var(--border-subtle)] p-8 shadow-sm">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-[#111111] mb-2">
                 Email Verification
@@ -287,14 +287,14 @@ const VerifyEmail = () => {
               <label className="block text-sm font-medium text-[#555555] mb-2">
                 Email Address
               </label>
-              <div className="flex items-center gap-3 p-4 bg-[#F7F7F7] rounded-xl border border-[#E5E5E5]">
+              <div className="flex items-center gap-3 p-4 bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)]">
                 <Mail className="w-5 h-5 text-[#555555]" />
                  <input
                     type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter email"
-                    className="w-full px-4 py-3 bg-[#F7F7F7] border border-[#E5E5E5] rounded-xl focus:outline-none focus:border-[#E10600] focus:ring-2 focus:ring-[#E10600]/20 text-[#111111] placeholder-[#B8B8B8]  text-xl tracking-widest"
+                    className="w-full px-4 py-3 bg-[#F7F7F7] border border-[var(--border-subtle)] rounded-xl focus:outline-none focus:border-[#E10600] focus:ring-2 focus:ring-[#E10600]/20 text-[#111111] placeholder-[#B8B8B8]  text-xl tracking-widest"
                     disabled={verificationStatus === 'verifying'}
          
                   />
@@ -324,7 +324,7 @@ const VerifyEmail = () => {
                     value={verificationCode}
                     onChange={handleOtpChange}
                     placeholder="Enter 6-digit OTP"
-                    className="w-full px-4 py-3 bg-[#F7F7F7] border border-[#E5E5E5] rounded-xl focus:outline-none focus:border-[#E10600] focus:ring-2 focus:ring-[#E10600]/20 text-[#111111] placeholder-[#B8B8B8] text-center text-2xl tracking-widest"
+                    className="w-full px-4 py-3 bg-[#F7F7F7] border border-[var(--border-subtle)] rounded-xl focus:outline-none focus:border-[#E10600] focus:ring-2 focus:ring-[#E10600]/20 text-[#111111] placeholder-[#B8B8B8] text-center text-2xl tracking-widest"
                     maxLength={6}
                     disabled={verificationStatus === 'verifying'}
                     inputMode="numeric"
@@ -386,7 +386,7 @@ const VerifyEmail = () => {
                   <button
                     onClick={handleResendCode}
                     disabled={countdown > 0 || loading || !userId}
-                    className="w-full bg-transparent border border-[#E5E5E5] text-[#555555] hover:bg-[#F7F7F7] py-3 px-6 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-transparent border border-[var(--border-subtle)] text-[#555555] hover:bg-[#F7F7F7] py-3 px-6 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {countdown > 0 ? (
                       <>
@@ -431,7 +431,7 @@ const VerifyEmail = () => {
               )}
 
               {showOtpInput && (
-                <div className="pt-4 border-t border-[#E5E5E5]">
+                <div className="pt-4 border-t border-[var(--border-subtle)]">
                   <p className="text-center text-sm text-[#555555]">
                     Didn't receive the email?{' '}
                     <button
@@ -464,7 +464,7 @@ const VerifyEmail = () => {
             </div>
 
             {/* Help Text */}
-            <div className="mt-8 p-4 bg-[#F7F7F7] rounded-xl border border-[#E5E5E5]">
+            <div className="mt-8 p-4 bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)]">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-[#555555] mt-0.5 flex-shrink-0" />
                 <div>

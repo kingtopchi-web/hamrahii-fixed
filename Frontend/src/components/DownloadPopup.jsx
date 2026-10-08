@@ -106,14 +106,14 @@ const DownloadPopup = () => {
               className="fixed inset-0 flex items-center justify-center z-50 p-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-white rounded-2xl max-w-sm w-full mx-4 overflow-hidden shadow-2xl" style={{ backgroundColor: '#FFFFFF' }}>
+              <div className="bg-[var(--bg-surface)] rounded-2xl max-w-sm w-full mx-4 overflow-hidden shadow-2xl" style={{ backgroundColor: '#FFFFFF' }}>
                 {/* Header with gradient */}
                 <div className="bg-gradient-to-r from-[#E10600] to-[#E10600]/80 p-6 text-white text-center">
                   <motion.div
                     initial={{ rotate: -10, scale: 0 }}
                     animate={{ rotate: 0, scale: 1 }}
                     transition={{ delay: 0.2, type: "spring" }}
-                    className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-3 backdrop-blur-sm"
+                    className="inline-flex items-center justify-center w-16 h-16 bg-[var(--bg-surface)]/20 rounded-full mb-3 backdrop-blur-sm"
                   >
                     <Smartphone className="w-8 h-8" />
                   </motion.div>

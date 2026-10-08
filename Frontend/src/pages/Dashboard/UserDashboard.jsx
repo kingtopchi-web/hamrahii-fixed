@@ -6,6 +6,8 @@ import { Package, Route, Wallet, Clock, ArrowRight, Car, Search, Gift, Shield, Z
 import { Link, useNavigate } from "react-router-dom";
 import RiderAvailability from "../../components/Rider/RiderAvailability";
 import ParcelRequests from "../../components/Rider/ParcelRequests";
+import WeatherWidget from "../../components/Weather/WeatherWidget";
+import KycGuard from "../../components/KycGuard";
 
 const UserDashboard = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -62,7 +64,7 @@ const UserDashboard = () => {
           <h1 className="text-xl font-bold text-[#111111]">Dashboard</h1>
           <button 
             onClick={() => setMobileMenuOpen(true)}
-            className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium shadow-sm text-gray-700"
+            className="px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-sm font-medium shadow-sm text-gray-700"
           >
             Menu
           </button>
@@ -87,7 +89,7 @@ const UserDashboard = () => {
                 
                 <div className="relative z-10 p-6 md:p-8 lg:p-9 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                   <div className="space-y-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-semibold text-gray-200 border border-white/10 backdrop-blur-sm">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-surface)]/10 text-xs font-semibold text-gray-200 border border-white/10 backdrop-blur-sm">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span>Hamrahi Smart Mobility</span>
                     </div>
@@ -100,26 +102,35 @@ const UserDashboard = () => {
                   </div>
                   
                   <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full md:w-auto shrink-0">
-                    <motion.button 
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => navigate('/rides')}
-                      className="px-5 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-600/25 flex items-center justify-center gap-2 text-sm transition-all"
-                    >
-                      <Search size={16} />
-                      Find a Ride
-                    </motion.button>
-                    <motion.button 
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => navigate('/offer-ride')}
-                      className="px-5 py-3 bg-white/10 hover:bg-white/15 text-white border border-white/15 font-bold rounded-xl backdrop-blur-sm transition-all flex items-center justify-center gap-2 text-sm"
-                    >
-                      <Car size={16} />
-                      Offer a Ride
-                    </motion.button>
+                    <KycGuard>
+                      <motion.button 
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => navigate('/rides')}
+                        className="px-5 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-600/25 flex items-center justify-center gap-2 text-sm transition-all"
+                      >
+                        <Search size={16} />
+                        Find a Ride
+                      </motion.button>
+                    </KycGuard>
+                    <KycGuard>
+                      <motion.button 
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => navigate('/offer-ride')}
+                        className="px-5 py-3 bg-[var(--bg-surface)]/10 hover:bg-[var(--bg-surface)]/15 text-white border border-white/15 font-bold rounded-xl backdrop-blur-sm transition-all flex items-center justify-center gap-2 text-sm"
+                      >
+                        <Car size={16} />
+                        Offer a Ride
+                      </motion.button>
+                    </KycGuard>
                   </div>
                 </div>
+              </motion.div>
+
+              {/* Weather Widget */}
+              <motion.div variants={itemVariants}>
+                  <WeatherWidget />
               </motion.div>
 
               {/* Stats Grid */}
@@ -130,7 +141,7 @@ const UserDashboard = () => {
                     <motion.div
                       key={index}
                       whileHover={{ y: -3, scale: 1.01 }}
-                      className="bg-white rounded-2xl p-5 border border-gray-100 shadow-xs hover:shadow-md transition-all duration-200 relative overflow-hidden group"
+                      className="bg-[var(--bg-surface)] rounded-2xl p-5 border border-[var(--border-subtle)] shadow-xs hover:shadow-md transition-all duration-200 relative overflow-hidden group"
                     >
                       <div className={`absolute -right-6 -top-6 w-20 h-20 bg-gradient-to-br ${stat.color} rounded-full opacity-10 blur-xl group-hover:opacity-20 transition-opacity duration-300`} />
                       
@@ -163,9 +174,9 @@ const UserDashboard = () => {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 {/* Verification Status */}
                 <motion.div variants={itemVariants} className="lg:col-span-2">
-                  <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs relative overflow-hidden h-full flex flex-col justify-between">
+                  <div className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-xs relative overflow-hidden h-full flex flex-col justify-between">
                     <div>
-                      <div className="flex items-center gap-3.5 mb-5 pb-3 border-b border-gray-100">
+                      <div className="flex items-center gap-3.5 mb-5 pb-3 border-b border-[var(--border-subtle)]">
                         <div className={`p-2.5 rounded-xl ${isVerified ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
                           {isVerified ? <CheckCircle size={22} /> : <AlertCircle size={22} />}
                         </div>
@@ -178,7 +189,7 @@ const UserDashboard = () => {
                       </div>
 
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 border border-gray-100">
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 border border-[var(--border-subtle)]">
                           <div className="flex items-center gap-3">
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${user?.phoneVerified ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-200 text-gray-400'}`}>
                               <CheckCircle size={16} />
@@ -192,7 +203,7 @@ const UserDashboard = () => {
                           )}
                         </div>
 
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 border border-gray-100">
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 border border-[var(--border-subtle)]">
                           <div className="flex items-center gap-3">
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${user?.emailVerified ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-200 text-gray-400'}`}>
                               <CheckCircle size={16} />
@@ -206,7 +217,7 @@ const UserDashboard = () => {
                           )}
                         </div>
                         
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 border border-gray-100">
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 border border-[var(--border-subtle)]">
                           <div className="flex items-center gap-3">
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${user?.dlVerified ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-200 text-gray-400'}`}>
                               <CheckCircle size={16} />
@@ -226,28 +237,34 @@ const UserDashboard = () => {
 
                 {/* Quick Actions Grid */}
                 <motion.div variants={itemVariants}>
-                  <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs h-full flex flex-col justify-between">
-                    <h3 className="text-base font-bold text-gray-900 mb-4 pb-3 border-b border-gray-100 flex items-center gap-2">
+                  <div className="bg-[var(--bg-surface)] rounded-2xl p-6 border border-[var(--border-subtle)] shadow-xs h-full flex flex-col justify-between">
+                    <h3 className="text-base font-bold text-gray-900 mb-4 pb-3 border-b border-[var(--border-subtle)] flex items-center gap-2">
                       <Zap className="text-amber-500 w-4 h-4" /> Quick Actions
                     </h3>
                     
                     <div className="grid grid-cols-2 gap-3 flex-1">
                       {quickActions.map((action, index) => {
                         const Icon = action.icon;
-                        return (
+                        const ButtonNode = (
                           <motion.button
                             key={index}
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => navigate(action.link)}
-                            className={`${action.bg} rounded-xl p-3.5 flex flex-col items-center justify-center gap-2.5 border border-transparent hover:border-gray-200 transition-all cursor-pointer`}
+                            className={`${action.bg} rounded-xl p-3.5 flex flex-col items-center justify-center gap-2.5 border border-transparent hover:border-[var(--border-subtle)] transition-all cursor-pointer w-full`}
                           >
-                            <div className={`w-10 h-10 rounded-xl bg-white shadow-xs flex items-center justify-center ${action.color}`}>
+                            <div className={`w-10 h-10 rounded-xl bg-[var(--bg-surface)] shadow-xs flex items-center justify-center ${action.color}`}>
                               <Icon size={18} strokeWidth={2.5} />
                             </div>
                             <span className="text-xs font-bold text-gray-700 text-center">{action.label}</span>
                           </motion.button>
                         );
+
+                        if (action.link === '/rides' || action.link === '/offer-ride') {
+                           return <KycGuard key={index}>{ButtonNode}</KycGuard>;
+                        }
+                        
+                        return <React.Fragment key={index}>{ButtonNode}</React.Fragment>;
                       })}
                     </div>
                   </div>
@@ -261,7 +278,7 @@ const UserDashboard = () => {
                   
                   <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-4 text-center md:text-left">
-                      <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0 mx-auto md:mx-0 border border-white/10 text-red-400">
+                      <div className="w-12 h-12 rounded-xl bg-[var(--bg-surface)]/10 backdrop-blur-md flex items-center justify-center shrink-0 mx-auto md:mx-0 border border-white/10 text-red-400">
                         <HelpCircle size={24} />
                       </div>
                       <div>
@@ -282,7 +299,7 @@ const UserDashboard = () => {
                       <motion.button
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
-                        className="px-6 py-2.5 bg-white/10 hover:bg-white/15 text-white font-bold text-xs rounded-xl transition-all backdrop-blur-sm border border-white/15 w-full sm:w-auto"
+                        className="px-6 py-2.5 bg-[var(--bg-surface)]/10 hover:bg-[var(--bg-surface)]/15 text-white font-bold text-xs rounded-xl transition-all backdrop-blur-sm border border-white/15 w-full sm:w-auto"
                       >
                         View FAQs
                       </motion.button>

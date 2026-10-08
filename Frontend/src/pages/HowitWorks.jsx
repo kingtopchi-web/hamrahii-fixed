@@ -235,7 +235,7 @@ const HowitWorks = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--bg-page)]">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         {/* Background Elements */}
@@ -274,7 +274,7 @@ const HowitWorks = () => {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="bg-white rounded-xl border border-[#E5E5E5] p-5 hover:border-[#E10600]/30 hover:shadow-md transition-all duration-300"
+                  className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-5 hover:border-[#E10600]/30 hover:shadow-md transition-all duration-300"
                 >
                   <div className="text-3xl font-bold text-[#111111] mb-1">
                     {stat.value}
@@ -320,7 +320,7 @@ const HowitWorks = () => {
             animate="animate"
             className="text-center mb-12"
           >
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white border border-[#E5E5E5] text-[#111111] text-sm font-semibold mb-4">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[#111111] text-sm font-semibold mb-4">
               <Sparkles className="w-4 h-4 mr-2 text-[#E10600]" />
               Simple & Easy Process
             </div>
@@ -348,7 +348,7 @@ const HowitWorks = () => {
                 whileHover={{ y: -8 }}
                 className="relative"
               >
-                <div className="bg-white rounded-2xl border border-[#E5E5E5] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300 h-full">
+                <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300 h-full">
                   {/* Step Number */}
                   <div className="absolute -top-4 -left-4 w-12 h-12 rounded-xl bg-[#E10600] flex items-center justify-center text-white font-bold text-xl shadow-lg">
                     {step.number}
@@ -377,7 +377,7 @@ const HowitWorks = () => {
           </motion.div>
 
           {/* Features Section */}
-          <div className="bg-white rounded-2xl border border-[#E5E5E5] p-8 md:p-12 mb-16">
+          <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-8 md:p-12 mb-16">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-[#111111] mb-4">
                 Travel Made Better, Together
@@ -396,7 +396,7 @@ const HowitWorks = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -5 }}
-                  className="bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] p-6 hover:border-[#E10600] hover:shadow-md transition-all duration-300"
+                  className="bg-[#F7F7F7] rounded-xl border border-[var(--border-subtle)] p-6 hover:border-[#E10600] hover:shadow-md transition-all duration-300"
                 >
                   <div className="w-12 h-12 rounded-lg bg-[#E10600] flex items-center justify-center mb-4">
                     <feature.icon className="w-6 h-6 text-white" />
@@ -455,10 +455,10 @@ const HowitWorks = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200/50 overflow-hidden group"
+                  className="bg-[var(--bg-surface)] rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[var(--border-subtle)]/50 overflow-hidden group"
                 >
                   {/* Ride Header */}
-                  <div className="p-5 border-b border-gray-100">
+                  <div className="p-5 border-b border-[var(--border-subtle)]">
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h3 className="text-lg font-bold text-gray-900 mb-1">
@@ -653,7 +653,7 @@ const HowitWorks = () => {
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate("/rides")}
-                  className="px-8 py-3 bg-white border-2 border-red-200 text-red-700 font-semibold rounded-xl hover:bg-red-50 hover:border-red-300 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 mx-auto group"
+                  className="px-8 py-3 bg-[var(--bg-surface)] border-2 border-red-200 text-red-700 font-semibold rounded-xl hover:bg-red-50 hover:border-red-300 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 mx-auto group"
                 >
                   <Car size={20} />
                   <span>View All Available Rides</span>
@@ -670,7 +670,7 @@ const HowitWorks = () => {
       <div className="bg-[#F7F7F7] py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white border border-[#E5E5E5] text-[#111111] text-sm font-semibold mb-4">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[#111111] text-sm font-semibold mb-4">
               <Heart className="w-4 h-4 mr-2 text-[#E10600]" />
               Loved by Riders Across India
             </div>
@@ -691,7 +691,7 @@ const HowitWorks = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
                 whileHover={{ y: -5 }}
-                className="bg-white rounded-2xl border border-[#E5E5E5] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
+                className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-8 hover:border-[#E10600] hover:shadow-lg transition-all duration-300"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div>
@@ -718,7 +718,7 @@ const HowitWorks = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-6 border-t border-[#E5E5E5]">
+                <div className="flex items-center justify-between pt-6 border-t border-[var(--border-subtle)]">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -802,7 +802,7 @@ const HowitWorks = () => {
       </div>
 
       {/* Final CTA Banner */}
-      <div className="border-t border-[#E5E5E5]">
+      <div className="border-t border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h3 className="text-2xl font-bold text-[#111111] mb-4">

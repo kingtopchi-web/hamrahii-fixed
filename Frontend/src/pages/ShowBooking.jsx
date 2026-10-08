@@ -115,7 +115,7 @@ const ShowBooking = ({ setShowBooking, rideDetails , selectedSeats}) => {
               {formatDate(rideDetails.departureTime)} • {formatTime(rideDetails.departureTime)}
             </p>
           </div>
-          <div className='bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs'>
+          <div className='bg-[var(--bg-surface)]/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs'>
             <span className='font-bold'>{rideDetails.availableSeats}</span>
             <span className='text-slate-300 ml-1'>seats left</span>
           </div>
@@ -175,7 +175,7 @@ const ShowBooking = ({ setShowBooking, rideDetails , selectedSeats}) => {
 
       {/* Seat Selection Card */}
 
-      {rideDetails?.isFullSharing ? null : <div className='bg-white rounded-xl border border-slate-200 p-5'>
+      {rideDetails?.isFullSharing ? null : <div className='bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] p-5'>
         <div className='flex items-center justify-between mb-4'>
           <div>
             <h3 className='text-lg font-bold text-slate-900'>Select Seats</h3>
@@ -238,7 +238,7 @@ const ShowBooking = ({ setShowBooking, rideDetails , selectedSeats}) => {
         </div>
         
         {/* Estimated Fare */}
-        <div className='mt-5 pt-4 border-t border-slate-200'>
+        <div className='mt-5 pt-4 border-t border-[var(--border-subtle)]'>
           <div className='flex justify-between items-center'>
             <div>
               <span className='text-sm font-medium text-slate-700'>Estimated Fare</span>
@@ -281,7 +281,7 @@ const ShowBooking = ({ setShowBooking, rideDetails , selectedSeats}) => {
 
       {/* Booking Card */}
       <div className='max-w-2xl mx-auto'>
-        <div className='bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden'>
+        <div className='bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl shadow-sm overflow-hidden'>
           {/* Header */}
           <div className='p-4 bg-gradient-to-r from-slate-900 to-slate-800'>
             <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-2'>
@@ -482,9 +482,9 @@ const ShowBooking = ({ setShowBooking, rideDetails , selectedSeats}) => {
       />
       
       <div className='absolute inset-2 sm:inset-4 flex items-center justify-center'>
-        <div className='bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full h-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col'>
+        <div className='bg-[var(--bg-surface)] rounded-xl sm:rounded-2xl shadow-2xl w-full h-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col'>
           {/* Header */}
-          <div className='bg-white border-b border-slate-200 p-4'>
+          <div className='bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] p-4'>
             <div className='flex items-center justify-between'>
               <div>
                 <h2 className='text-lg sm:text-xl font-bold text-slate-900'>Request Ride</h2>

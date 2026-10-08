@@ -642,7 +642,7 @@ const Register = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="w-full lg:w-7/12"
           >
-            <div className="bg-white rounded-3xl shadow-card-hover p-6 sm:p-8 md:p-10 border border-gray-100 h-full flex flex-col justify-between">
+            <div className="bg-[var(--bg-surface)] rounded-3xl shadow-card-hover p-6 sm:p-8 md:p-10 border border-[var(--border-subtle)] h-full flex flex-col justify-between">
               {success ? (
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
@@ -721,14 +721,14 @@ const Register = () => {
                           Phone Number <span className="text-red-500">*</span>
                         </label>
                         <div
-                          className={`relative flex items-center rounded-xl border transition-all duration-200 bg-gray-50/50 hover:bg-white overflow-hidden ${
+                          className={`relative flex items-center rounded-xl border transition-all duration-200 bg-gray-50/50 hover:bg-[var(--bg-surface)] overflow-hidden ${
                             phoneError
                               ? "border-red-500 focus-within:ring-2 focus-within:ring-red-100"
                               : "border-gray-300 focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-100"
                           }`}
                         >
                           {/* Country Flag Selector */}
-                          <div className="relative flex items-center pl-3 pr-2.5 py-3.5 border-r border-gray-200 bg-gray-100/70 hover:bg-gray-200/60 transition-colors shrink-0 cursor-pointer">
+                          <div className="relative flex items-center pl-3 pr-2.5 py-3.5 border-r border-[var(--border-subtle)] bg-gray-100/70 hover:bg-gray-200/60 transition-colors shrink-0 cursor-pointer">
                             <div className="flex items-center gap-1">
                               <Flag size={40} code={selected?.code || "IN"} />
                               <ChevronDown size={14} className="text-gray-500" />
@@ -801,7 +801,7 @@ const Register = () => {
                             }}
                             placeholder="e.g. JOIN2026"
                             disabled={loading}
-                            className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none transition-all bg-gray-50/50 hover:bg-white text-sm sm:text-base uppercase tracking-wider font-semibold text-gray-800"
+                            className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none transition-all bg-gray-50/50 hover:bg-[var(--bg-surface)] text-sm sm:text-base uppercase tracking-wider font-semibold text-gray-800"
                           />
                           <Gift className="absolute left-3.5 w-4 h-4 text-gray-400" />
                         </div>
@@ -922,7 +922,7 @@ const Register = () => {
                               className={`w-11 h-13 sm:w-14 sm:h-16 text-center text-xl sm:text-2xl font-bold border-2 rounded-xl focus:outline-none transition-all ${
                                 digit
                                   ? "border-red-500 bg-red-50/20 text-gray-900"
-                                  : "border-gray-300 bg-gray-50/50 hover:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                                  : "border-gray-300 bg-gray-50/50 hover:bg-[var(--bg-surface)] focus:border-red-500 focus:ring-2 focus:ring-red-100"
                               }`}
                               disabled={loading}
                               aria-label={`OTP Digit ${index + 1}`}
@@ -1064,7 +1064,7 @@ const Register = () => {
                                   ? "border-red-400 bg-red-50/30"
                                   : digit
                                   ? "border-red-500 bg-red-50/20 text-gray-900"
-                                  : "border-gray-300 bg-gray-50/50 hover:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                                  : "border-gray-300 bg-gray-50/50 hover:bg-[var(--bg-surface)] focus:border-red-500 focus:ring-2 focus:ring-red-100"
                               }`}
                               disabled={loading}
                               aria-label={`Digit ${index + 1} of 6`}
@@ -1151,7 +1151,7 @@ const Register = () => {
                   )}
 
                   {/* Sign In Link */}
-                  <div className="text-center mt-6 pt-4 border-t border-gray-100">
+                  <div className="text-center mt-6 pt-4 border-t border-[var(--border-subtle)]">
                     <p className="text-gray-600 text-sm">
                       Already have an account?{" "}
                       <Link
@@ -1218,9 +1218,9 @@ const Register = () => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 + 0.3 }}
-                      className="flex items-start gap-3 p-3.5 bg-white/10 rounded-2xl backdrop-blur-md border border-white/10"
+                      className="flex items-start gap-3 p-3.5 bg-[var(--bg-surface)]/10 rounded-2xl backdrop-blur-md border border-white/10"
                     >
-                      <div className="p-2 bg-white/20 rounded-xl shrink-0">
+                      <div className="p-2 bg-[var(--bg-surface)]/20 rounded-xl shrink-0">
                         {benefit.icon}
                       </div>
                       <div>
@@ -1237,13 +1237,13 @@ const Register = () => {
               </div>
 
               {/* Testimonial */}
-              <div className="p-4 bg-white/15 rounded-2xl backdrop-blur-md border border-white/10 mt-4">
+              <div className="p-4 bg-[var(--bg-surface)]/15 rounded-2xl backdrop-blur-md border border-white/10 mt-4">
                 <p className="text-xs sm:text-sm text-white italic mb-3">
                   "The 6-digit numeric password makes login super fast on my
                   phone. Finding trustworthy co-riders has never been easier!"
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center font-bold text-xs text-white">
+                  <div className="w-8 h-8 rounded-full bg-[var(--bg-surface)]/30 flex items-center justify-center font-bold text-xs text-white">
                     AJ
                   </div>
                   <div>

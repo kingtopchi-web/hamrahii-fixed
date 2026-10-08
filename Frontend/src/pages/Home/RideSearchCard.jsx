@@ -359,9 +359,9 @@ const RideSearchCard = ({ location }) => {
       <div className="absolute -inset-2 bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-2xl blur-2xl" />
 
       {/* Main Card */}
-      <div className="relative bg-white/95 backdrop-blur-md rounded-3xl border border-gray-200/80 shadow-card-hover mt-6 lg:mt-0">
+      <div className="relative bg-[var(--bg-surface)]/95 backdrop-blur-md rounded-3xl border border-[var(--border-subtle)]/80 shadow-card-hover mt-6 lg:mt-0">
         {/* Card Header */}
-        <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-red-50/40 via-white to-orange-50/30 rounded-t-3xl">
+        <div className="px-6 py-5 border-b border-[var(--border-subtle)] bg-gradient-to-r from-red-50/40 via-white to-orange-50/30 rounded-t-3xl">
           <div className="flex items-center justify-between">
             <div>
 
@@ -406,7 +406,7 @@ const RideSearchCard = ({ location }) => {
                       fetchPredictions(val, "from");
                     }
                   }}
-                  className="w-full pl-15 pr-4 py-3.5 bg-gray-50/60 border border-gray-200 rounded-xl focus:bg-white focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900 placeholder-gray-400 shadow-xs hover:border-gray-300"
+                  className="w-full pl-15 pr-4 py-3.5 bg-gray-50/60 border border-[var(--border-subtle)] rounded-xl focus:bg-[var(--bg-surface)] focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900 placeholder-gray-400 shadow-xs hover:border-gray-300"
                 />
 
                 {/* Predictions Dropdown */}
@@ -416,7 +416,7 @@ const RideSearchCard = ({ location }) => {
                       initial={{ opacity: 0, y: -8, scale: 0.98 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                      className="absolute z-50 left-0 right-0 w-full mt-2 bg-white rounded-2xl border border-gray-200 shadow-card-hover max-h-64 overflow-y-auto hide-scrollbar"
+                      className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] shadow-card-hover max-h-64 overflow-y-auto hide-scrollbar"
                     >
                       {fromPredictions.map((p) => (
                         <motion.button
@@ -426,7 +426,7 @@ const RideSearchCard = ({ location }) => {
                             selectPlace(p.place_id, p.description, "from")
                           }
                           whileHover={{ backgroundColor: "#F9FAFB" }}
-                          className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-red-50/40 transition-colors"
+                          className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-red-50/40 transition-colors"
                         >
                           <MapPin className="w-4 h-4 text-[#E10600] shrink-0" />
                           <div className="text-left min-w-0">
@@ -452,7 +452,7 @@ const RideSearchCard = ({ location }) => {
                 onClick={swapLocations}
                 whileHover={{ scale: 1.1, rotate: 180 }}
                 whileTap={{ scale: 0.9 }}
-                className="w-9 h-9 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center hover:border-[#E10600] hover:text-[#E10600] transition-all z-10"
+                className="w-9 h-9 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm flex items-center justify-center hover:border-[#E10600] hover:text-[#E10600] transition-all z-10"
                 title="Swap Locations"
               >
                 <ArrowDownUp className="w-4 h-4 text-gray-600 hover:text-[#E10600]" />
@@ -485,7 +485,7 @@ const RideSearchCard = ({ location }) => {
                       fetchPredictions(val, "to");
                     }
                   }}
-                  className="w-full pl-15 pr-4 py-3.5 bg-gray-50/60 border border-gray-200 rounded-xl focus:bg-white focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900 placeholder-gray-400 shadow-xs hover:border-gray-300"
+                  className="w-full pl-15 pr-4 py-3.5 bg-gray-50/60 border border-[var(--border-subtle)] rounded-xl focus:bg-[var(--bg-surface)] focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900 placeholder-gray-400 shadow-xs hover:border-gray-300"
                 />
 
                 {/* Predictions Dropdown */}
@@ -495,7 +495,7 @@ const RideSearchCard = ({ location }) => {
                       initial={{ opacity: 0, y: -8, scale: 0.98 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                      className="absolute z-50 left-0 right-0 w-full mt-2 bg-white rounded-2xl border border-gray-200 shadow-card-hover max-h-64 overflow-y-auto hide-scrollbar"
+                      className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] shadow-card-hover max-h-64 overflow-y-auto hide-scrollbar"
                     >
                       {toPredictions.map((p) => (
                         <motion.button
@@ -505,7 +505,7 @@ const RideSearchCard = ({ location }) => {
                             selectPlace(p.place_id, p.description, "to")
                           }
                           whileHover={{ backgroundColor: "#F9FAFB" }}
-                          className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-red-50/40 transition-colors"
+                          className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-red-50/40 transition-colors"
                         >
                           <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
                           <div className="text-left min-w-0">
@@ -536,14 +536,14 @@ const RideSearchCard = ({ location }) => {
                   value={date}
                   min={getTodayDate()}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50/60 border border-gray-200 rounded-xl focus:bg-white focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50/60 border border-[var(--border-subtle)] rounded-xl focus:bg-[var(--bg-surface)] focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900"
                 />
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-5 mt-5 border-t border-gray-100">
+          <div className="flex gap-3 pt-5 mt-5 border-t border-[var(--border-subtle)]">
             <motion.button
               type="button"
               onClick={clearForm}
@@ -565,7 +565,7 @@ const RideSearchCard = ({ location }) => {
               }
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex-1 py-3 px-6 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white rounded-xl font-bold text-sm shadow-md hover:shadow-red-glow transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-water btn-water-up btn-water-bg-red flex-1 py-3 px-6 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white rounded-xl font-bold text-sm shadow-md hover:shadow-red-glow transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSearching ? (
                 <>
@@ -583,7 +583,7 @@ const RideSearchCard = ({ location }) => {
           </div>
 
           {/* Popular Routes */}
-          <div className="pt-5 mt-5 border-t border-gray-100">
+          <div className="pt-5 mt-5 border-t border-[var(--border-subtle)]">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#E10600]" />
@@ -608,7 +608,7 @@ const RideSearchCard = ({ location }) => {
                     setFromPredictions([]);
                     setToPredictions([]);
                   }}
-                  className="p-2.5 bg-gray-50/80 hover:bg-red-50/50 rounded-xl border border-gray-200/60 hover:border-red-200 transition-all text-left group"
+                  className="p-2.5 bg-gray-50/80 hover:bg-red-50/50 rounded-xl border border-[var(--border-subtle)]/60 hover:border-red-200 transition-all text-left group"
                 >
                   <div className="flex items-center gap-1.5 mb-0.5">
                     <Route className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#E10600] transition-colors" />

@@ -263,9 +263,9 @@ const EditBasicDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--bg-page)]">
       {/* Header */}
-      <div className="border-b border-[#E5E5E5] bg-white sticky top-0 z-10">
+      <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] sticky top-0 z-10">
         <div className="px-6 py-4 max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -347,9 +347,9 @@ const EditBasicDetails = () => {
               initial="hidden"
               animate="visible"
               onSubmit={handleSubmit}
-              className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+              className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
             >
-              <div className="border-b border-[#E5E5E5] px-6 py-4 bg-[#F7F7F7]/50">
+              <div className="border-b border-[var(--border-subtle)] px-6 py-4 bg-[#F7F7F7]/50">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-[#E10600] rounded-lg">
                     <User size={20} className="text-white" />
@@ -385,8 +385,8 @@ const EditBasicDetails = () => {
                           className={`w-full px-4 py-3 border ${
                             errors.firstName 
                               ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-                              : 'border-[#E5E5E5] focus:ring-[#E10600] focus:border-[#E10600]'
-                          } rounded-lg outline-none transition-all bg-white text-[#111111] placeholder-[#B8B8B8]`}
+                              : 'border-[var(--border-subtle)] focus:ring-[#E10600] focus:border-[#E10600]'
+                          } rounded-lg outline-none transition-all bg-[var(--bg-surface)] text-[#111111] placeholder-[#B8B8B8]`}
                           placeholder="Enter your first name"
                         />
                         {formData.firstName && !errors.firstName && (
@@ -423,8 +423,8 @@ const EditBasicDetails = () => {
                           className={`w-full px-4 py-3 border ${
                             errors.lastName 
                               ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-                              : 'border-[#E5E5E5] focus:ring-[#E10600] focus:border-[#E10600]'
-                          } rounded-lg outline-none transition-all bg-white text-[#111111] placeholder-[#B8B8B8]`}
+                              : 'border-[var(--border-subtle)] focus:ring-[#E10600] focus:border-[#E10600]'
+                          } rounded-lg outline-none transition-all bg-[var(--bg-surface)] text-[#111111] placeholder-[#B8B8B8]`}
                           placeholder="Enter your last name"
                         />
                         {formData.lastName && !errors.lastName && (
@@ -462,8 +462,8 @@ const EditBasicDetails = () => {
                         className={`w-full px-4 py-3 border ${
                           errors.email 
                             ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-                            : 'border-[#E5E5E5] focus:ring-[#E10600] focus:border-[#E10600]'
-                        } rounded-lg outline-none transition-all bg-white text-[#111111] placeholder-[#B8B8B8]`}
+                            : 'border-[var(--border-subtle)] focus:ring-[#E10600] focus:border-[#E10600]'
+                        } rounded-lg outline-none transition-all bg-[var(--bg-surface)] text-[#111111] placeholder-[#B8B8B8]`}
                         placeholder="example@email.com"
                       />
                       {formData.email && validateEmail(formData.email) && !errors.email && (
@@ -510,8 +510,8 @@ const EditBasicDetails = () => {
                           className={`w-full px-4 py-3 border ${
                             errors.dateOfBirth 
                               ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-                              : 'border-[#E5E5E5] focus:ring-[#E10600] focus:border-[#E10600]'
-                          } rounded-lg outline-none transition-all bg-white text-[#111111] placeholder-[#B8B8B8]`}
+                              : 'border-[var(--border-subtle)] focus:ring-[#E10600] focus:border-[#E10600]'
+                          } rounded-lg outline-none transition-all bg-[var(--bg-surface)] text-[#111111] placeholder-[#B8B8B8]`}
                         />
                        
                       </div>
@@ -556,7 +556,7 @@ const EditBasicDetails = () => {
                             className={`flex items-center justify-center gap-2 px-4 py-3 border rounded-lg cursor-pointer transition-all ${
                               formData.gender === option.value
                                 ? 'border-[#E10600] bg-red-50 text-[#E10600]'
-                                : 'border-[#E5E5E5] hover:border-[#B8B8B8] text-[#555555]'
+                                : 'border-[var(--border-subtle)] hover:border-[#B8B8B8] text-[#555555]'
                             }`}
                           >
                             <input
@@ -624,7 +624,7 @@ const EditBasicDetails = () => {
               variants={scaleIn}
               initial="hidden"
               animate="visible"
-              className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+              className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
             >
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-6">
@@ -694,7 +694,7 @@ const EditBasicDetails = () => {
               initial="hidden"
               animate="visible"
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden"
+              className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
             >
               <div className="p-6">
                 <h3 className="text-lg font-bold text-[#111111] mb-4">

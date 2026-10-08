@@ -182,7 +182,7 @@
 //                                         required
 //                                         minLength={2}
 //                                         maxLength={50}
-//                                         className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+//                                         className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
 //                                         placeholder="Enter your first name"
 //                                         disabled={isRegistered || isLoading}
 //                                     />
@@ -213,7 +213,7 @@
 //                                         name="lastName"
 //                                         value={formData.lastName}
 //                                         onChange={handleChange}
-//                                         className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+//                                         className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
 //                                         placeholder="Enter your last name"
 //                                         disabled={isRegistered || isLoading}
 //                                     />
@@ -234,7 +234,7 @@
 //                                     value={formData.email}
 //                                     onChange={handleChange}
 //                                     required
-//                                     className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+//                                     className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
 //                                     placeholder="your.email@example.com"
 //                                     disabled={isRegistered || isLoading}
 //                                 />
@@ -259,7 +259,7 @@
 //                                     value={formData.phone}
 //                                     onChange={handleChange}
 //                                     required
-//                                     className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+//                                     className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
 //                                     placeholder="+1 (234) 567-8900"
 //                                     disabled={isRegistered || isLoading}
 //                                 />
@@ -285,7 +285,7 @@
 //                                     onChange={handleChange}
 //                                     required
 //                                     minLength={8}
-//                                     className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 pr-12"
+//                                     className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 pr-12"
 //                                     placeholder="••••••••"
 //                                     disabled={isRegistered || isLoading}
 //                                 />
@@ -321,7 +321,7 @@
 //                                     value={formData.dateOfBirth}
 //                                     onChange={handleChange}
 //                                     required
-//                                     className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 appearance-none"
+//                                     className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 appearance-none"
 //                                     disabled={isRegistered || isLoading}
 //                                 />
 //                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-400">
@@ -345,7 +345,7 @@
 //                                         onClick={() => setFormData(prev => ({ ...prev, gender: option }))}
 //                                         className={`px-4 py-3 rounded-xl border-2 transition-all duration-300 font-medium ${formData.gender === option
 //                                             ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white border-emerald-500 shadow-lg'
-//                                             : 'bg-white/70 border-emerald-100 text-gray-700 hover:border-emerald-300 hover:shadow-md'
+//                                             : 'bg-[var(--bg-surface)]/70 border-emerald-100 text-gray-700 hover:border-emerald-300 hover:shadow-md'
 //                                             } ${(isRegistered || isLoading) ? 'opacity-50 cursor-not-allowed' : ''}`}
 //                                         disabled={isRegistered || isLoading}
 //                                     >
@@ -680,7 +680,7 @@ const GoogleLogin = () => {
                                         required
                                         minLength={2}
                                         maxLength={50}
-                                        className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+                                        className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
                                         placeholder="Enter your full name (e.g., John Doe)"
                                         disabled={isRegistered || isLoading}
                                     />
@@ -716,7 +716,7 @@ const GoogleLogin = () => {
                                         name="lastName"
                                         value={formData.lastName}
                                         onChange={handleLastNameChange}
-                                        className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+                                        className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
                                         placeholder="Auto-filled or enter manually"
                                         disabled={isRegistered || isLoading}
                                     />
@@ -750,7 +750,7 @@ const GoogleLogin = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
-                                    className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+                                    className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
                                     placeholder="your.email@example.com"
                                     disabled={isRegistered || isLoading}
                                 />
@@ -775,7 +775,7 @@ const GoogleLogin = () => {
                                     value={formData.phone}
                                     onChange={handleChange}
                                     required
-                                    className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
+                                    className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200"
                                     placeholder="+91 9876543210"
                                     disabled={isRegistered || isLoading}
                                 />
@@ -801,7 +801,7 @@ const GoogleLogin = () => {
                                     onChange={handleChange}
                                     required
                                     minLength={8}
-                                    className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 pr-12"
+                                    className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 pr-12"
                                     placeholder="••••••••"
                                     disabled={isRegistered || isLoading}
                                 />
@@ -837,7 +837,7 @@ const GoogleLogin = () => {
                                     value={formData.dateOfBirth}
                                     onChange={handleChange}
                                     required
-                                    className="w-full px-5 py-4 bg-white/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 appearance-none"
+                                    className="w-full px-5 py-4 bg-[var(--bg-surface)]/70 rounded-xl border-2 border-emerald-100 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-300 placeholder-gray-400 group-hover:border-emerald-200 appearance-none"
                                     disabled={isRegistered || isLoading}
                                 />
                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-400">
@@ -861,7 +861,7 @@ const GoogleLogin = () => {
                                         onClick={() => setFormData(prev => ({ ...prev, gender: option }))}
                                         className={`px-4 py-3 rounded-xl border-2 transition-all duration-300 font-medium ${formData.gender === option
                                             ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white border-emerald-500 shadow-lg'
-                                            : 'bg-white/70 border-emerald-100 text-gray-700 hover:border-emerald-300 hover:shadow-md'
+                                            : 'bg-[var(--bg-surface)]/70 border-emerald-100 text-gray-700 hover:border-emerald-300 hover:shadow-md'
                                             } ${(isRegistered || isLoading) ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         disabled={isRegistered || isLoading}
                                     >

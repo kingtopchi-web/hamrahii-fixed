@@ -721,7 +721,7 @@ const AddCar = () => {
             </button>
           </div>
 
-          <div className="bg-[#F7F7F7] rounded-xl p-3 border border-[#E5E5E5] mb-4">
+          <div className="bg-[#F7F7F7] rounded-xl p-3 border border-[var(--border-subtle)] mb-4">
             <p className="text-[#555555] text-xs sm:text-sm text-center">
               {currentStep === 1
                 ? "Step 1: Enter RC Number to auto-fill vehicle details or enter manually."
@@ -758,7 +758,7 @@ const AddCar = () => {
             <div className="w-20"></div>
           </div>
 
-          <div className="bg-[#F7F7F7] rounded-xl p-4 border border-[#E5E5E5]">
+          <div className="bg-[#F7F7F7] rounded-xl p-4 border border-[var(--border-subtle)]">
             <p className="text-[#555555] text-center">
               {currentStep === 1
                 ? "Step 1: Enter RC Number to auto-fill vehicle details or enter manually."
@@ -770,7 +770,7 @@ const AddCar = () => {
         {/* Stepper Progress Bar */}
         <div className="mb-6 md:mb-8">
           {/* Desktop Stepper */}
-          <div className="hidden md:flex items-center justify-between px-6 py-4 bg-[#F7F7F7] rounded-2xl border border-[#E5E5E5]">
+          <div className="hidden md:flex items-center justify-between px-6 py-4 bg-[#F7F7F7] rounded-2xl border border-[var(--border-subtle)]">
             {/* Step 1 */}
             <button
               type="button"
@@ -861,7 +861,7 @@ const AddCar = () => {
           </div>
 
           {/* Mobile Stepper */}
-          <div className="md:hidden bg-[#F7F7F7] p-4 rounded-xl border border-[#E5E5E5] space-y-2">
+          <div className="md:hidden bg-[#F7F7F7] p-4 rounded-xl border border-[var(--border-subtle)] space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold">
               <span
                 className={
@@ -901,10 +901,10 @@ const AddCar = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="bg-[#F7F7F7] rounded-2xl p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 border border-[#E5E5E5] shadow-sm"
+            className="bg-[#F7F7F7] rounded-2xl p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 border border-[var(--border-subtle)] shadow-sm"
           >
             {/* Entry Mode Switcher Tabs */}
-            <div className="bg-white p-1.5 rounded-2xl border border-[#E5E5E5] shadow-xs">
+            <div className="bg-[var(--bg-surface)] p-1.5 rounded-2xl border border-[var(--border-subtle)] shadow-xs">
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -989,7 +989,7 @@ const AddCar = () => {
                         setRcNumber(e.target.value.toUpperCase())
                       }
                       placeholder="Enter your RC Number (e.g., DL01AB1234)"
-                      className="w-full px-4 py-3 text-sm sm:text-base border border-[#E5E5E5] rounded-xl focus:outline-none focus:border-[#E10600] bg-white font-mono uppercase"
+                      className="w-full px-4 py-3 text-sm sm:text-base border border-[var(--border-subtle)] rounded-xl focus:outline-none focus:border-[#E10600] bg-[var(--bg-surface)] font-mono uppercase"
                       disabled={isFetchingData}
                     />
                   </div>
@@ -1037,7 +1037,7 @@ const AddCar = () => {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="p-4 sm:p-6 rounded-xl border bg-white space-y-4"
+                  className="p-4 sm:p-6 rounded-xl border bg-[var(--bg-surface)] space-y-4"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <h4 className="font-semibold text-[#111111] flex items-center gap-2">
@@ -1059,7 +1059,7 @@ const AddCar = () => {
                         name="brand"
                         value={formData.brand}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600]"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600]"
                         placeholder="e.g., Toyota, Honda"
                       />
                       {errors.brand && (
@@ -1076,7 +1076,7 @@ const AddCar = () => {
                         name="model"
                         value={formData.model}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600]"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600]"
                         placeholder="e.g., Camry, Civic"
                       />
                       {errors.model && (
@@ -1095,7 +1095,7 @@ const AddCar = () => {
                         onChange={handleInputChange}
                         min="1900"
                         max={new Date().getFullYear() + 1}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600]"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600]"
                         placeholder="e.g., 2023"
                       />
                       {errors.year && (
@@ -1111,7 +1111,7 @@ const AddCar = () => {
                         name="fuelType"
                         value={formData.fuelType}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600]"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600]"
                       >
                         <option value="">Select Fuel Type</option>
                         <option value="petrol">Petrol</option>
@@ -1135,7 +1135,7 @@ const AddCar = () => {
                         name="transmission"
                         value={formData.transmission}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600]"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600]"
                       >
                         <option value="">Select Transmission</option>
                         <option value="manual">Manual</option>
@@ -1159,7 +1159,7 @@ const AddCar = () => {
                         onChange={handleInputChange}
                         min="1"
                         max="20"
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600]"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600]"
                         placeholder="e.g., 5"
                       />
                       {errors.seats && (
@@ -1176,7 +1176,7 @@ const AddCar = () => {
                         name="plateNumber"
                         value={formData.plateNumber}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600] font-mono uppercase"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600] font-mono uppercase"
                         placeholder="e.g., DL01AB1234"
                       />
                       {errors.plateNumber && (
@@ -1195,7 +1195,7 @@ const AddCar = () => {
                         type="text"
                         value={chassisNumber}
                         onChange={(e) => setChassisNumber(e.target.value)}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600] font-mono uppercase"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600] font-mono uppercase"
                         placeholder="Enter chassis number"
                       />
                       {errors.chassisNumber && (
@@ -1214,7 +1214,7 @@ const AddCar = () => {
                         type="text"
                         value={engineNumber}
                         onChange={(e) => setEngineNumber(e.target.value)}
-                        className="w-full px-4 py-2 text-sm sm:text-base border border-[#E5E5E5] rounded-lg focus:outline-none focus:border-[#E10600] font-mono uppercase"
+                        className="w-full px-4 py-2 text-sm sm:text-base border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:border-[#E10600] font-mono uppercase"
                         placeholder="Enter engine number"
                       />
                       {errors.engineNumber && (
@@ -1235,7 +1235,7 @@ const AddCar = () => {
                   className="space-y-4 md:space-y-6"
                 >
                   {/* Vehicle Details from RC */}
-                  <div className="p-4 sm:p-6 rounded-xl border bg-white space-y-4">
+                  <div className="p-4 sm:p-6 rounded-xl border bg-[var(--bg-surface)] space-y-4">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                       <h4 className="font-semibold text-[#111111] flex items-center gap-2">
                         <CheckCircle className="w-5 h-5 text-green-500" />
@@ -1247,37 +1247,37 @@ const AddCar = () => {
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                      <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                      <div className="bg-gray-50 p-3 rounded-lg border border-[var(--border-subtle)]">
                         <p className="text-xs text-[#555555]">Brand</p>
                         <p className="font-semibold text-sm sm:text-base text-[#111111]">
                           {formData.brand || "N/A"}
                         </p>
                       </div>
-                      <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                      <div className="bg-gray-50 p-3 rounded-lg border border-[var(--border-subtle)]">
                         <p className="text-xs text-[#555555]">Model</p>
                         <p className="font-semibold text-sm sm:text-base text-[#111111]">
                           {formData.model || "N/A"}
                         </p>
                       </div>
-                      <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                      <div className="bg-gray-50 p-3 rounded-lg border border-[var(--border-subtle)]">
                         <p className="text-xs text-[#555555]">Year</p>
                         <p className="font-semibold text-sm sm:text-base text-[#111111]">
                           {formData.year || "N/A"}
                         </p>
                       </div>
-                      <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                      <div className="bg-gray-50 p-3 rounded-lg border border-[var(--border-subtle)]">
                         <p className="text-xs text-[#555555]">Fuel Type</p>
                         <p className="font-semibold text-sm sm:text-base capitalize text-[#111111]">
                           {formData.fuelType || "N/A"}
                         </p>
                       </div>
-                      <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                      <div className="bg-gray-50 p-3 rounded-lg border border-[var(--border-subtle)]">
                         <p className="text-xs text-[#555555]">Seats</p>
                         <p className="font-semibold text-sm sm:text-base text-[#111111]">
                           {formData.seats || "N/A"}
                         </p>
                       </div>
-                      <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                      <div className="bg-gray-50 p-3 rounded-lg border border-[var(--border-subtle)]">
                         <p className="text-xs text-[#555555]">RC Number</p>
                         <p className="font-semibold text-sm sm:text-base font-mono text-[#111111]">
                           {formData.plateNumber || "N/A"}
@@ -1303,7 +1303,7 @@ const AddCar = () => {
                                 ? "border-green-500 bg-green-50"
                                 : verificationStatus.chassis === false
                                   ? "border-red-500 bg-red-50"
-                                  : "border-[#E5E5E5]"
+                                  : "border-[var(--border-subtle)]"
                             }`}
                           />
                           <button
@@ -1349,7 +1349,7 @@ const AddCar = () => {
                                 ? "border-green-500 bg-green-50"
                                 : verificationStatus.engine === false
                                   ? "border-red-500 bg-red-50"
-                                  : "border-[#E5E5E5]"
+                                  : "border-[var(--border-subtle)]"
                             }`}
                           />
                           <button
@@ -1382,7 +1382,7 @@ const AddCar = () => {
                   </div>
 
                   {/* Transmission Selection (Required for API data) */}
-                  <div className="p-4 sm:p-6 rounded-xl border bg-white space-y-4">
+                  <div className="p-4 sm:p-6 rounded-xl border bg-[var(--bg-surface)] space-y-4">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                       <h4 className="font-semibold text-[#111111] flex items-center gap-2">
                         <Settings className="w-5 h-5 text-[#E10600]" />
@@ -1422,7 +1422,7 @@ const AddCar = () => {
                           className={`p-4 rounded-xl border-2 text-center transition-all ${
                             formData.transmission === "manual"
                               ? "border-[#E10600] bg-[#E10600]/5"
-                              : "border-[#E5E5E5] hover:border-[#E10600]/50"
+                              : "border-[var(--border-subtle)] hover:border-[#E10600]/50"
                           }`}
                         >
                           <div className="text-base sm:text-lg font-bold mb-1 text-[#111111]">
@@ -1453,7 +1453,7 @@ const AddCar = () => {
                           className={`p-4 rounded-xl border-2 text-center transition-all ${
                             formData.transmission === "automatic"
                               ? "border-[#E10600] bg-[#E10600]/5"
-                              : "border-[#E5E5E5] hover:border-[#E10600]/50"
+                              : "border-[var(--border-subtle)] hover:border-[#E10600]/50"
                           }`}
                         >
                           <div className="text-base sm:text-lg font-bold mb-1 text-[#111111]">
@@ -1479,7 +1479,7 @@ const AddCar = () => {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="p-4 sm:p-6 rounded-xl border bg-white space-y-4"
+                  className="p-4 sm:p-6 rounded-xl border bg-[var(--bg-surface)] space-y-4"
                 >
                   <div className="text-red-600 p-4 bg-red-50 rounded-xl border border-red-200">
                     <p className="font-semibold text-sm sm:text-base">Unable to fetch vehicle details</p>
@@ -1531,7 +1531,7 @@ const AddCar = () => {
             className="space-y-6"
           >
             {/* Vehicle Summary Card */}
-            <div className="bg-white rounded-2xl p-4 sm:p-6 border border-[#E5E5E5] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="bg-[var(--bg-surface)] rounded-2xl p-4 sm:p-6 border border-[var(--border-subtle)] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-[#E10600]/10 rounded-xl shrink-0">
                   <Car className="w-7 h-7 text-[#E10600]" />
@@ -1588,7 +1588,7 @@ const AddCar = () => {
                 className={`bg-[#F7F7F7] rounded-2xl p-4 sm:p-6 border ${
                   errors.images
                     ? "border-red-400 bg-red-50/20"
-                    : "border-[#E5E5E5]"
+                    : "border-[var(--border-subtle)]"
                 } shadow-sm flex flex-col justify-between`}
               >
                 <div>
@@ -1620,7 +1620,7 @@ const AddCar = () => {
                               ? "border-[#E10600] bg-[#E10600]/10"
                               : uploadedImageUrls.carImages.length > 0
                                 ? "border-green-300 bg-green-50/50"
-                                : "border-[#E5E5E5] bg-white"
+                                : "border-[var(--border-subtle)] bg-[var(--bg-surface)]"
                           }`}
                         >
                           {isUploading.carImages ? (
@@ -1673,7 +1673,7 @@ const AddCar = () => {
                               key={index}
                               initial={{ scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
-                              className="relative group rounded-xl overflow-hidden border border-[#E5E5E5] bg-white p-2"
+                              className="relative group rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2"
                             >
                               <div className="aspect-video rounded-lg overflow-hidden bg-gray-100 relative">
                                 <img
@@ -1701,7 +1701,7 @@ const AddCar = () => {
 
                 {uploadedImageUrls.carImages.length > 0 && (
                   <label className="mt-4 block cursor-pointer">
-                    <div className="py-2 px-3 border border-[#E5E5E5] hover:border-[#E10600] rounded-lg text-center text-xs font-semibold text-[#555555] hover:text-[#E10600] transition-colors bg-white">
+                    <div className="py-2 px-3 border border-[var(--border-subtle)] hover:border-[#E10600] rounded-lg text-center text-xs font-semibold text-[#555555] hover:text-[#E10600] transition-colors bg-[var(--bg-surface)]">
                       Change Vehicle Photo
                     </div>
                     <input
@@ -1723,7 +1723,7 @@ const AddCar = () => {
                 className={`bg-[#F7F7F7] rounded-2xl p-4 sm:p-6 border ${
                   errors.plateImage
                     ? "border-red-400 bg-red-50/20"
-                    : "border-[#E5E5E5]"
+                    : "border-[var(--border-subtle)]"
                 } shadow-sm flex flex-col justify-between`}
               >
                 <div>
@@ -1753,7 +1753,7 @@ const AddCar = () => {
                           className={`border-2 border-dashed rounded-xl p-6 sm:p-8 text-center transition-all duration-200 group-hover:border-[#E10600] group-hover:bg-[#E10600]/5 ${
                             isUploading.plateImage
                               ? "border-[#E10600] bg-[#E10600]/10"
-                              : "border-[#E5E5E5] bg-white"
+                              : "border-[var(--border-subtle)] bg-[var(--bg-surface)]"
                           }`}
                         >
                           {isUploading.plateImage ? (
@@ -1804,7 +1804,7 @@ const AddCar = () => {
                             Plate Photo Uploaded
                           </p>
                         </div>
-                        <div className="relative rounded-xl overflow-hidden bg-white p-3 border border-[#E5E5E5]">
+                        <div className="relative rounded-xl overflow-hidden bg-[var(--bg-surface)] p-3 border border-[var(--border-subtle)]">
                           <div className="aspect-video rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center p-2 relative">
                             <img
                               src={uploadedImageUrls.plateImageUrl}
@@ -1834,7 +1834,7 @@ const AddCar = () => {
 
                 {uploadedImageUrls.plateImageUrl && (
                   <label className="mt-4 block cursor-pointer">
-                    <div className="py-2 px-3 border border-[#E5E5E5] hover:border-[#E10600] rounded-lg text-center text-xs font-semibold text-[#555555] hover:text-[#E10600] transition-colors bg-white">
+                    <div className="py-2 px-3 border border-[var(--border-subtle)] hover:border-[#E10600] rounded-lg text-center text-xs font-semibold text-[#555555] hover:text-[#E10600] transition-colors bg-[var(--bg-surface)]">
                       Change Plate Photo
                     </div>
                     <input
@@ -1899,7 +1899,7 @@ const AddCar = () => {
                   setCurrentStep(1);
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[#E5E5E5] hover:bg-gray-100 text-[#555555] font-semibold transition-colors flex items-center justify-center gap-2 text-sm sm:text-base order-2 sm:order-1"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[var(--border-subtle)] hover:bg-gray-100 text-[#555555] font-semibold transition-colors flex items-center justify-center gap-2 text-sm sm:text-base order-2 sm:order-1"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Vehicle Data
@@ -2032,7 +2032,7 @@ const ShowSelectVehicleType = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center"
+          className="bg-[var(--bg-surface)] rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center"
         >
           <div className="relative">
             <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-6"></div>
@@ -2053,10 +2053,10 @@ const ShowSelectVehicleType = ({
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden"
+        className="bg-[var(--bg-surface)] rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden"
       >
         {/* Header */}
-        <div className="p-6 md:p-8 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-blue-50">
+        <div className="p-6 md:p-8 border-b border-[var(--border-subtle)] bg-gradient-to-r from-purple-50 to-blue-50">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -2099,7 +2099,7 @@ const ShowSelectVehicleType = ({
                 className={`relative cursor-pointer group rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                   selectedType?._id === vehicleType._id
                     ? "border-purple-600 ring-2 ring-purple-200"
-                    : "border-gray-200 hover:border-purple-400 hover:shadow-lg"
+                    : "border-[var(--border-subtle)] hover:border-purple-400 hover:shadow-lg"
                 }`}
               >
                 {/* Checkmark overlay */}
@@ -2170,7 +2170,7 @@ const ShowSelectVehicleType = ({
         </div>
 
         {/* Footer */}
-        <div className="p-6 md:p-8 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+        <div className="p-6 md:p-8 border-t border-[var(--border-subtle)] bg-gradient-to-r from-gray-50 to-white">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex-1">
               {selectedType ? (

@@ -49,7 +49,7 @@ const RequestCard = ({ req, handleAction, actionLoading, pendingCashCollection }
 
   if (expired) {
     return (
-      <div className="bg-gray-50/70 border border-dashed border-gray-200 rounded-xl p-3 flex items-center justify-between text-xs opacity-60">
+      <div className="bg-gray-50/70 border border-dashed border-[var(--border-subtle)] rounded-xl p-3 flex items-center justify-between text-xs opacity-60">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-lg bg-gray-200/80 text-gray-500 flex items-center justify-center shrink-0">
             <Package className="w-3.5 h-3.5" />
@@ -71,9 +71,9 @@ const RequestCard = ({ req, handleAction, actionLoading, pendingCashCollection }
   }
 
   return (
-    <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-2xs hover:shadow-md hover:border-red-100 transition-all flex flex-col justify-between">
+    <div className="bg-[var(--bg-surface)] rounded-xl p-4 border border-[var(--border-subtle)] shadow-2xs hover:shadow-md hover:border-red-100 transition-all flex flex-col justify-between">
       <div>
-        <div className="flex items-start justify-between pb-3 mb-3 border-b border-gray-100">
+        <div className="flex items-start justify-between pb-3 mb-3 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0">
               <Package className="w-4 h-4" />
@@ -124,14 +124,14 @@ const RequestCard = ({ req, handleAction, actionLoading, pendingCashCollection }
             </div>
           </div>
           {parcel.description && (
-            <p className="text-[11px] text-gray-500 italic pl-4 border-l-2 border-gray-100 line-clamp-1 mt-1">
+            <p className="text-[11px] text-gray-500 italic pl-4 border-l-2 border-[var(--border-subtle)] line-clamp-1 mt-1">
               "{parcel.description}"
             </p>
           )}
         </div>
       </div>
 
-      <div className="pt-2 border-t border-gray-100">
+      <div className="pt-2 border-t border-[var(--border-subtle)]">
         {req.expiresAt && !expired && (
           <div className="flex items-center justify-between px-2.5 py-1 bg-amber-50/70 border border-amber-200/50 rounded-lg text-[11px] text-amber-700 font-semibold mb-2.5">
             <span className="flex items-center gap-1">
@@ -160,7 +160,7 @@ const RequestCard = ({ req, handleAction, actionLoading, pendingCashCollection }
           <button
             onClick={() => handleAction(parcel._id, "reject")}
             disabled={actionLoading === parcel._id}
-            className="flex-1 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 font-semibold py-2 px-3 rounded-xl transition flex items-center justify-center gap-1.5 text-xs border border-gray-200/80 hover:border-red-200 disabled:opacity-60 cursor-pointer"
+            className="flex-1 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 font-semibold py-2 px-3 rounded-xl transition flex items-center justify-center gap-1.5 text-xs border border-[var(--border-subtle)]/80 hover:border-red-200 disabled:opacity-60 cursor-pointer"
           >
             <XCircle className="w-3.5 h-3.5" />
             <span>Decline</span>
@@ -229,9 +229,9 @@ const ParcelRequests = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xs hover:shadow-sm transition-all p-5 border border-gray-100 h-full flex flex-col justify-between">
+    <div className="bg-[var(--bg-surface)] rounded-2xl shadow-xs hover:shadow-sm transition-all p-5 border border-[var(--border-subtle)] h-full flex flex-col justify-between">
       <div>
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-subtle)]">
           <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
             <Package className="w-4 h-4 text-red-600" />
             Nearby Parcel Requests

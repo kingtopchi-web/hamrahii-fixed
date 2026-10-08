@@ -181,19 +181,6 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-3 mb-6">
-              {socialLinks.map((item, idx) => (
-                <a
-                  key={idx}
-                  href={item.href}
-                  aria-label={item.label}
-                  className="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#E10600] border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-200"
-                >
-                  {item.icon}
-                </a>
-              ))}
-            </div>
           </motion.div>
 
           {/* Links Columns */}
@@ -241,7 +228,43 @@ const Footer = () => {
 
 
       </motion.div>
-      <div className="w-full bg-black text-white py-4 px-4 md:px-[5%] mb-10 md:mb-0 flex flex-col md:flex-row items-center justify-between gap-3 text-sm">
+
+      {/* Social Icons & Payment Methods - Full Width Row */}
+      <div className="container mx-auto px-4 lg:px-8 pb-8 pt-4 md:w-[80%]">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            {socialLinks.map((item, idx) => (
+              <a
+                key={idx}
+                href={item.href}
+                aria-label={item.label}
+                className="w-9 h-9 rounded-xl bg-[var(--bg-surface)]/5 hover:bg-[#E10600] border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-200"
+              >
+                {item.icon}
+              </a>
+            ))}
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <span className="text-gray-400 text-sm font-medium mr-2 hidden sm:inline-block">Secure Payments:</span>
+            {[
+              { name: "Mastercard", src: "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" },
+              { name: "Visa", src: "https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png" },
+              { name: "PayPal", src: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" },
+              { name: "GPay", src: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" },
+              { name: "RuPay", src: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" }
+            ].map((payment, idx) => (
+              <div key={idx} className="bg-white px-2 py-1 rounded-md border border-gray-200 flex items-center justify-center w-[50px] h-[30px] hover:shadow-md transition-shadow">
+                <img 
+                  src={payment.src} 
+                  alt={payment.name} 
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>      <div className="w-full bg-black text-white py-4 px-4 md:px-[5%] mb-10 md:mb-0 flex flex-col md:flex-row items-center justify-between gap-3 text-sm">
 
         {/* Left */}
         <p className="text-center md:text-left">

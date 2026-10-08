@@ -301,7 +301,7 @@ const AddBio = () => {
                 { icon: <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />, title: "More Rides", desc: "Get selected more" },
                 { icon: <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />, title: "Global Network", desc: "Join community" }
               ].map((stat, index) => (
-                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 lg:p-4 border border-gray-200/50 shadow-sm">
+                <div key={index} className="bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 lg:p-4 border border-[var(--border-subtle)]/50 shadow-sm">
                   <div className="flex flex-col items-center justify-center gap-1 sm:gap-2">
                     {stat.icon}
                     <div className="text-xs sm:text-sm lg:text-base font-bold text-gray-900 text-center line-clamp-2">{stat.title}</div>
@@ -318,10 +318,10 @@ const AddBio = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-200/50 p-4 sm:p-6 lg:p-8 shadow-lg"
+          className="bg-[var(--bg-surface)]/90 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-[var(--border-subtle)]/50 p-4 sm:p-6 lg:p-8 shadow-lg"
         >
           {/* Header with Save Button - Responsive */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-gray-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-[var(--border-subtle)]">
             <div className="flex-1 min-w-0">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate">Craft Your Story</h2>
               <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base line-clamp-2">
@@ -379,7 +379,7 @@ const AddBio = () => {
               {/* Bio Editor */}
               <motion.div
                 variants={fadeInUp}
-                className="bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-xl p-4 sm:p-6 border-2 border-gray-200/50"
+                className="bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-xl p-4 sm:p-6 border-2 border-[var(--border-subtle)]/50"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <div className="flex items-start gap-3">
@@ -403,7 +403,7 @@ const AddBio = () => {
                     onChange={handleBioChange}
                     onKeyDown={handleKeyDown}
                     placeholder="Example: Adventure enthusiast and music lover. I've traveled across 20+ countries and love sharing stories. Looking for pleasant company and smooth rides..."
-                    className={`w-full ${getTextareaHeight()} p-3 sm:p-4 lg:p-6 text-gray-800 bg-white border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 sm:focus:ring-4 focus:ring-blue-200/50 transition-all resize-none shadow-sm text-sm sm:text-base`}
+                    className={`w-full ${getTextareaHeight()} p-3 sm:p-4 lg:p-6 text-gray-800 bg-[var(--bg-surface)] border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 sm:focus:ring-4 focus:ring-blue-200/50 transition-all resize-none shadow-sm text-sm sm:text-base`}
                     maxLength={MAX_CHARS}
                   />
                   
@@ -471,7 +471,7 @@ const AddBio = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+                <div className="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-[var(--border-subtle)]">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -547,7 +547,7 @@ const AddBio = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setShowSuggestions(false)}
-                        className="p-1.5 sm:p-2 hover:bg-white/50 rounded-lg self-end"
+                        className="p-1.5 sm:p-2 hover:bg-[var(--bg-surface)]/50 rounded-lg self-end"
                       >
                         <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
                       </motion.button>
@@ -560,7 +560,7 @@ const AddBio = () => {
                           whileHover={{ scale: 1.01, y: -1 }}
                           whileTap={{ scale: 0.99 }}
                           onClick={() => handleSuggestionClick(suggestion.text)}
-                          className="p-3 sm:p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 text-left hover:border-indigo-300 hover:shadow-sm transition-all text-sm sm:text-base"
+                          className="p-3 sm:p-4 bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-xl border border-[var(--border-subtle)] text-left hover:border-indigo-300 hover:shadow-sm transition-all text-sm sm:text-base"
                         >
                           <div className="flex items-start gap-2 sm:gap-3">
                             <div className="flex-shrink-0 mt-0.5">
@@ -603,7 +603,7 @@ const AddBio = () => {
                     </div>
                   </div>
 
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 sm:p-4 lg:p-6 shadow-inner">
+                  <div className="bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-xl p-3 sm:p-4 lg:p-6 shadow-inner">
                     <div className="flex items-start gap-3 sm:gap-4">
                       <div className="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white font-bold text-sm sm:text-lg lg:text-xl flex-shrink-0">
                         {user?.firstName?.[0]?.toUpperCase() + user?.lastName?.[0]?.toUpperCase() || 'U'}
@@ -629,7 +629,7 @@ const AddBio = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="mt-6 sm:mt-8 pt-4 sm:pt-6 lg:pt-8 border-t border-gray-200"
+              className="mt-6 sm:mt-8 pt-4 sm:pt-6 lg:pt-8 border-t border-[var(--border-subtle)]"
             >
               <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
                 <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
@@ -644,7 +644,7 @@ const AddBio = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate(-1)}
-                    className="px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2 lg:py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg sm:rounded-xl font-medium hover:border-gray-400 transition-all text-xs sm:text-sm flex-1 sm:flex-none"
+                    className="px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2 lg:py-3 bg-[var(--bg-surface)] border-2 border-gray-300 text-gray-700 rounded-lg sm:rounded-xl font-medium hover:border-gray-400 transition-all text-xs sm:text-sm flex-1 sm:flex-none"
                   >
                     Cancel
                   </motion.button>
@@ -681,7 +681,7 @@ const AddBio = () => {
         </motion.div>
 
         {/* Mobile Bottom Navigation */}
-        <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-3 z-40">
+        <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-surface)]/95 backdrop-blur-sm border-t border-[var(--border-subtle)] p-3 z-40">
           <div className="flex justify-between items-center">
             <button
               onClick={() => navigate(-1)}

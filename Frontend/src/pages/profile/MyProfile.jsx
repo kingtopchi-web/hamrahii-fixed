@@ -34,7 +34,7 @@ const MyProfile = () => {
           <h1 className="text-xl font-bold text-[#111111]">My Account</h1>
           <button 
             onClick={() => setMobileMenuOpen(true)}
-            className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium shadow-sm text-gray-700"
+            className="px-4 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg text-sm font-medium shadow-sm text-gray-700"
           >
             Menu
           </button>
@@ -51,7 +51,7 @@ const MyProfile = () => {
           <main className="lg:col-span-9 space-y-6 lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar pb-16 lg:pb-0 px-4 lg:px-0">
             <div
               key={location.pathname}
-              className="bg-white rounded-2xl border border-[#E5E5E5]/50 shadow-sm overflow-hidden min-h-[500px]"
+              className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm overflow-hidden min-h-[500px]"
             >
               <Outlet />
             </div>

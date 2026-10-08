@@ -553,7 +553,7 @@ const BookingHistory = () => {
   const getStatusConfig = (status) => {
     if (!status) {
       return {
-        color: "bg-gray-100 text-gray-800 border border-gray-200",
+        color: "bg-gray-100 text-gray-800 border border-[var(--border-subtle)]",
         icon: <Clock size={16} />,
         label: "Unknown"
       };
@@ -597,7 +597,7 @@ const BookingHistory = () => {
         };
       default:
         return {
-          color: "bg-gray-100 text-gray-800 border border-gray-200",
+          color: "bg-gray-100 text-gray-800 border border-[var(--border-subtle)]",
           icon: <Clock size={16} />,
           label: status
         };
@@ -662,7 +662,7 @@ const BookingHistory = () => {
  
 
       {!loading && filteredBookings.length > 0 && (
-        <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg border border-[var(--border-subtle)]">
           <div className="text-sm text-gray-600">
             Showing {((pagination.currentPage - 1) * pagination.limit) + 1} to {
               Math.min(pagination.currentPage * pagination.limit, pagination.totalRecords)
@@ -677,7 +677,7 @@ const BookingHistory = () => {
               <select
                 value={pagination.limit}
                 onChange={handleItemsPerPageChange}
-                className="px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#E10600] text-sm bg-white"
+                className="px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#E10600] text-sm bg-[var(--bg-surface)]"
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
@@ -724,7 +724,7 @@ const BookingHistory = () => {
                 setFilter("all");
                 setPagination(prev => ({ ...prev, currentPage: 1 }));
               }}
-              className="px-6 py-3 border border-[#E5E5E5] rounded-xl font-medium hover:bg-[#F7F7F7] transition-colors"
+              className="px-6 py-3 border border-[var(--border-subtle)] rounded-xl font-medium hover:bg-[#F7F7F7] transition-colors"
             >
               {searchQuery ? "Clear Search" : "View All Bookings"}
             </button>
@@ -750,7 +750,7 @@ const BookingHistory = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white border border-[#E5E5E5] rounded-xl p-4 md:p-5 hover:shadow-md transition-shadow"
+                className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-4 md:p-5 hover:shadow-md transition-shadow"
                 style={{ backgroundColor: '#FFFFFF' }}
               >
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
@@ -803,7 +803,7 @@ const BookingHistory = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-[#E5E5E5]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-[var(--border-subtle)]">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg" style={{ backgroundColor: '#E10600', color: '#FFFFFF' }}>
                       <Car className="w-5 h-5" />
@@ -838,7 +838,7 @@ const BookingHistory = () => {
                     <div className="flex gap-2">
                       <button 
                         onClick={() => setShowBookingDetail(booking)}
-                        className="px-3 py-2 border border-[#E5E5E5] rounded-lg hover:border-[#555555] transition-colors text-sm"
+                        className="px-3 py-2 border border-[var(--border-subtle)] rounded-lg hover:border-[#555555] transition-colors text-sm"
                       >
                         Details
                       </button>
@@ -861,7 +861,7 @@ const BookingHistory = () => {
 
       {/* Pagination Controls - Bottom */}
       {!loading && filteredBookings.length > 0 && pagination.totalPages > 1 && (
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div className="mt-8 pt-6 border-t border-[var(--border-subtle)]">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             {/* Page Info */}
             <div className="text-sm text-gray-600">
@@ -949,7 +949,7 @@ const BookingHistory = () => {
                     handlePageChange(page);
                   }
                 }}
-                className="w-16 px-2 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#E10600] text-center bg-white"
+                className="w-16 px-2 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#E10600] text-center bg-[var(--bg-surface)]"
               />
             </div>
           </div>

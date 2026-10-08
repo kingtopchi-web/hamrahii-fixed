@@ -86,7 +86,7 @@ const UserSidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const DesktopSidebar = () => (
     <motion.aside variants={itemVariants} className="lg:col-span-3 space-y-6 hidden lg:block hide-scrollbar h-[90vh] overflow-y-scroll">
       {/* User Profile Card */}
-      <motion.div variants={fadeIn} className="bg-gradient-to-br from-white to-[#F9FAFB] rounded-2xl p-6 border border-[#E5E5E5]/50 shadow-sm">
+      <motion.div variants={fadeIn} className="bg-gradient-to-br from-white to-[#F9FAFB] rounded-2xl p-6 border border-[var(--border-subtle)]/50 shadow-sm">
         <div className="flex flex-col items-center text-center">
           <div className="relative mb-6">
             <div className="absolute inset-0 bg-gradient-to-r from-[#E10600] to-[#F59E0B] rounded-full blur-md opacity-30" />
@@ -101,7 +101,7 @@ const UserSidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           <p className="text-sm text-[#555555] mb-4">{userData.email}</p>
 
           {/* Wallet Cards */}
-          <motion.div className="bg-white border border-[#E5E5E5] rounded-xl p-4 shadow-sm w-full">
+          <motion.div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-4 shadow-sm w-full">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -149,7 +149,7 @@ const UserSidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
       </motion.div>
 
       {/* Navigation */}
-      <motion.nav variants={fadeIn} className="bg-white rounded-2xl p-4 border border-[#E5E5E5]/50 shadow-sm">
+      <motion.nav variants={fadeIn} className="bg-[var(--bg-surface)] rounded-2xl p-4 border border-[var(--border-subtle)]/50 shadow-sm">
         <div className="space-y-4">
           {categories.map((category, idx) => (
             <div key={idx}>
@@ -208,9 +208,9 @@ const UserSidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           <motion.div
             initial={{ x: "-100%" }} animate={{ x: 0 }} exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 30 }}
-            className="fixed left-0 top-0 h-full w-80 bg-white z-50 shadow-2xl lg:hidden overflow-y-auto"
+            className="fixed left-0 top-0 h-full w-80 bg-[var(--bg-surface)] z-50 shadow-2xl lg:hidden overflow-y-auto"
           >
-            <div className="px-6 pb-6 pt-3 border-b border-[#E5E5E5]">
+            <div className="px-6 pb-6 pt-3 border-b border-[var(--border-subtle)]">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-[#111111]">Menu</h2>
                 <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-lg hover:bg-[#F7F7F7] z-100">

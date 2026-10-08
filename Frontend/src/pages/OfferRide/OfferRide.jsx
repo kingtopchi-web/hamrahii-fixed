@@ -535,7 +535,7 @@ const OfferRide = () => {
 
           <div className="relative">
             {/* Glass progress track */}
-            <div className="absolute top-6 left-4 right-4 h-2 bg-white/80 backdrop-blur-sm rounded-full shadow-inner border border-white/50 -z-10"></div>
+            <div className="absolute top-6 left-4 right-4 h-2 bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-full shadow-inner border border-white/50 -z-10"></div>
 
             {/* Animated progress fill */}
             <motion.div
@@ -591,16 +591,16 @@ const OfferRide = () => {
                           ? `bg-gradient-to-br ${config.gradient} bg-opacity-90`
                           : isCompleted
                             ? `bg-gradient-to-br ${config.gradient} bg-opacity-80`
-                            : "bg-white/60"
+                            : "bg-[var(--bg-surface)]/60"
                         }
               `}
                     >
                       {/* Inner glow */}
                       <div
                         className={`absolute inset-2 rounded-xl ${isActive
-                          ? "bg-white/20"
+                          ? "bg-[var(--bg-surface)]/20"
                           : isCompleted
-                            ? "bg-white/10"
+                            ? "bg-[var(--bg-surface)]/10"
                             : "bg-transparent"
                           }`}
                       />
@@ -674,7 +674,7 @@ const OfferRide = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-full shadow-lg">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-gradient-to-r from-red-500 to-orange-500"></div>
                   <span className="text-sm font-semibold text-gray-700">
@@ -698,7 +698,7 @@ const OfferRide = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4 }}
-          className="bg-white rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden mb-8"
+          className="bg-[var(--bg-surface)] rounded-2xl shadow-2xl border border-[var(--border-subtle)]/50 overflow-hidden mb-8"
         >
           {/* Form Header */}
           <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6">
@@ -723,7 +723,7 @@ const OfferRide = () => {
                   </p>
                 </div>
               </div>
-              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
+              <div className="px-4 py-2 bg-[var(--bg-surface)]/10 backdrop-blur-sm rounded-lg">
                 <span className="text-white font-semibold">
                   Step {step}/{stepConfig.length}
                 </span>
@@ -830,7 +830,7 @@ const OfferRide = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={prevStep}
-                className="flex items-center gap-2 px-5 py-3 text-sm border border-gray-300 rounded-xl bg-white text-gray-700 hover:bg-gray-50 font-medium shadow-sm"
+                className="flex items-center gap-2 px-5 py-3 text-sm border border-gray-300 rounded-xl bg-[var(--bg-surface)] text-gray-700 hover:bg-gray-50 font-medium shadow-sm"
               >
                 <ChevronLeft size={18} />
                 Previous

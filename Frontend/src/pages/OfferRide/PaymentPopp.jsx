@@ -105,13 +105,13 @@ const PaymentPopup = ({
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           className="relative w-full max-w-sm"
         >
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+          <div className="bg-[var(--bg-surface)] rounded-3xl shadow-2xl overflow-hidden border border-[var(--border-subtle)]">
 
             {/* HEADER */}
             <div className="p-5 bg-gradient-to-r from-[#E10600] to-[#FF3B30]">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-xl bg-[var(--bg-surface)]/20 backdrop-blur-sm flex items-center justify-center">
                     <Wallet className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -121,7 +121,7 @@ const PaymentPopup = ({
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 bg-white/20 rounded-full hover:bg-white/30 transition-colors cursor-pointer"
+                  className="p-1.5 bg-[var(--bg-surface)]/20 rounded-full hover:bg-[var(--bg-surface)]/30 transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4 text-white" />
                 </button>
@@ -170,7 +170,7 @@ const PaymentPopup = ({
                         ${isVirtualMoneyUsed && canUseVirtualMoney ? 'bg-green-500' : 'bg-gray-300'}
                       `} />
                       <span className={`
-                        absolute left-0.5 top-0.5 bg-white w-5 h-5 rounded-full
+                        absolute left-0.5 top-0.5 bg-[var(--bg-surface)] w-5 h-5 rounded-full
                         transition-transform duration-200 transform
                         ${isVirtualMoneyUsed && canUseVirtualMoney ? 'translate-x-5' : ''}
                         shadow-sm

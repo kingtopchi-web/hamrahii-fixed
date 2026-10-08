@@ -118,7 +118,7 @@ export const PreferencesForm = ({ data, setFormData }) => {
         <motion.div
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6"
+          className="bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)] shadow-sm p-4 sm:p-6"
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
@@ -144,7 +144,7 @@ export const PreferencesForm = ({ data, setFormData }) => {
                 className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
                   preferences[option.id]
                     ? `${option.activeColor} shadow-sm`
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    : "border-[var(--border-subtle)] hover:border-gray-300 bg-[var(--bg-surface)]"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -180,7 +180,7 @@ export const PreferencesForm = ({ data, setFormData }) => {
                 >
                   <motion.div
                     layout
-                    className={`w-4 h-4 bg-white rounded-full shadow-sm ${
+                    className={`w-4 h-4 bg-[var(--bg-surface)] rounded-full shadow-sm ${
                       preferences[option.id] ? "ml-6" : "ml-0"
                     }`}
                   />
@@ -195,7 +195,7 @@ export const PreferencesForm = ({ data, setFormData }) => {
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6"
+          className="bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)] shadow-sm p-4 sm:p-6"
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
@@ -221,7 +221,7 @@ export const PreferencesForm = ({ data, setFormData }) => {
                 className={`p-3 rounded-lg border-2 flex flex-col items-center justify-center transition-all ${
                   preferences.luggageSpace === option.value
                     ? `${option.color} border-gray-400 shadow-sm`
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    : "border-[var(--border-subtle)] hover:border-gray-300 bg-[var(--bg-surface)]"
                 }`}
               >
                 <div className="mb-2">
@@ -256,7 +256,7 @@ export const PreferencesForm = ({ data, setFormData }) => {
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-gradient-to-r from-gray-50 to-white rounded-lg border border-gray-200 p-4 sm:p-6"
+          className="bg-gradient-to-r from-gray-50 to-white rounded-lg border border-[var(--border-subtle)] p-4 sm:p-6"
         >
           <h4 className="text-sm font-semibold text-gray-900 mb-3">
             Your Preferences
@@ -296,7 +296,7 @@ export const PreferencesForm = ({ data, setFormData }) => {
               <div className="text-xs font-medium text-gray-500 mb-1">
                 Luggage
               </div>
-              <div className="flex items-center justify-between p-2 bg-white rounded border border-gray-200">
+              <div className="flex items-center justify-between p-2 bg-[var(--bg-surface)] rounded border border-[var(--border-subtle)]">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center">
                     {

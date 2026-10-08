@@ -39,6 +39,7 @@ import {
   User,
   Tag,
   PawPrint,
+  Package,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -55,6 +56,8 @@ import { getBrowserCoords, getCityFromCoords, getlocationFromCoords } from "../.
 import { useGoogleMaps } from "../../components/maps/GoogleMapsProvider"
 import DownloadPopup from "../../components/DownloadPopup";
 import { useTypewriter } from "../../hooks/useTypewriter";
+import KycGuard from "../../components/KycGuard";
+import FloatingActionButtons from "../../components/FloatingActionButtons";
 
 // Format helper for ride departure time
 const formatRideTime = (timeStr) => {
@@ -539,7 +542,7 @@ const Home = () => {
             className="absolute bg-none inset-0 md:bg-cover bg-center"
             style={{ backgroundImage: `url(${heroBg})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-white/80 to-red-50/40" />
+          <div className="absolute inset-0 bg-[var(--bg-surface)]/30" />
           <HeroCanvas />
         </div>
 
@@ -564,447 +567,169 @@ const Home = () => {
         </div>
 
         <div className="container mx-auto px-4 lg:px-6 max-w-7xl relative z-10">
-          <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 items-center">
-            {/* Left Content */}
-            <div className="lg:w-1/2">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
+          <div className="flex justify-center items-center min-h-[75vh] lg:min-h-[85vh] pt-10 pb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="w-full max-w-4xl"
+            >
 
 
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-6 leading-[1.15] tracking-tight min-h-[140px] sm:min-h-[160px] lg:min-h-[180px]">
-                  <span className="block text-[#111111]">Share Rides,</span>
-                  <span className="inline-block bg-gradient-to-r from-[#E10600] via-[#FF4D30] to-[#FFA033] bg-clip-text text-transparent">
-                    {typedHeadline || "\u00A0"}
-                  </span>
-                  <span className="inline-block w-[3px] sm:w-[4px] h-[0.82em] bg-[#E10600] ml-1.5 align-baseline animate-pulse rounded-full shadow-[0_0_8px_rgba(225,6,0,0.6)]"></span>
-                </h1>
 
-                <p className="text-base lg:text-lg text-[#555555] mb-8 leading-relaxed max-w-xl">
-                  Join thousands of smart commuters sharing rides across India.
-                  <span className="font-semibold text-[#E10600]">
-                    {" "}Save up to 70%{" "}
-                  </span>
-                  on travel costs while reducing traffic and making meaningful connections.
-                </p>
 
-                {/* Quick Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  {stats.slice(0, 2).map((stat, index) => (
-                    <motion.div
-                      key={stat.label}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 + 0.3 }}
-                      whileHover={{ y: -2 }}
-                      className="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/70 hover:border-red-200 shadow-card-subtle hover:shadow-md transition-all duration-300"
-                    >
-                      <div
-                        className={`p-2.5 rounded-xl ${stat.bgColor} border border-white/40 shadow-sm`}
-                      >
-                        <div className={stat.color}>{stat.icon}</div>
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold text-[#111111]">
-                          {stat.value}
-                        </div>
-                        <div className="text-xs text-[#555555] font-medium">
-                          {stat.label}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3.5 mb-8">
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row justify-center gap-6 mb-8">
+                <KycGuard>
                   <motion.button
-                    whileHover={{ scale: 1.02, y: -1 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => navigate("/rides")}
-                    className="px-8 py-3.5 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white font-bold rounded-xl shadow-md hover:shadow-red-glow transition-all duration-300 flex items-center justify-center gap-2.5 group flex-1"
+                    className="btn-water btn-water-right btn-water-bg-red px-10 py-4 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-red-glow transition-all duration-300 flex items-center justify-center gap-3 group w-full sm:w-64 mx-auto sm:mx-0"
                   >
-                    <Car size={19} />
+                    <Car size={24} />
                     <span>Find a Ride Now</span>
                     <ArrowRight
-                      size={18}
+                      size={20}
                       className="group-hover:translate-x-1 transition-transform"
                     />
                   </motion.button>
+                </KycGuard>
 
+                <KycGuard>
                   <motion.button
-                    whileHover={{ scale: 1.02, y: -1 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => navigate("/offer-ride")}
-                    className="px-8 py-3.5 bg-white/90 backdrop-blur-md border border-gray-200 text-[#111111] font-semibold rounded-xl hover:border-red-300 hover:bg-red-50/40 hover:text-[#E10600] shadow-sm transition-all duration-300 flex items-center justify-center gap-2.5 group flex-1"
+                    className="btn-water btn-water-up btn-water-bg-light-red px-10 py-4 bg-[var(--bg-surface)]/95 backdrop-blur-md border-2 border-red-100 text-[#111111] font-bold text-lg rounded-2xl hover:border-red-400 hover:text-[#E10600] shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group w-full sm:w-64 mx-auto sm:mx-0"
                   >
-                    <Zap size={19} className="text-[#E10600]" />
-                    <span>Offer a Ride</span>
-                  </motion.button>
-                </div>
-              </motion.div>
-            </div>
-
-            <RideSearchCard cityBg={cityBg} location={location} />
-          </div>
-        </div>
-      </section>
-
-      {/* Recent Rides Section */}
-      <section className="py-8 lg:py-12 bg-gradient-to-b from-white to-gray-50/30 relative overflow-hidden">
-        <div className="container mx-auto px-4 lg:px-6 max-w-7xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-50 to-orange-50 border border-red-100/50 mb-4">
-              <Car size={16} className="text-red-500" />
-              <span className="text-sm font-semibold text-red-700">
-                Available Rides
-              </span>
-            </div>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              <span className="text-red-600">Recent</span> & Upcoming Rides
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Join these verified rides happening soon. Book your seat and
-              travel smart!
-            </p>
-          </motion.div>
-
-          {/* Rides Display - Updated to handle recentRides properly */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {ridesList && ridesList.length > 0 ? (
-              ridesList.slice(0, 6).map((ride, index) => {
-                const { isToday, formatted: formattedDate } = formatRideDate(ride?.departureDate);
-                const seatsCount = ride.availableSeats ?? ride.seatsAvailable ?? 1;
-
-                return (
-                  <motion.div
-                    key={ride._id || index}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
-                    whileHover={{ y: -4 }}
-                    className="bg-white rounded-3xl shadow-card-subtle hover:shadow-card-hover transition-all duration-300 border border-gray-100 overflow-hidden group"
-                  >
-                    {/* Ride Header */}
-                    <div className="p-5 border-b border-gray-100 bg-gradient-to-r from-gray-50/50 via-white to-red-50/20">
-                      <div className="flex justify-between items-start mb-3 gap-2">
-                        <div>
-                          <h3 className="text-base sm:text-lg font-bold text-[#111111] mb-1">
-                            {ride.from?.city || "Location"} → {ride.to?.city || "Destination"}
-                          </h3>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 font-medium flex-wrap">
-                            {isToday && (
-                              <span className="px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[10px] uppercase tracking-wide">
-                                Today
-                              </span>
-                            )}
-                            <div className="flex items-center gap-1">
-                              <Calendar size={13} className="text-[#E10600]" />
-                              <span>{formattedDate}</span>
-                            </div>
-                            <span className="text-gray-300">•</span>
-                            <div className="flex items-center gap-1">
-                              <Clock size={13} className="text-[#E10600]" />
-                              <span>{formatRideTime(ride?.departureTime)}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="px-3 py-1 bg-red-50 border border-red-100 rounded-full shrink-0">
-                          <span className="text-sm font-bold text-[#E10600]">
-                            ₹{ride.pricePerSeat || "0"}
-                            <span className="text-xs font-normal text-gray-500">/seat</span>
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Driver Info */}
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E10600] to-[#FF5A36] flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-white">
-                          {(ride.driver?.firstName?.[0] || "U").toUpperCase()}
-                          {(ride.driver?.lastName?.[0] || "").toUpperCase()}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-sm text-[#111111]">
-                            {ride.driver?.firstName
-                              ? `${ride.driver.firstName} ${ride.driver.lastName || ""}`.trim()
-                              : "Verified Driver"}
-                          </div>
-                          <div className="flex items-center gap-1 text-xs text-gray-500">
-                            <Car size={12} />
-                            <span>{ride?.carDetails?.model || "Standard Car"}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Ride Details */}
-                    <div className="p-5">
-                      {/* Route Info */}
-                      <div className="flex items-start gap-3 mb-4">
-                        <div className="flex flex-col items-center pt-1">
-                          <div className="w-2.5 h-2.5 rounded-full bg-blue-500 ring-2 ring-blue-100"></div>
-                          <div className="w-0.5 h-8 bg-gradient-to-b from-blue-400 to-emerald-400 my-0.5"></div>
-                          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-100"></div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-sm text-[#111111] truncate" title={ride.from?.address || ride.from?.city}>
-                            {ride.from?.address || ride.from?.city || "Pickup Location"}
-                          </div>
-                          <div className="text-xs text-gray-400 mb-3 truncate">
-                            {ride.from?.city || "City"}
-                          </div>
-                          <div className="font-semibold text-sm text-[#111111] truncate" title={ride.to?.location || ride.to?.address || ride.to?.city}>
-                            {ride.to?.location || ride.to?.address || ride.to?.city || "Drop Location"}
-                          </div>
-                          <div className="text-xs text-gray-400 truncate">
-                            {ride.to?.city || "City"}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Seats & Action */}
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-1.5">
-                          <Users size={15} className="text-gray-400" />
-                          <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                            seatsCount <= 1
-                              ? "bg-amber-50 text-amber-700 border border-amber-200"
-                              : "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                          }`}>
-                            {seatsCount <= 1 ? "🔥 Only " : "✓ "}
-                            {seatsCount} seat{seatsCount !== 1 ? "s" : ""} left
-                          </span>
-                        </div>
-                        <motion.button
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                          onClick={() =>
-                            navigate("/view-ride-details", {
-                              state: { rideId: ride?._id },
-                            })
-                          }
-                          className="px-4 py-2 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white font-bold text-xs rounded-xl shadow-sm hover:shadow-red-glow transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
-                        >
-                          <span>Book Now</span>
-                          <ArrowRight size={14} />
-                        </motion.button>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })
-            ) : (
-              // Show message when no rides are available
-              <div className="col-span-full text-center py-12">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-red-50 to-orange-50 mb-4">
-                  <Car size={24} className="text-red-500" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  No rides available at the moment
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Be the first to offer a ride and help others travel smarter!
-                </p>
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/offer-ride")}
-                  className="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-red-200 transition-all duration-300 flex items-center gap-2 mx-auto cursor-pointer"
-                >
-                  <Zap size={20} />
-                  <span>Offer a Ride Now</span>
+                  <Zap size={24} className="text-[#E10600]" />
+                  <span>Offer a Ride</span>
                 </motion.button>
+                </KycGuard>
               </div>
-            )}
-          </div>
-
-          {/* View All Rides Button - Only show if there are rides */}
-          {ridesList && ridesList.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="text-center mt-10"
-            >
-              <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => navigate("/rides")}
-                className="px-8 py-3.5 bg-white border-2 border-red-200 text-[#E10600] font-bold rounded-2xl hover:bg-red-50 hover:border-red-300 shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center gap-2 mx-auto group cursor-pointer"
-              >
-                <Car size={19} />
-                <span>View All Available Rides</span>
-                <ArrowRight
-                  size={18}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
-              </motion.button>
             </motion.div>
-          )}
+          </div>
         </div>
-      </section>
-      {/* Features Section */}
-      <section className="py-2 lg:py-5 bg-gradient-to-b from-white to-gray-50/30 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `url(${patternBg})`,
-              backgroundSize: "cover",
-            }}
-          />
-        </div>
-        <div className="container mx-auto px-4 lg:px-6 max-w-7xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-50 to-orange-50 border border-red-100/50 mb-4">
-              <Zap size={16} className="text-red-500" />
-              <span className="text-sm font-semibold text-red-700">
-                Why Choose HumRahii
-              </span>
-            </div>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Smarter Commute,{" "}
-              <span className="text-red-600">Better Experience</span>
-            </h2>
-            <p className="text-gray-600 max-w-3xl mx-auto">
-              Experience premium carpooling with features designed for safety,
-              comfort, and maximum savings.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative overflow-hidden rounded-xl"
-              >
-                {/* Feature Background Image */}
-                <div
-                  className="absolute inset-0 opacity-10 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${feature.image})` }}
-                />
-
-                <div
-                  className={`relative ${feature.bgColor} backdrop-blur-sm rounded-xl p-5 border border-gray-200/50 hover:border-red-200 hover:shadow-xl transition-all duration-300`}
-                >
-                  {/* Feature Icon */}
-                  <div
-                    className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
-                  >
-                    <div className="text-white">{feature.icon}</div>
-                  </div>
-
-                  {/* Feature Content */}
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 mb-3 text-sm">
-                    {feature.description}
-                  </p>
-
-                  {/* Feature Stat */}
-                  <div className="text-sm font-semibold text-gray-700">
-                    {feature.stat}
-                  </div>
-                </div>
-              </motion.div>
+        {/* Bottom Marquee */}
+        <div className="absolute bottom-0 left-0 w-full bg-[#1A1A1A] py-3 overflow-hidden border-t border-b border-[#333333] z-20">
+          <div className="animate-marquee-horizontal flex items-center whitespace-nowrap">
+            {[...Array(15)].map((_, i) => (
+              <div key={i} className="flex items-center">
+                <span className="text-white text-xl md:text-2xl font-black uppercase tracking-wider">
+                  HUMRA<span className="text-[#E10600]">HII</span>
+                </span>
+                <span className="text-white mx-6 md:mx-10 text-xl">✦</span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-2 lg:py-5 bg-white relative overflow-hidden">
+      {/* Our Services in Major Cities Section */}
+      <section className="py-12 lg:py-16 bg-[var(--bg-surface)] relative overflow-hidden">
         <div className="container mx-auto px-4 lg:px-6 max-w-7xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-50 to-orange-50 border border-red-100/50 mb-4">
-                <Play size={16} className="text-red-500" />
-                <span className="text-sm font-semibold text-red-700">
-                  Simple & Easy
-                </span>
-              </div>
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                How <span className="text-red-600">HumRahii</span> Works
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-8 bg-yellow-400 rounded-full"></div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
+                Our Services in Major Cities
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Get started in just 4 simple steps and experience smart
-                commuting
+            </div>
+            <Link to="/rides" className="text-blue-600 font-semibold hover:text-blue-800 transition-colors hidden sm:block">
+              EXPLORE MORE
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {[
+              { name: "Hyderabad", image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=600" },
+              { name: "Varanasi", image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?q=80&w=600" },
+              { name: "Chandigarh", image: "https://images.unsplash.com/photo-1616843413587-9e3a37f7bbd8?q=80&w=600" },
+              { name: "Lucknow", image: "/lucknow.jpg" },
+              { name: "Bangalore", image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?q=80&w=600" },
+              { name: "Delhi", image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=600" },
+            ].map((city, index) => (
+              <motion.div
+                key={city.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                onClick={() => navigate("/rides", { state: { fromCity: city.name } })}
+                className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300"
+              >
+                {/* Background Image */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: `url(${city.image})` }}
+                />
+                
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
+
+                {/* Content */}
+                <div className="absolute top-0 left-0 p-6 w-full h-full flex flex-col justify-start">
+                  <h3 className="text-2xl font-bold text-white mb-2">{city.name}</h3>
+                  <div className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-300">
+                    <ArrowRight size={16} className="text-white group-hover:text-black" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="mt-6 text-center sm:hidden">
+            <Link to="/rides" className="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+              EXPLORE MORE
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Vehicle Type Banner Section */}
+      <section className="py-8 lg:py-12 bg-white relative overflow-hidden border-y border-gray-100">
+        <div className="container mx-auto px-4 lg:px-6 max-w-7xl">
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between shadow-sm relative overflow-hidden border border-gray-200">
+            {/* Background Accent */}
+            <div className="absolute right-0 top-0 w-64 h-full bg-red-50/50 transform skew-x-12 translate-x-20 rounded-l-[100px] pointer-events-none"></div>
+            
+            {/* Text Content */}
+            <div className="z-10 text-center md:text-left mb-8 md:mb-0 w-full md:w-1/2">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Vehicles type we provide
+              </h2>
+              <p className="text-gray-600 mb-6 max-w-md mx-auto md:mx-0">
+                Choose from our wide range of verified, comfortable, and well-maintained vehicles for your next journey.
               </p>
+              <button
+                onClick={() => navigate("/vehicles")}
+                className="bg-[#E10600] text-white px-8 py-3 rounded-full font-semibold hover:bg-red-700 transition-colors shadow-lg hover:shadow-red-500/30"
+              >
+                View Vehicles
+              </button>
             </div>
 
-            {/* Steps */}
-            <div className="relative">
-              <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-red-100 via-orange-100 to-red-100 -translate-y-1/2"></div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-                {howItWorks.map((step, index) => (
-                  <motion.div
-                    key={step.step}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="relative"
-                  >
-                    {/* Step Background Image */}
-                    <div
-                      className="absolute inset-0 rounded-2xl opacity-5 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${step.image})` }}
-                    />
-
-                    <div
-                      className={`relative ${step.bgColor} backdrop-blur-sm rounded-2xl p-5 text-center border border-gray-200/50`}
-                    >
-                      {/* Step Number */}
-                      <div className="absolute -top-3 -left-3 w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-bold shadow-lg">
-                        {step.step}
-                      </div>
-
-                      {/* Step Icon */}
-                      <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-white/80 border border-gray-200/50 flex items-center justify-center">
-                        <div className="text-red-600">{step.icon}</div>
-                      </div>
-
-                      {/* Step Content */}
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {step.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+            {/* Images Group */}
+            <div className="z-10 w-full md:w-1/2 flex justify-center md:justify-end items-end gap-2 md:gap-4 relative h-48 md:h-64">
+              <motion.img 
+                initial={{ x: 50, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=400&q=80" 
+                alt="Sedan Car"
+                className="w-32 md:w-48 h-auto object-contain drop-shadow-xl z-20 absolute left-0 md:left-10 bottom-0 rounded-lg"
+              />
+              <motion.img 
+                initial={{ x: 50, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=400&q=80" 
+                alt="SUV Car"
+                className="w-40 md:w-56 h-auto object-contain drop-shadow-2xl z-30 relative bottom-0 rounded-lg border-4 border-white shadow-lg"
+              />
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -1017,21 +742,7 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-50 to-orange-50 border border-red-100/50 mb-4">
-                <BookOpen size={16} className="text-red-500" />
-                <span className="text-sm font-semibold text-red-700">
-                  Latest Insights
-                </span>
-              </div>
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                Latest <span className="text-red-600">Blogs</span>
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Read our latest articles on travel, safety, sustainability, and
-                community
-              </p>
-            </div>
+
 
             {/* Loading State */}
             {loadingBlogs && blogs.length === 0 ? (
@@ -1060,7 +771,7 @@ const Home = () => {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       whileHover={{ y: -5 }}
-                      className="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="group cursor-pointer bg-[var(--bg-surface)] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
                       onClick={() => navigate(`/blog/${blog.slug}`)}
                     >
                      
@@ -1138,7 +849,7 @@ const Home = () => {
                         <motion.div
                           whileHover={{ y: -5 }}
                           onClick={() => navigate("/blog")}
-                          className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 w-full max-w-sm mx-auto cursor-pointer"
+                          className="bg-[var(--bg-surface)] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 w-full max-w-sm mx-auto cursor-pointer"
                         >
                           {/* Blog Image */}
                           <div className="relative overflow-hidden h-48">
@@ -1217,55 +928,80 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-8 lg:py-13 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: `url(${patternBg})`,
-              backgroundSize: "cover",
-            }}
-          />
-        </div>
-
+      {/* Reviews Section */}
+      <section className="py-10 bg-[#EAF5FE] relative overflow-hidden">
+        {/* Grid Background Pattern */}
+        <div 
+          className="absolute inset-0 opacity-20 pointer-events-none" 
+          style={{
+            backgroundImage: `linear-gradient(to right, #4a90e2 1px, transparent 1px), linear-gradient(to bottom, #4a90e2 1px, transparent 1px)`,
+            backgroundSize: '40px 40px'
+          }} 
+        />
+        
         <div className="container mx-auto px-4 lg:px-6 max-w-7xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-4"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="text-2xl lg:text-3xl font-bold text-white mb-2">
-                  {stat.value}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16">
+            
+            {/* Google Reviews */}
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/google.png" alt="Google" className="w-10 h-10 object-contain" />
+              </div>
+              <div>
+                <h3 className="text-gray-900 font-bold text-lg mb-0">Google</h3>
+                <div className="flex items-center text-amber-400 gap-1 my-1">
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} className="text-gray-300" fill="currentColor" />
                 </div>
-                <div className="flex flex-col items-center gap-2">
-                  <div className="p-2 rounded-lg bg-white/20 backdrop-blur-sm">
-                    <div className="text-white">{stat.icon}</div>
-                  </div>
-                  <div className="text-sm font-medium text-white/90">
-                    {stat.label}
-                  </div>
+                <p className="text-gray-900 font-bold text-sm">(12022 Review)</p>
+              </div>
+            </div>
+
+            {/* Play Store Reviews */}
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                <img src="https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/google-play.png" alt="Play Store" className="w-10 h-10 object-contain" />
+              </div>
+              <div>
+                <h3 className="text-gray-900 font-bold text-lg mb-0">Play Store</h3>
+                <div className="flex items-center text-amber-400 gap-1 my-1">
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} className="text-gray-300" fill="currentColor" />
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                <p className="text-gray-900 font-bold text-sm">(3222 Review)</p>
+              </div>
+            </div>
+
+            {/* App Store Reviews */}
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/App_Store_%28iOS%29.svg" alt="App Store" className="w-10 h-10 object-contain" />
+              </div>
+              <div>
+                <h3 className="text-gray-900 font-bold text-lg mb-0">App Store</h3>
+                <div className="flex items-center text-amber-400 gap-1 my-1">
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} fill="currentColor" />
+                  <Star size={16} className="text-gray-300" fill="currentColor" />
+                </div>
+                <p className="text-gray-900 font-bold text-sm">(5444 Review)</p>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
       {/* Additional Benefits */}
-      <section className="py-2 lg:py-4 bg-white relative overflow-hidden">
+      <section className="py-2 lg:py-4 bg-[var(--bg-surface)] relative overflow-hidden">
         <div className="container mx-auto px-4 lg:px-6 max-w-7xl relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -1290,7 +1026,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center text-center p-4 rounded-xl bg-gradient-to-b from-gray-50/80 to-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-red-200 hover:shadow-lg transition-all duration-300"
+                className="flex flex-col items-center text-center p-4 rounded-xl bg-gradient-to-b from-gray-50/80 to-white/80 backdrop-blur-sm border border-[var(--border-subtle)]/50 hover:border-red-200 hover:shadow-lg transition-all duration-300"
               >
                 <div
                   className={`w-12 h-12 rounded-xl ${benefit.bgColor} flex items-center justify-center mb-3`}
@@ -1307,92 +1043,164 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-4 lg:pb-5">
-        <div className="container mx-auto px-4 lg:px-6 max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 lg:p-8 text-center relative overflow-hidden"
-          >
-            {/* Background Image */}
-            <div
-              className="absolute inset-0 opacity-10"
-              style={{
-                backgroundImage: `url(${cityBg})`,
-                backgroundSize: "cover",
-              }}
-            />
-
-            {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-red-500/10 to-transparent rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tr from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
-
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 mb-4">
-                <Sparkles size={16} className="text-red-300" />
-                <span className="text-sm font-semibold text-white">
-                  Start Your Journey Today
-                </span>
+      {/* What Makes Humrahii Unique */}
+      <section className="py-8 lg:py-12 bg-white relative overflow-hidden">
+        <div className="container mx-auto px-4 lg:px-6 max-w-7xl">
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-1.5 h-10 bg-[#FFD700]"></div>
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-800">
+              What Makes Humrahii Unique?
+            </h2>
+          </div>
+          
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            
+            <div className="flex items-center gap-5 bg-[#FCFAEE] px-6 py-5 rounded-2xl w-full md:w-1/3 shadow-sm border border-yellow-50">
+              <div className="text-blue-500 bg-white p-2 rounded-lg border border-blue-100 shadow-sm">
+                <Car size={32} strokeWidth={1.5} />
               </div>
+              <h3 className="text-gray-900 font-semibold text-lg">Ride Offered</h3>
+            </div>
 
-              <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4">
-                Ready to Travel Smarter?
+            <div className="flex items-center gap-5 bg-[#FCFAEE] px-6 py-5 rounded-2xl w-full md:w-1/3 shadow-sm border border-yellow-50">
+              <div className="text-blue-500 bg-white p-2 rounded-lg border border-blue-100 shadow-sm">
+                <Package size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-gray-900 font-semibold text-lg">Parcel Delivery</h3>
+            </div>
+
+            <div className="flex items-center gap-5 bg-[#FCFAEE] px-6 py-5 rounded-2xl w-full md:w-1/3 shadow-sm border border-yellow-50">
+              <div className="text-blue-500 bg-white p-2 rounded-lg border border-blue-100 shadow-sm">
+                <ShieldCheck size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-gray-900 font-semibold text-lg">Verified Users</h3>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* App Download Section */}
+      <section className="py-12 lg:py-16 bg-[#F8FAF9] relative overflow-hidden">
+        <div className="container mx-auto px-4 lg:px-6 max-w-7xl">
+          <div className="flex flex-col lg:flex-row items-center gap-10">
+            {/* Text & Download Links */}
+            <div className="w-full lg:w-1/2">
+              <p className="text-sm font-semibold text-gray-500 tracking-wider mb-2 uppercase">MOST DOWNLOADED</p>
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 leading-tight mb-4">
+                Make Your Travel Easy with <br/> Humrahii
               </h2>
-
-              <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-                Join India's fastest-growing carpool community. Save money,
-                reduce emissions, and turn every commute into an opportunity.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/register")}
-                  className="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 flex items-center justify-center gap-2 group"
-                >
-                  <Download size={18} />
-                  <span>Get Started Free</span>
-                  <ArrowRight
-                    size={16}
-                    className="group-hover:translate-x-1 transition-transform"
+              <h3 className="text-4xl lg:text-5xl font-bold text-[#1877F2] mb-8">
+                Download App Now
+              </h3>
+              
+              <div className="flex flex-row items-center w-full max-w-md bg-white rounded-xl shadow-sm border border-gray-200 p-1.5 sm:p-2 mb-8">
+                <div className="flex flex-1 items-center bg-transparent min-w-0">
+                  <span className="px-2 sm:px-4 text-gray-500 border-r border-gray-200 font-medium text-sm sm:text-base shrink-0">+91</span>
+                  <input 
+                    type="text" 
+                    placeholder="Enter mobile number" 
+                    className="flex-1 w-full min-w-0 px-2 sm:px-4 py-2 outline-none text-gray-700 bg-transparent text-sm sm:text-base"
                   />
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/blog")}
-                  className="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center gap-2 group"
-                >
-                  <BookOpen size={18} />
-                  <span>Read Our Blog</span>
-                </motion.button>
+                </div>
+                <button className="bg-[#1877F2] hover:bg-blue-600 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors whitespace-nowrap text-center flex items-center justify-center text-xs sm:text-base shrink-0">
+                  Get App Link
+                </button>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400">
-                <div className="flex items-center gap-1">
-                  <CheckCircle size={12} className="text-green-400" />
-                  <span>No credit card needed</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Shield size={12} className="text-blue-400" />
-                  <span>100% secure signup</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Clock size={12} className="text-amber-400" />
-                  <span>Quick setup</span>
-                </div>
+              <div className="flex items-center gap-4">
+                <a href="#" className="block hover:opacity-90 transition-opacity">
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-[52px]" />
+                </a>
+                <a href="#" className="block hover:opacity-90 transition-opacity">
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" className="h-[52px]" />
+                </a>
               </div>
             </div>
-          </motion.div>
+
+            {/* Mockup Phones */}
+            <div className="w-full lg:w-1/2 relative h-[500px] hidden md:block">
+               {/* Phone 1 (Back/Left) */}
+               <div className="absolute right-40 top-10 w-64 h-[450px] bg-white rounded-[3rem] border-[8px] border-gray-800 shadow-2xl overflow-hidden transform -rotate-6">
+                 <div className="bg-gray-50 h-full w-full p-4 relative flex flex-col">
+                   <div className="bg-white rounded-xl shadow-sm p-3 mb-6 mt-8 flex items-center justify-between">
+                     <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                     <div className="h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center">
+                       <User size={12} className="text-orange-500" />
+                     </div>
+                   </div>
+                   <div className="space-y-4 flex-1">
+                     <div className="h-16 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center px-4">
+                        <MapPin className="text-blue-500 mr-3" size={20} />
+                        <div className="h-2 w-32 bg-gray-200 rounded"></div>
+                     </div>
+                     <div className="h-16 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center px-4">
+                        <Car className="text-blue-500 mr-3" size={20} />
+                        <div className="h-2 w-32 bg-gray-200 rounded"></div>
+                     </div>
+                   </div>
+                   <div className="absolute bottom-6 left-4 right-4 h-12 bg-[#FFD700] rounded-xl flex items-center justify-center shadow-sm">
+                     <span className="font-bold text-sm text-gray-800">Search</span>
+                   </div>
+                 </div>
+               </div>
+
+               {/* Phone 2 (Front/Right) */}
+               <div className="absolute right-10 top-0 w-64 h-[480px] bg-white rounded-[3rem] border-[8px] border-gray-800 shadow-2xl overflow-hidden transform rotate-12 z-10">
+                 <div className="bg-gray-50 h-full w-full p-0 relative">
+                   <div className="bg-white p-4 pt-10 shadow-sm flex items-center justify-between z-20 relative">
+                     <span className="font-bold text-sm text-gray-800 flex items-center gap-2">
+                       <ArrowRight size={16} className="rotate-180" /> My Rides
+                     </span>
+                     <div className="h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center">
+                       <User size={12} className="text-orange-500" />
+                     </div>
+                   </div>
+                   <div className="h-56 bg-[#f0f4f8] border-b border-gray-200 flex items-center justify-center relative overflow-hidden">
+                      {/* Fake Map Route */}
+                      <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(#9ca3af 1px, transparent 1px)', backgroundSize: '12px 12px' }}></div>
+                      <div className="absolute inset-0 opacity-10 bg-blue-200"></div>
+                      
+                      {/* Dashed line */}
+                      <div className="w-32 h-32 border-l-[3px] border-b-[3px] border-[#1877F2] border-dashed absolute top-10 left-12"></div>
+                      
+                      <div className="absolute bottom-10 right-16 z-10 bg-white rounded-full p-1 shadow-md">
+                        <MapPin size={16} className="text-[#1877F2]" />
+                      </div>
+                      
+                      <div className="absolute top-6 left-8 z-10 bg-white rounded-full p-1 shadow-md transform -translate-x-1/2 -translate-y-1/2">
+                        <Car size={16} className="text-[#1877F2] transform rotate-45" />
+                      </div>
+                   </div>
+                   <div className="p-4 space-y-4">
+                     <div className="bg-[#FFF4E5] rounded-xl p-3 border border-orange-100">
+                       <div className="flex justify-between items-center mb-1">
+                         <span className="font-bold text-sm text-gray-800">Rajesh Sharma</span>
+                         <span className="font-bold text-sm text-gray-800">₹ 1296</span>
+                       </div>
+                       <div className="text-[11px] text-gray-500 font-medium">120 km</div>
+                     </div>
+                     <div className="space-y-3">
+                       <div className="text-[11px] text-gray-600 flex items-center font-medium">
+                         <div className="w-2.5 h-2.5 rounded-full bg-green-500 mr-3 ring-2 ring-green-100"></div>
+                         Indiranagar, Lucknow
+                       </div>
+                       <div className="h-6 w-px bg-gray-300 ml-1.5 -my-2"></div>
+                       <div className="text-[11px] text-gray-600 flex items-center font-medium">
+                         <div className="w-2.5 h-2.5 rounded-full bg-red-500 mr-3 ring-2 ring-red-100"></div>
+                         Ashok Nagar, Kanpur
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <DownloadPopup />
+      <FloatingActionButtons whatsappNumber="916688684504" message="Hi Humrahii, I need some help!" />
     </div>
   );
 };

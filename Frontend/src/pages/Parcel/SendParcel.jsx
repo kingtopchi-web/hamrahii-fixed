@@ -562,7 +562,7 @@ const SendParcel = () => {
         </div>
 
         {/* Main Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-200/80 p-5 sm:p-7">
+        <div className="bg-[var(--bg-surface)] rounded-2xl sm:rounded-3xl shadow-sm border border-[var(--border-subtle)]/80 p-5 sm:p-7">
           
           {isCheckingActive ? (
             <div className="flex flex-col items-center justify-center py-12">
@@ -624,7 +624,7 @@ const SendParcel = () => {
                           ? "bg-red-50 text-red-600 border border-red-200 animate-pulse"
                           : pickupCoords[0] !== 0 && pickupLocationSource === "GPS"
                           ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
-                          : "bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600 border border-gray-200"
+                          : "bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600 border border-[var(--border-subtle)]"
                       }`}
                     >
                       {isDetectingLocation ? (
@@ -638,9 +638,9 @@ const SendParcel = () => {
                     </button>
                   </div>
                   {showPickupSuggestions && pickupSuggestions.length > 0 && (
-                    <div className="absolute z-[100] w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div className="absolute z-[100] w-full mt-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl shadow-lg max-h-60 overflow-y-auto">
                       {pickupSuggestions.map((s) => (
-                        <div key={s.place_id} onClick={() => selectPickup(s.place_id, s.description)} className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 flex flex-col gap-0.5 text-left">
+                        <div key={s.place_id} onClick={() => selectPickup(s.place_id, s.description)} className="p-3 hover:bg-gray-50 cursor-pointer border-b border-[var(--border-subtle)] flex flex-col gap-0.5 text-left">
                           <span className="font-semibold text-sm text-gray-900">{s.structured_formatting?.main_text || s.description}</span>
                           {s.structured_formatting?.secondary_text && <span className="text-xs text-gray-500">{s.structured_formatting.secondary_text}</span>}
                         </div>
@@ -669,7 +669,7 @@ const SendParcel = () => {
                 <div className="relative">
                   <div 
                     onClick={() => setStep(1)}
-                    className="cursor-pointer p-3 bg-gray-50 hover:bg-gray-100/70 rounded-xl border border-gray-200 mb-2 flex items-center justify-between gap-3 transition"
+                    className="cursor-pointer p-3 bg-gray-50 hover:bg-gray-100/70 rounded-xl border border-[var(--border-subtle)] mb-2 flex items-center justify-between gap-3 transition"
                     title="Edit pickup location"
                   >
                     <div className="flex items-start gap-3 min-w-0 flex-1">
@@ -684,7 +684,7 @@ const SendParcel = () => {
                   <button
                     onClick={handleSwapLocations}
                     type="button"
-                    className="absolute -bottom-[22px] right-6 z-20 w-8 h-8 bg-white border border-gray-200 rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-[#E10600] hover:border-red-200 hover:bg-red-50 transition-all hover:rotate-180"
+                    className="absolute -bottom-[22px] right-6 z-20 w-8 h-8 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-[#E10600] hover:border-red-200 hover:bg-red-50 transition-all hover:rotate-180"
                     title="Swap locations"
                   >
                     <ArrowUpDown size={16} />
@@ -720,7 +720,7 @@ const SendParcel = () => {
                           ? "bg-blue-50 text-blue-600 border border-blue-200 animate-pulse"
                           : dropoffCoords[0] !== 0
                           ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
-                          : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600 border border-gray-200"
+                          : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600 border border-[var(--border-subtle)]"
                       }`}
                     >
                       {isDetectingDropoffLocation ? (
@@ -734,9 +734,9 @@ const SendParcel = () => {
                     </button>
                   </div>
                   {showDropoffSuggestions && dropoffSuggestions.length > 0 && (
-                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div className="absolute z-10 w-full mt-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl shadow-lg max-h-60 overflow-y-auto">
                       {dropoffSuggestions.map((s) => (
-                        <div key={s.place_id} onClick={() => selectDropoff(s.place_id, s.description)} className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 flex flex-col gap-0.5 text-left">
+                        <div key={s.place_id} onClick={() => selectDropoff(s.place_id, s.description)} className="p-3 hover:bg-gray-50 cursor-pointer border-b border-[var(--border-subtle)] flex flex-col gap-0.5 text-left">
                           <span className="font-semibold text-sm text-gray-900">{s.structured_formatting?.main_text || s.description}</span>
                           {s.structured_formatting?.secondary_text && <span className="text-xs text-gray-500">{s.structured_formatting.secondary_text}</span>}
                         </div>
@@ -811,7 +811,7 @@ const SendParcel = () => {
                           className={`cursor-pointer px-4 py-3 rounded-xl border-2 font-bold text-sm transition-all ${
                             parcelType === type
                               ? "border-[#E10600] bg-red-50 text-[#E10600]"
-                              : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
+                              : "border-[var(--border-subtle)] hover:border-gray-300 text-gray-700 bg-[var(--bg-surface)]"
                           }`}
                         >
                           {type}
@@ -862,8 +862,8 @@ const SendParcel = () => {
                               disabled={isExceeded}
                               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer ${
                                 isExceeded
-                                  ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed opacity-50"
-                                  : "bg-gray-50 hover:bg-red-50 text-gray-700 hover:text-[#E10600] border border-gray-200 hover:border-red-200 shadow-2xs active:scale-95"
+                                  ? "bg-gray-100 text-gray-400 border border-[var(--border-subtle)] cursor-not-allowed opacity-50"
+                                  : "bg-gray-50 hover:bg-red-50 text-gray-700 hover:text-[#E10600] border border-[var(--border-subtle)] hover:border-red-200 shadow-2xs active:scale-95"
                               }`}
                               title={isExceeded ? `Adding ${num} KG exceeds max ${maxAllowed} KG` : `Add ${num} KG`}
                             >
@@ -906,8 +906,8 @@ const SendParcel = () => {
             {step === 6 && (
               <motion.div key="step6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
                 <h2 className="text-xl font-bold text-gray-900">Confirm Booking</h2>
-                <div className="bg-gray-50 rounded-2xl p-5 space-y-4 border border-gray-200">
-                  <div className="flex justify-between items-start border-b border-gray-200 pb-4 gap-2">
+                <div className="bg-gray-50 rounded-2xl p-5 space-y-4 border border-[var(--border-subtle)]">
+                  <div className="flex justify-between items-start border-b border-[var(--border-subtle)] pb-4 gap-2">
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Route</p>
                       <p className="text-xs sm:text-sm font-semibold flex items-start gap-2 mb-2 text-gray-800 break-words leading-snug"><MapPin size={16} className="text-emerald-600 mt-0.5 shrink-0" /> <span>{pickupAddress}</span></p>
@@ -916,7 +916,7 @@ const SendParcel = () => {
                     </div>
                     <button onClick={() => setStep(1)} className="text-blue-600 p-2 bg-blue-50 rounded-lg hover:bg-blue-100 shrink-0"><Edit2 size={14}/></button>
                   </div>
-                  <div className="flex justify-between items-center border-b border-gray-200 pb-4 gap-2">
+                  <div className="flex justify-between items-center border-b border-[var(--border-subtle)] pb-4 gap-2">
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Parcel Details</p>
                       <p className="text-xs sm:text-sm font-semibold capitalize break-words">
@@ -926,7 +926,7 @@ const SendParcel = () => {
                     </div>
                     <button onClick={() => setStep(4)} className="text-blue-600 p-2 bg-blue-50 rounded-lg hover:bg-blue-100 shrink-0"><Edit2 size={14}/></button>
                   </div>
-                  <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                  <div className="flex justify-between items-center border-b border-[var(--border-subtle)] pb-4">
                     <div>
                       <p className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Receiver</p>
                       <p className="text-sm font-semibold">{receiverName} • {receiverPhone}</p>
@@ -951,7 +951,7 @@ const SendParcel = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex justify-between items-center pt-3 border-t border-gray-200">
+                    <div className="flex justify-between items-center pt-3 border-t border-[var(--border-subtle)]">
                       <p className="text-sm font-bold text-gray-900">Total Price</p>
                       <p className="text-xl font-extrabold text-[#E10600]">₹{calculatedPrice}</p>
                     </div>
@@ -967,7 +967,7 @@ const SendParcel = () => {
                 <div className="space-y-3">
                   <div
                     onClick={() => setPaymentMethod("ONLINE")}
-                    className={`cursor-pointer p-5 rounded-2xl border-2 flex items-center justify-between transition-all ${paymentMethod === "ONLINE" ? "border-[#E10600] bg-red-50/50" : "border-gray-200 hover:border-gray-300"}`}
+                    className={`cursor-pointer p-5 rounded-2xl border-2 flex items-center justify-between transition-all ${paymentMethod === "ONLINE" ? "border-[#E10600] bg-red-50/50" : "border-[var(--border-subtle)] hover:border-gray-300"}`}
                   >
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-xl ${paymentMethod === "ONLINE" ? "bg-[#E10600] text-white" : "bg-gray-100 text-gray-500"}`}>
@@ -983,7 +983,7 @@ const SendParcel = () => {
                   
                   <div
                     onClick={() => setPaymentMethod("COD")}
-                    className={`cursor-pointer p-5 rounded-2xl border-2 flex items-center justify-between transition-all ${paymentMethod === "COD" ? "border-[#E10600] bg-red-50/50" : "border-gray-200 hover:border-gray-300"}`}
+                    className={`cursor-pointer p-5 rounded-2xl border-2 flex items-center justify-between transition-all ${paymentMethod === "COD" ? "border-[#E10600] bg-red-50/50" : "border-[var(--border-subtle)] hover:border-gray-300"}`}
                   >
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-xl ${paymentMethod === "COD" ? "bg-[#E10600] text-white" : "bg-gray-100 text-gray-500"}`}>

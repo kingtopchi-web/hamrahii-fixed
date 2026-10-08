@@ -538,7 +538,7 @@ const Career = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-xl font-bold border-2 border-white text-lg text-white hover:bg-white/10 transition-colors"
+              className="px-8 py-4 rounded-xl font-bold border-2 border-white text-lg text-white hover:bg-[var(--bg-surface)]/10 transition-colors"
             >
               <button  onClick={() => navigate("/contact")} className="flex items-center justify-center gap-2">
                 <MessageCircle className="w-5 h-5" />

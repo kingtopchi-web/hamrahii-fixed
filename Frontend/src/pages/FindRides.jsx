@@ -164,6 +164,7 @@ const FindRides = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [activeView, setActiveView] = useState("grid");
   const [hasSearched, setHasSearched] = useState(false);
+  const [hasManuallySearched, setHasManuallySearched] = useState(false);
   const [favoriteRides, setFavoriteRides] = useState([]);
   const [timeFilter, setTimeFilter] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 5000]);
@@ -354,6 +355,7 @@ const FindRides = () => {
         location?.state?.date,
       );
       setHasSearched(true);
+      setHasManuallySearched(true);
       setSearching(true);
       setError(null);
       setShowFromPredictions(false);
@@ -523,6 +525,7 @@ const FindRides = () => {
     }
 
     setHasSearched(true);
+    setHasManuallySearched(true);
     setSearching(true);
     setError(null);
     setShowFromPredictions(false);
@@ -604,6 +607,7 @@ const FindRides = () => {
     setSelectedRide(null);
     setShowFilters(false);
     setHasSearched(false);
+    setHasManuallySearched(false);
 
     if (fromInputRef.current) fromInputRef.current.value = "";
     if (toInputRef.current) toInputRef.current.value = "";
@@ -881,8 +885,13 @@ const FindRides = () => {
       return 0;
     });
 
+    // Limit to 3 if user hasn't searched explicitly yet
+    if (!hasManuallySearched) {
+      list = list.slice(0, 3);
+    }
+
     return list;
-  }, [searchResults, sortBy, priceRange, seatPreference, timeFilter]);
+  }, [searchResults, sortBy, priceRange, seatPreference, timeFilter, hasManuallySearched]);
 
   /* ---------------- LOADING STATE ---------------- */
   if (!isMapsLoaded) {
@@ -943,20 +952,6 @@ const FindRides = () => {
           transition={{ duration: 0.7 }}
           className="text-center mb-12"
         >
-
-
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-            <span className="block">Find Your Perfect</span>
-            <span className="bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 bg-clip-text text-transparent">
-              Ride Companion
-            </span>
-          </h1>
-
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Connect with verified drivers, enjoy premium comfort, and save up to{" "}
-            <span className="font-bold text-red-600">70%</span> on your
-            intercity travel
-          </p>
         </motion.div>
 
         {/* Search Section - Glass Morphism */}
@@ -972,7 +967,7 @@ const FindRides = () => {
           <div className="absolute -inset-1 bg-gradient-to-r from-red-500/10 via-transparent to-blue-500/10 rounded-3xl blur-xl" />
 
           {/* Main Card */}
-          <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-gray-200/50 p-4 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl">
+          <div className="relative bg-[var(--bg-surface)]/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-[var(--border-subtle)]/50 p-4 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl">
             {/* Form Header */}
             <div className="flex items-center justify-between mb-4 sm:mb-8">
               <div className="flex items-center gap-2.5 sm:gap-3">
@@ -1071,7 +1066,7 @@ const FindRides = () => {
                           fetchPredictions(val, "from");
                         }
                       }}
-                      className="w-full pl-10 md:pl-14 pr-24 py-4 bg-white/50 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all text-gray-900 placeholder-gray-400"
+                      className="w-full pl-10 md:pl-14 pr-24 py-4 bg-[var(--bg-surface)]/50 border-2 border-[var(--border-subtle)] rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all text-gray-900 placeholder-gray-400"
                       placeholder="Where are you starting?"
                     />
                     <div className="absolute left-0 md:left-4 top-1/2 transform -translate-y-1/2">
@@ -1092,7 +1087,7 @@ const FindRides = () => {
                             ? "bg-red-50 text-red-600 border border-red-200 animate-pulse"
                             : userCoords
                             ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
-                            : "bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600 border border-gray-200"
+                            : "bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600 border border-[var(--border-subtle)]"
                         }`}
                       >
                         {isLocating ? (
@@ -1123,7 +1118,7 @@ const FindRides = () => {
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="absolute z-50 left-0 right-0 w-full mt-2 bg-white rounded-xl border border-gray-200 shadow-2xl max-h-64 overflow-y-auto hide-scrollbar"
+                        className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-2xl max-h-64 overflow-y-auto hide-scrollbar"
                       >
                         {fromPredictions.map((p) => (
                           <motion.button
@@ -1133,7 +1128,7 @@ const FindRides = () => {
                               selectPlace(p.place_id, p.description, "from")
                             }
                             whileHover={{ backgroundColor: "#F9FAFB" }}
-                            className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-gradient-to-r hover:from-red-50/50 hover:to-orange-50/50 transition-all"
+                            className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-gradient-to-r hover:from-red-50/50 hover:to-orange-50/50 transition-all"
                           >
                             <MapPin className="w-5 h-5 text-gray-400 shrink-0" />
                             <div className="text-left min-w-0">
@@ -1159,7 +1154,7 @@ const FindRides = () => {
                     whileHover={{ scale: 1.1, rotate: 180 }}
                     whileTap={{ scale: 0.9 }}
                     title="Swap pickup and destination"
-                    className="w-10 h-10 lg:w-16 lg:h-16 rounded-full lg:rounded-2xl bg-gradient-to-br from-gray-100 to-white border-2 border-gray-200 flex items-center justify-center hover:border-red-500 hover:shadow-lg transition-all shadow-sm"
+                    className="w-10 h-10 lg:w-16 lg:h-16 rounded-full lg:rounded-2xl bg-gradient-to-br from-gray-100 to-white border-2 border-[var(--border-subtle)] flex items-center justify-center hover:border-red-500 hover:shadow-lg transition-all shadow-sm"
                   >
                     <ArrowDownUp className="w-4 h-4 lg:hidden text-gray-700" />
                     <ArrowLeftRight className="hidden lg:block w-6 h-6 text-gray-700" />
@@ -1187,7 +1182,7 @@ const FindRides = () => {
                           fetchPredictions(val, "to");
                         }
                       }}
-                      className="w-full pl-10 md:pl-14 pr-4 py-4 bg-white/50 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all text-gray-900 placeholder-gray-400"
+                      className="w-full pl-10 md:pl-14 pr-4 py-4 bg-[var(--bg-surface)]/50 border-2 border-[var(--border-subtle)] rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all text-gray-900 placeholder-gray-400"
                       placeholder="Where to? (Optional for nearby rides)"
                     />
                     <div className="absolute left-0 md:left-4 top-1/2 transform -translate-y-1/2">
@@ -1204,7 +1199,7 @@ const FindRides = () => {
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="absolute z-50 left-0 right-0 w-full mt-2 bg-white rounded-xl border border-gray-200 shadow-2xl max-h-64 overflow-y-auto hide-scrollbar"
+                        className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-2xl max-h-64 overflow-y-auto hide-scrollbar"
                       >
                         {toPredictions.map((p) => (
                           <motion.button
@@ -1214,7 +1209,7 @@ const FindRides = () => {
                               selectPlace(p.place_id, p.description, "to")
                             }
                             whileHover={{ backgroundColor: "#F9FAFB" }}
-                            className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-gradient-to-r hover:from-red-50/50 hover:to-orange-50/50 transition-all"
+                            className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-gradient-to-r hover:from-red-50/50 hover:to-orange-50/50 transition-all"
                           >
                             <MapPin className="w-5 h-5 text-gray-400 shrink-0" />
                             <div className="text-left min-w-0">
@@ -1249,7 +1244,7 @@ const FindRides = () => {
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                       min={gotTodayDate()}
-                      className="w-full pl-12 sm:pl-14 pr-4 py-3.5 sm:py-4 bg-white/50 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none text-gray-900 text-sm sm:text-base"
+                      className="w-full pl-12 sm:pl-14 pr-4 py-3.5 sm:py-4 bg-[var(--bg-surface)]/50 border-2 border-[var(--border-subtle)] rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none text-gray-900 text-sm sm:text-base"
                     />
                     <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
                   </div>
@@ -1307,7 +1302,7 @@ const FindRides = () => {
 
             {/* Popular Routes */}
             {!hasSearched ? (
-              <div className="mt-8 pt-8 border-t border-gray-200/50">
+              <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]/50">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-red-500" />
@@ -1335,7 +1330,7 @@ const FindRides = () => {
                           setFromPredictions([]);
                           setToPredictions([]);
                         }}
-                        className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300 font-medium text-gray-700 flex items-center gap-2 group"
+                        className="px-4 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300 font-medium text-gray-700 flex items-center gap-2 group"
                       >
                         <CornerDownRight className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
                         {route.from} → {route.to}
@@ -1459,14 +1454,14 @@ const FindRides = () => {
                   {isNearbyActive && maxDistanceKm < 100 && (
                     <button
                       onClick={() => handleRadiusChange(100)}
-                      className="px-6 py-3 bg-white border-2 border-emerald-500 text-emerald-700 rounded-xl font-semibold hover:bg-emerald-50 transition-colors shadow-sm"
+                      className="px-6 py-3 bg-[var(--bg-surface)] border-2 border-emerald-500 text-emerald-700 rounded-xl font-semibold hover:bg-emerald-50 transition-colors shadow-sm"
                     >
                       Expand Radius to 100 km
                     </button>
                   )}
                   <button
                     onClick={clearSearch}
-                    className="px-6 py-3 bg-white border-2 border-gray-200 rounded-xl font-medium text-gray-700 hover:border-gray-300 transition-colors"
+                    className="px-6 py-3 bg-[var(--bg-surface)] border-2 border-[var(--border-subtle)] rounded-xl font-medium text-gray-700 hover:border-gray-300 transition-colors"
                   >
                     Try Another Route
                   </button>
@@ -1506,7 +1501,7 @@ const FindRides = () => {
                         className={`px-2.5 sm:px-3 py-1 text-xs font-bold rounded-lg transition-all ${
                           maxDistanceKm === radius
                             ? "bg-emerald-600 text-white shadow-sm"
-                            : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                            : "bg-[var(--bg-surface)] text-gray-700 hover:bg-gray-100 border border-[var(--border-subtle)]"
                         }`}
                       >
                         {radius} km
@@ -1517,7 +1512,7 @@ const FindRides = () => {
               )}
 
               {/* Results Header */}
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 mb-6 sm:mb-8 p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-lg relative z-30">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 mb-6 sm:mb-8 p-4 sm:p-6 bg-[var(--bg-surface)]/80 backdrop-blur-sm rounded-2xl border border-[var(--border-subtle)]/50 shadow-lg relative z-30">
                 <div>
                   <div className="flex items-center gap-2.5 sm:gap-3 mb-1.5 sm:mb-2">
                     <div className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-green-500 animate-pulse shrink-0" />
@@ -1557,7 +1552,7 @@ const FindRides = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full lg:w-auto pt-2 lg:pt-0 border-t lg:border-t-0 border-gray-100">
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full lg:w-auto pt-2 lg:pt-0 border-t lg:border-t-0 border-[var(--border-subtle)]">
                   {/* Filter Menu */}
                   <div className="relative z-50 flex-1 sm:flex-initial" ref={filterMenuRef}>
                     <motion.button
@@ -1567,10 +1562,10 @@ const FindRides = () => {
                         setShowFilters(!showFilters);
                         setShowSortMenu(false);
                       }}
-                      className={`w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 bg-white border-2 rounded-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm font-medium ${
+                      className={`w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 bg-[var(--bg-surface)] border-2 rounded-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm font-medium ${
                         showFilters || seatPreference !== "any" || timeFilter !== "all" || priceRange[0] > 0 || priceRange[1] < 5000
                           ? "border-red-500 text-red-600 shadow-sm"
-                          : "border-gray-200 text-gray-700 hover:border-red-500"
+                          : "border-[var(--border-subtle)] text-gray-700 hover:border-red-500"
                       }`}
                     >
                       <Filter className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
@@ -1586,9 +1581,9 @@ const FindRides = () => {
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute left-0 sm:left-auto right-auto sm:right-0 mt-2 w-[calc(100vw-2.5rem)] max-w-xs sm:w-72 bg-white rounded-2xl border border-gray-200 shadow-2xl p-4 sm:p-5 z-50"
+                          className="absolute left-0 sm:left-auto right-auto sm:right-0 mt-2 w-[calc(100vw-2.5rem)] max-w-xs sm:w-72 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] shadow-2xl p-4 sm:p-5 z-50"
                         >
-                          <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                          <div className="flex items-center justify-between mb-4 pb-2 border-b border-[var(--border-subtle)]">
                             <span className="font-bold text-gray-900 text-sm flex items-center gap-1.5">
                               <Filter className="w-4 h-4 text-red-500" />
                               Filter Rides
@@ -1695,7 +1690,7 @@ const FindRides = () => {
                         setShowSortMenu(!showSortMenu);
                         setShowFilters(false);
                       }}
-                      className="w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 bg-white border-2 border-gray-200 rounded-xl hover:border-red-500 transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium"
+                      className="w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 bg-[var(--bg-surface)] border-2 border-[var(--border-subtle)] rounded-xl hover:border-red-500 transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium"
                     >
                       <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-amber-500" />
                       <span className="truncate max-w-[90px] sm:max-w-none">
@@ -1710,7 +1705,7 @@ const FindRides = () => {
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute right-0 mt-2 w-[calc(100vw-2.5rem)] max-w-[260px] sm:w-64 bg-white rounded-xl border border-gray-200 shadow-2xl z-50"
+                          className="absolute right-0 mt-2 w-[calc(100vw-2.5rem)] max-w-[260px] sm:w-64 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-2xl z-50"
                         >
                           {sortOptions.map((option) => (
                             <button
@@ -1743,7 +1738,7 @@ const FindRides = () => {
                       onClick={() => setActiveView("grid")}
                       className={`p-1.5 sm:p-2 rounded-lg transition-all ${
                         activeView === "grid"
-                          ? "bg-white text-gray-900 shadow-sm"
+                          ? "bg-[var(--bg-surface)] text-gray-900 shadow-sm"
                           : "text-gray-600 hover:text-gray-900"
                       }`}
                       title="Grid View"
@@ -1754,7 +1749,7 @@ const FindRides = () => {
                       onClick={() => setActiveView("list")}
                       className={`p-1.5 sm:p-2 rounded-lg transition-all ${
                         activeView === "list"
-                          ? "bg-white text-gray-900 shadow-sm"
+                          ? "bg-[var(--bg-surface)] text-gray-900 shadow-sm"
                           : "text-gray-600 hover:text-gray-900"
                       }`}
                       title="List View"
@@ -1778,7 +1773,7 @@ const FindRides = () => {
                       key={ride._id}
                       variants={fadeInUp}
                       whileHover={{ y: -6 }}
-                      className="group bg-white rounded-3xl border border-gray-100/90 overflow-hidden shadow-card-subtle hover:shadow-card-hover hover:border-red-200/80 transition-all duration-300 relative flex flex-col justify-between"
+                      className="group bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)]/90 overflow-hidden shadow-card-subtle hover:shadow-card-hover hover:border-red-200/80 transition-all duration-300 relative flex flex-col justify-between"
                     >
                       {/* Status Badges */}
                       <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5">
@@ -1799,7 +1794,7 @@ const FindRides = () => {
                       {/* Favorite Button */}
                       <button
                         onClick={() => toggleFavorite(ride._id)}
-                        className="absolute top-4 right-4 z-10 p-2 bg-white/90 backdrop-blur-md rounded-xl hover:bg-red-50 transition-colors shadow-sm"
+                        className="absolute top-4 right-4 z-10 p-2 bg-[var(--bg-surface)]/90 backdrop-blur-md rounded-xl hover:bg-red-50 transition-colors shadow-sm"
                       >
                         <Heart
                           className={`w-4 h-4 ${
@@ -1894,7 +1889,7 @@ const FindRides = () => {
                         </div>
 
                         {/* Price and Action */}
-                        <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-100 mt-2">
+                        <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-[var(--border-subtle)] mt-2">
                           <div>
                             <div className="text-lg sm:text-xl font-extrabold text-[#111111]">
                               ₹{ride.pricePerSeat}
@@ -1936,7 +1931,7 @@ const FindRides = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       whileHover={{ scale: 1.01 }}
-                      className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 hover:border-red-300 hover:shadow-xl transition-all duration-300"
+                      className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-4 sm:p-6 hover:border-red-300 hover:shadow-xl transition-all duration-300"
                     >
                       <div className="flex flex-col lg:flex-row lg:items-center gap-4 sm:gap-6">
                         {/* Left Section */}
@@ -2064,7 +2059,7 @@ const FindRides = () => {
                         </div>
 
                         {/* Right Section */}
-                        <div className="w-full lg:w-48 pt-3 sm:pt-4 lg:pt-0 border-t lg:border-t-0 border-gray-100 flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-3 sm:gap-4 shrink-0">
+                        <div className="w-full lg:w-48 pt-3 sm:pt-4 lg:pt-0 border-t lg:border-t-0 border-[var(--border-subtle)] flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-3 sm:gap-4 shrink-0">
                           <div className="text-left lg:text-right">
                             <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
                               ₹{ride.pricePerSeat}
@@ -2145,7 +2140,7 @@ const FindRides = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 + 0.3 }}
                     whileHover={{ y: -8, scale: 1.02 }}
-                    className={`${feature.bgColor} rounded-2xl p-6 border border-gray-200/50 hover:shadow-xl transition-all duration-300`}
+                    className={`${feature.bgColor} rounded-2xl p-6 border border-[var(--border-subtle)]/50 hover:shadow-xl transition-all duration-300`}
                   >
                     <div
                       className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5`}
@@ -2207,7 +2202,7 @@ const FindRides = () => {
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => navigate("/offer-ride")}
-                      className="px-8 py-3.5 bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center gap-3 group"
+                      className="px-8 py-3.5 bg-[var(--bg-surface)]/10 backdrop-blur-sm border-2 border-white/20 text-white font-semibold rounded-xl hover:bg-[var(--bg-surface)]/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center gap-3 group"
                     >
                       <Car size={20} />
                       <span>Offer a Ride</span>

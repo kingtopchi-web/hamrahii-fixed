@@ -433,7 +433,7 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
         return {
           label: "Delivery Completed",
           desc: "Transaction finalized and completed",
-          color: "text-gray-800 bg-gray-100 border-gray-200",
+          color: "text-gray-800 bg-gray-100 border-[var(--border-subtle)]",
         };
       case "CANCELLED":
         return {
@@ -445,7 +445,7 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
         return {
           label: "Searching for Rider",
           desc: "Waiting for a nearby rider to accept your parcel",
-          color: "text-gray-700 bg-gray-50 border-gray-200",
+          color: "text-gray-700 bg-gray-50 border-[var(--border-subtle)]",
         };
     }
   }, [parcel?.status]);
@@ -458,8 +458,8 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
       {/* ======================================================== */}
       {/* 1. VISUALLY CONNECTED ROUTE DETAILS SECTION               */}
       {/* ======================================================== */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 shadow-xs transition-all">
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+      <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-4 sm:p-5 shadow-xs transition-all">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <Compass className="w-4 h-4" />
@@ -559,7 +559,7 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
                     <span className="text-xs font-bold text-gray-900">
                       Rider: {riderLocation.name || "Assigned Driver"}
                     </span>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white text-gray-700 border border-gray-200 shadow-2xs">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--bg-surface)] text-gray-700 border border-[var(--border-subtle)] shadow-2xs">
                       {riderLocation.vehicleType}
                       {riderLocation.vehicleNumber ? ` • ${riderLocation.vehicleNumber}` : ""}
                     </span>
@@ -580,7 +580,7 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
                     Live GPS: {riderLocation.lat.toFixed(4)}° N, {riderLocation.lng.toFixed(4)}° E
                   </span>
                   {typeof riderLocation.accuracy === "number" && (
-                    <span className="text-gray-500 bg-white/70 px-1.5 py-0.5 rounded border border-gray-200/60 font-mono text-[10px]">
+                    <span className="text-gray-500 bg-[var(--bg-surface)]/70 px-1.5 py-0.5 rounded border border-[var(--border-subtle)]/60 font-mono text-[10px]">
                       Accuracy: ±{Math.round(riderLocation.accuracy)}m
                     </span>
                   )}
@@ -594,7 +594,7 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
                 )}
               </div>
             ) : (
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-500 text-xs flex items-center justify-between">
+              <div className="bg-gray-50 border border-[var(--border-subtle)] rounded-xl p-3 text-gray-500 text-xs flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Radio className="w-4 h-4 text-gray-400 animate-pulse" />
                   <span>
@@ -643,13 +643,13 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
       {/* 2. INTERACTIVE GOOGLE MAP WITH REAL-TIME MARKERS         */}
       {/* ======================================================== */}
       <div
-        className={`relative bg-gray-100 rounded-2xl border border-gray-200 overflow-hidden shadow-xs transition-all w-full ${
+        className={`relative bg-gray-100 rounded-2xl border border-[var(--border-subtle)] overflow-hidden shadow-xs transition-all w-full ${
           isFullScreen ? "fixed inset-4 z-50 shadow-2xl h-[calc(100vh-32px)]" : "h-[380px] sm:h-[440px] md:h-[480px]"
         }`}
       >
         {/* Top Floating Info Bar */}
         <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between pointer-events-none">
-          <div className="pointer-events-auto bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-gray-200/80 flex items-center gap-2">
+          <div className="pointer-events-auto bg-[var(--bg-surface)]/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-[var(--border-subtle)]/80 flex items-center gap-2">
             <span className="relative flex h-2 w-2">
               <span
                 className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
@@ -673,7 +673,7 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
             )}
           </div>
 
-          <div className="pointer-events-auto flex items-center gap-1.5 bg-white/95 backdrop-blur-md p-1 rounded-xl shadow-md border border-gray-200/80">
+          <div className="pointer-events-auto flex items-center gap-1.5 bg-[var(--bg-surface)]/95 backdrop-blur-md p-1 rounded-xl shadow-md border border-[var(--border-subtle)]/80">
             <button
               onClick={fitRouteBounds}
               title="Re-center route"
@@ -811,7 +811,7 @@ const LiveRouteTrackingMap = ({ parcel, isDriverView = false }) => {
 
         {/* Bottom Floating Legend / Status Pill */}
         <div className="absolute bottom-3 left-3 right-3 z-10 pointer-events-none flex items-center justify-between">
-          <div className="pointer-events-auto bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-gray-200/80 text-[11px] text-gray-600 flex items-center gap-3">
+          <div className="pointer-events-auto bg-[var(--bg-surface)]/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-[var(--border-subtle)]/80 text-[11px] text-gray-600 flex items-center gap-3">
             <span className="flex items-center gap-1 font-semibold text-emerald-700">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
               Pickup
