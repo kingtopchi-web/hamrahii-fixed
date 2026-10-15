@@ -313,14 +313,26 @@ export const handleUpdateUserVerificationStatus = async (req, res, next) => {
 
     if (!validateField(isUser?.email, "user not found", res)) return;
 
+    const isApproved = status === "verified";
+    const isRejected = status === "rejected";
+
+    const updateFields = {
+      isVerified: status,
+      verificationMessage: message,
+    };
+
+    if (isApproved) {
+      updateFields["kyc.status"] = "VERIFIED";
+      updateFields["kyc.verifiedAt"] = new Date();
+      updateFields["kyc.rejectionReason"] = null;
+    } else if (isRejected) {
+      updateFields["kyc.status"] = "REJECTED";
+      updateFields["kyc.rejectionReason"] = message;
+    }
+
     const updatedUser = await userModel.findByIdAndUpdate(
       userId,
-      {
-        $set: {
-          isVerified: status,
-          verificationMessage: message,
-        },
-      },
+      { $set: updateFields },
       { new: true },
     );
 
@@ -342,6 +354,65 @@ export const handleUpdateUserVerificationStatus = async (req, res, next) => {
       error: false,
       success: true,
       user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handleAdminUpdateKycStatus = async (req, res, next) => {
+  try {
+    const { userId, status, reason } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required." });
+    }
+
+    if (!["VERIFIED", "REJECTED"].includes(status)) {
+      return res.status(400).json({ success: false, message: "Status must be VERIFIED or REJECTED." });
+    }
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
+
+    const isApprove = status === "VERIFIED";
+
+    user.kyc = {
+      ...(user.kyc?.toObject ? user.kyc.toObject() : (user.kyc || {})),
+      status: status,
+      verifiedAt: isApprove ? new Date() : null,
+      rejectionReason: isApprove ? null : (reason || "KYC verification was rejected by Admin.")
+    };
+    user.isVerified = isApprove ? "verified" : "rejected";
+    user.verificationMessage = isApprove ? "KYC verified by Admin." : (reason || "KYC rejected by Admin.");
+
+    await user.save();
+
+    if (user.email) {
+      try {
+        await sendEmailByType(
+          "GENERIC_STATUS_NOTIFICATION",
+          user.email,
+          {
+            name: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User',
+            email: user.email,
+            message: isApprove
+              ? "Congratulations! Your Aadhaar KYC verification has been approved by the Admin. You can now access all services on Humrahii."
+              : `Your KYC verification was rejected. Reason: ${reason || "Document mismatch or unclear details. Please re-submit."}`,
+            status: isApprove ? "KYC Verified" : "KYC Rejected"
+          }
+        );
+      } catch (err) {
+        console.error("Failed to send KYC email notification:", err);
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: `KYC successfully ${isApprove ? "approved" : "rejected"}.`,
+      user
     });
   } catch (error) {
     next(error);

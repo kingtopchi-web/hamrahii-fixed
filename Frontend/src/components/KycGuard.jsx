@@ -4,7 +4,7 @@ import { ShieldAlert, X } from 'lucide-react';
 import Axios from '../services/axios';
 import { api } from '../services/endpoints';
 
-const KycGuard = ({ children, fallback }) => {
+const KycGuard = ({ children, fallback, className = "" }) => {
     const [kycStatus, setKycStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
@@ -19,7 +19,7 @@ const KycGuard = ({ children, fallback }) => {
                     setKycStatus(res.data.kyc.status);
                 }
             } catch (error) {
-                console.error("Error fetching KYC status:", error);
+                // If 401 or not logged in, status remains unverified
             } finally {
                 setLoading(false);
             }
@@ -37,19 +37,19 @@ const KycGuard = ({ children, fallback }) => {
     };
 
     if (loading) {
-        return <div className="opacity-50 pointer-events-none">{children}</div>;
+        return <div className={`relative ${className}`}>{children}</div>;
     }
 
     if (kycStatus === 'VERIFIED') {
-        return <>{children}</>;
+        return <div className={`relative ${className}`}>{children}</div>;
     }
 
     return (
         <>
             {/* The wrapped element that triggers the modal if unverified */}
-            <div onClickCapture={handleClickCapture} className="relative group cursor-pointer">
+            <div onClickCapture={handleClickCapture} className={`relative group cursor-pointer ${className}`}>
                 {children}
-                <div className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full shadow-sm text-red-500 z-10" title="KYC Required">
+                <div className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full shadow-sm text-red-500 z-10 pointer-events-none" title="KYC Required">
                     <ShieldAlert size={16} />
                 </div>
             </div>

@@ -1,25 +1,13 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
   Calendar,
   Search,
-  ChevronRight,
-  Target,
-  Loader2,
-  Compass,
-  ArrowDownUp,
-  Trash2,
-  Car,
-  Route,
+  ChevronDown,
+  ArrowRightLeft,
   Navigation,
-  Clock,
-  Sparkles,
-  Zap,
-  ShieldCheck,
-  Users,
-  Star,
-  ArrowRight,
+  Loader2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -28,46 +16,10 @@ import {
   getlocationFromCoords,
 } from "../../utils/GetLocation";
 import { useGoogleMaps } from "../../components/maps/GoogleMapsProvider";
-import axios from "axios";
-import { api } from "../../services/endpoints";
 import Axios from "../../services/axios";
-
-/* ---------------- GOOGLE MAP LOADER ---------------- */
-
-const libraries = ["places", "geometry"];
-
-let googleMapsLoaded = false;
-let googleMapsLoadingPromise = null;
-
-const loadGoogleMaps = () => {
-  if (window.google && window.google.maps) {
-    googleMapsLoaded = true;
-    return Promise.resolve();
-  }
-
-  if (googleMapsLoadingPromise) return googleMapsLoadingPromise;
-
-  googleMapsLoadingPromise = new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-      }&libraries=${libraries.join(",")}`;
-    script.async = true;
-    script.defer = true;
-
-    script.onload = () => {
-      googleMapsLoaded = true;
-      resolve();
-    };
-
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-
-  return googleMapsLoadingPromise;
-};
+import { api } from "../../services/endpoints";
 
 /* ---------------- HELPERS ---------------- */
-
 const extractCity = (place) => {
   const components = place.address_components || [];
   const types = [
@@ -90,19 +42,23 @@ const extractCity = (place) => {
   return null;
 };
 
-/* ---------------- COMPONENT ---------------- */
+function getTodayDate() {
+  const d = new Date();
+  return d.toISOString().split("T")[0];
+}
 
-const RideSearchCard = ({ location }) => {
+/* ---------------- COMPONENT ---------------- */
+const RideSearchCard = () => {
   const navigate = useNavigate();
 
   /* ---------------- STATE ---------------- */
-  const [from, setFrom] = useState(null);
-  const [to, setTo] = useState(null);
   const [fromCity, setFromCity] = useState("");
   const [toCity, setToCity] = useState("");
   const [date, setDate] = useState(getTodayDate());
-  const [isMapsLoaded, setIsMapsLoaded] = useState(false);
+  const [passengers, setPassengers] = useState("1");
   const [isSearching, setIsSearching] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
+
   const { isLoaded } = useGoogleMaps();
   const [fromPredictions, setFromPredictions] = useState([]);
   const [toPredictions, setToPredictions] = useState([]);
@@ -114,64 +70,37 @@ const RideSearchCard = ({ location }) => {
   const toInputRef = useRef(null);
   const fromContainerRef = useRef(null);
   const toContainerRef = useRef(null);
-  const formRef = useRef(null);
 
   const autocompleteServiceRef = useRef(null);
   const placesServiceRef = useRef(null);
 
-  useEffect(() => { getCity() }, []);
-
-  const getCity = async () => {
-    if (!isLoaded) return alert("Google not loaded yet");
-
-    try {
-      const { lat, lng } = await getBrowserCoords();
-
-
-      const streetLocation = await getlocationFromCoords(lat, lng);
-      console.log(streetLocation, "this is location");
-      if (fromInputRef.current) {
-        fromInputRef.current.value = streetLocation;
-      }
-
-      const city = await getCityFromCoords(lat, lng)
-      updateLocation(city, streetLocation)
-
-      return streetLocation;
-    } catch (err) {
-      console.log("Location error:", err);
-    }
-  };
-
-  const updateLocation = async (city, address) => {
-    try {
-      await Axios.post(api.user.updateLocation, { city, address })
-    } catch (error) {
-      console.log(error, "this is error")
-    }
-  }
-
-
-
-
-  /* ---------------- INIT GOOGLE ---------------- */
+  /* Auto-detect user's current city silently if available */
   useEffect(() => {
-    const init = async () => {
-      await loadGoogleMaps();
-      setIsMapsLoaded(true);
-
-      autocompleteServiceRef.current =
-        new window.google.maps.places.AutocompleteService();
-
-      placesServiceRef.current = new window.google.maps.places.PlacesService(
-        document.createElement("div"),
-      );
+    if (!isLoaded) return;
+    const detectLocation = async () => {
+      try {
+        const { lat, lng } = await getBrowserCoords();
+        const streetLocation = await getlocationFromCoords(lat, lng);
+        const city = await getCityFromCoords(lat, lng);
+        if (fromInputRef.current && !fromInputRef.current.value && streetLocation) {
+          fromInputRef.current.value = streetLocation;
+          setFromCity(city || streetLocation.split(",")[0]?.trim() || "");
+        }
+        if (city && streetLocation) {
+          try {
+            await Axios.post(api.user.updateLocation, { city, address: streetLocation });
+          } catch (err) {
+            // ignore
+          }
+        }
+      } catch (err) {
+        // user denied or location unavailable - silent fallback
+      }
     };
-    init();
-  }, []);
+    detectLocation();
+  }, [isLoaded]);
 
   /* ---------------- AUTOCOMPLETE ---------------- */
-
   const fetchPredictions = (value, type) => {
     if (!value || !value.trim()) {
       type === "from" ? setFromPredictions([]) : setToPredictions([]);
@@ -200,23 +129,22 @@ const RideSearchCard = ({ location }) => {
           setToPredictions(results || []);
           setShowToPredictions(true);
         }
-      },
+      }
     );
   };
 
   const selectPlace = (placeId, description, type) => {
     if (!placesServiceRef.current && window.google?.maps?.places) {
       placesServiceRef.current = new window.google.maps.places.PlacesService(
-        document.createElement("div"),
+        document.createElement("div")
       );
     }
 
     const applySelection = (place) => {
-      const city = place ? extractCity(place) : (description.split(",")[0]?.trim() || "");
-      const location = place?.geometry?.location || null;
+      const city =
+        place ? extractCity(place) : description.split(",")[0]?.trim() || "";
 
       if (type === "from") {
-        setFrom(location);
         setFromCity(city || description.split(",")[0]?.trim() || "");
         if (fromInputRef.current) {
           fromInputRef.current.value = place?.formatted_address || description;
@@ -224,7 +152,6 @@ const RideSearchCard = ({ location }) => {
         setFromPredictions([]);
         setShowFromPredictions(false);
       } else {
-        setTo(location);
         setToCity(city || description.split(",")[0]?.trim() || "");
         if (toInputRef.current) {
           toInputRef.current.value = place?.formatted_address || description;
@@ -247,27 +174,25 @@ const RideSearchCard = ({ location }) => {
         },
         (place) => {
           applySelection(place);
-        },
+        }
       );
     } catch (e) {
       applySelection(null);
     }
   };
 
-  /* ---------------- ACTIONS ---------------- */
-
+  /* Swap From and To */
   const swapLocations = () => {
-    const tempFrom = from;
-    const tempFromCity = fromCity;
-    const tempFromValue = fromInputRef.current.value;
+    const prevFromVal = fromInputRef.current ? fromInputRef.current.value : "";
+    const prevToVal = toInputRef.current ? toInputRef.current.value : "";
+    const prevFromCity = fromCity;
+    const prevToCity = toCity;
 
-    setFrom(to);
-    setFromCity(toCity);
-    fromInputRef.current.value = toInputRef.current.value;
+    if (fromInputRef.current) fromInputRef.current.value = prevToVal;
+    if (toInputRef.current) toInputRef.current.value = prevFromVal;
 
-    setTo(tempFrom);
-    setToCity(tempFromCity);
-    toInputRef.current.value = tempFromValue;
+    setFromCity(prevToCity);
+    setToCity(prevFromCity);
 
     setFromPredictions([]);
     setToPredictions([]);
@@ -275,45 +200,50 @@ const RideSearchCard = ({ location }) => {
     setShowToPredictions(false);
   };
 
-  const handleSearch = async () => {
-    if (!fromInputRef.current.value || !toInputRef.current.value) {
-      // You can add toast notification here
-      return;
+  /* Locate Me */
+  const handleLocateMe = async () => {
+    setIsLocating(true);
+    try {
+      const { lat, lng } = await getBrowserCoords();
+      const streetLocation = await getlocationFromCoords(lat, lng);
+      const city = await getCityFromCoords(lat, lng);
+      if (fromInputRef.current && streetLocation) {
+        fromInputRef.current.value = streetLocation;
+        setFromCity(city || streetLocation.split(",")[0]?.trim() || "");
+      }
+    } catch (err) {
+      // ignore
+    } finally {
+      setIsLocating(false);
     }
+  };
+
+  /* ---------------- SEARCH SUBMIT ---------------- */
+  const handleSearch = (e) => {
+    if (e) e.preventDefault();
+    const fromVal = fromInputRef.current?.value || "";
+    const toVal = toInputRef.current?.value || "";
+
+    const fromQuery = fromCity || fromVal.split(",")[0]?.trim() || fromVal;
+    const toQuery = toCity || toVal.split(",")[0]?.trim() || toVal;
 
     setIsSearching(true);
 
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     navigate("/rides", {
       state: {
-        fromCity,
-        toCity,
+        fromCity: fromQuery,
+        toCity: toQuery,
         date,
-        fromLocation: fromInputRef.current.value,
-        toLocation: toInputRef.current.value,
+        fromLocation: fromVal,
+        toLocation: toVal,
+        seats: parseInt(passengers, 10) || 1,
       },
     });
 
     setIsSearching(false);
   };
 
-  const clearForm = () => {
-    setFrom(null);
-    setTo(null);
-    setFromCity("");
-    setToCity("");
-    setDate(getTomorrowDate());
-    if (fromInputRef.current) fromInputRef.current.value = "";
-    if (toInputRef.current) toInputRef.current.value = "";
-    setFromPredictions([]);
-    setToPredictions([]);
-    setShowFromPredictions(false);
-    setShowToPredictions(false);
-  };
-
-  // Click outside to close predictions
+  // Click outside to dismiss predictions
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (fromContainerRef.current && !fromContainerRef.current.contains(event.target)) {
@@ -328,320 +258,216 @@ const RideSearchCard = ({ location }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const popularRoutes = [
-    { from: "Delhi", to: "Chandigarh" },
-    { from: "Mumbai", to: "Pune" },
-    ,
-  ];
-
-  if (!isMapsLoaded) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-red-100 border-t-red-500 rounded-full mx-auto mb-4"
-          />
-          <p className="text-gray-700 font-medium">Loading Maps...</p>
-          <p className="text-sm text-gray-500 mt-1">
-            Setting up location services
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div ref={formRef} className="relative">
-      {/* Background Effects */}
-      <div className="absolute -inset-4 bg-gradient-to-br from-red-500/5 via-transparent to-blue-500/5 rounded-3xl blur-xl" />
-      <div className="absolute -inset-2 bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-2xl blur-2xl" />
-
-      {/* Main Card */}
-      <div className="relative bg-[var(--bg-surface)]/95 backdrop-blur-md rounded-3xl border border-[var(--border-subtle)]/80 shadow-card-hover mt-6 lg:mt-0">
-        {/* Card Header */}
-        <div className="px-6 py-5 border-b border-[var(--border-subtle)] bg-gradient-to-r from-red-50/40 via-white to-orange-50/30 rounded-t-3xl">
-          <div className="flex items-center justify-between">
-            <div>
-
-              <h2 className="text-2xl font-extrabold text-[#111111]">
-                Find Your Perfect Ride
-              </h2>
-            </div>
-            {/* <div className="w-10 h-10 rounded-2xl bg-red-50 border border-red-100/70 flex items-center justify-center text-[#E10600] shadow-sm">
-              <Car className="w-5 h-5" />
-             
-            </div> */}
-          </div>
-        </div>
-
-        {/* Form Content */}
-        <div className="px-6 sm:px-8 py-6">
-          {/* Location Inputs */}
-          <div className="space-y-4">
-            {/* From Location */}
-            <div className={`relative transition-all ${showFromPredictions ? "z-30" : "z-20"}`} ref={fromContainerRef}>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-blue-500" />
-                  Starting Point
-                </div>
+    <div className="w-full relative z-30">
+      <form
+        onSubmit={handleSearch}
+        className="bg-white rounded-2xl md:rounded-3xl shadow-xl border border-gray-100 p-4 md:p-5"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 md:gap-4 items-end">
+          {/* 1. LEAVING FROM */}
+          <div className="lg:col-span-3 relative" ref={fromContainerRef}>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                LEAVING FROM
               </label>
-              <div className="relative group">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
-                  <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <Navigation className="w-4 h-4" />
-                  </div>
-                </div>
-                <input
-                  ref={fromInputRef}
-                  placeholder="Where are you starting from?"
-                  onChange={(e) => fetchPredictions(e.target.value, "from")}
-                  onFocus={() => {
-                    setShowToPredictions(false);
-                    setShowFromPredictions(true);
-                    const val = fromInputRef.current?.value || "";
-                    if (val.trim()) {
-                      fetchPredictions(val, "from");
-                    }
-                  }}
-                  className="w-full pl-15 pr-4 py-3.5 bg-gray-50/60 border border-[var(--border-subtle)] rounded-xl focus:bg-[var(--bg-surface)] focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900 placeholder-gray-400 shadow-xs hover:border-gray-300"
-                />
-
-                {/* Predictions Dropdown */}
-                <AnimatePresence>
-                  {showFromPredictions && fromPredictions.length > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                      className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] shadow-card-hover max-h-64 overflow-y-auto hide-scrollbar"
-                    >
-                      {fromPredictions.map((p) => (
-                        <motion.button
-                          key={p.place_id}
-                          type="button"
-                          onClick={() =>
-                            selectPlace(p.place_id, p.description, "from")
-                          }
-                          whileHover={{ backgroundColor: "#F9FAFB" }}
-                          className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-red-50/40 transition-colors"
-                        >
-                          <MapPin className="w-4 h-4 text-[#E10600] shrink-0" />
-                          <div className="text-left min-w-0">
-                            <p className="font-semibold text-sm text-gray-900 truncate">
-                              {p.structured_formatting.main_text}
-                            </p>
-                            <p className="text-xs text-gray-500 truncate">
-                              {p.structured_formatting.secondary_text}
-                            </p>
-                          </div>
-                        </motion.button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              <button
+                type="button"
+                onClick={handleLocateMe}
+                title="Use current location"
+                className="text-[10px] text-gray-400 hover:text-[#E10600] flex items-center gap-1 transition-colors"
+              >
+                {isLocating ? (
+                  <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                ) : (
+                  <Navigation className="w-2.5 h-2.5" />
+                )}
+                <span>Current</span>
+              </button>
+            </div>
+            <div className="relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white">
+              <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center shrink-0">
+                <div className="w-2 h-2 rounded-full bg-gray-400" />
               </div>
+              <input
+                ref={fromInputRef}
+                placeholder="Where from?"
+                defaultValue={fromCity}
+                onChange={(e) => {
+                  setFromCity(e.target.value);
+                  fetchPredictions(e.target.value, "from");
+                }}
+                onFocus={() => {
+                  setShowToPredictions(false);
+                  setShowFromPredictions(true);
+                  const val = fromInputRef.current?.value || "";
+                  if (val.trim()) fetchPredictions(val, "from");
+                }}
+                className="w-full text-sm font-semibold text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
+              />
             </div>
 
-            {/* Swap Button */}
-            <div className="flex justify-center -my-1 relative z-10">
-              <motion.button
+            {/* From Predictions Dropdown */}
+            <AnimatePresence>
+              {showFromPredictions && fromPredictions.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  className="absolute z-50 left-0 right-0 mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl max-h-60 overflow-y-auto"
+                >
+                  {fromPredictions.map((p) => (
+                    <button
+                      key={p.place_id}
+                      type="button"
+                      onClick={() => selectPlace(p.place_id, p.description, "from")}
+                      className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-red-50/50 transition-colors"
+                    >
+                      <MapPin className="w-4 h-4 text-[#E10600] shrink-0" />
+                      <div className="text-left min-w-0">
+                        <p className="font-semibold text-xs text-gray-900 truncate">
+                          {p.structured_formatting.main_text}
+                        </p>
+                        <p className="text-[11px] text-gray-500 truncate">
+                          {p.structured_formatting.secondary_text}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* 2. GOING TO */}
+          <div className="lg:col-span-3 relative" ref={toContainerRef}>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                GOING TO
+              </label>
+              <button
                 type="button"
                 onClick={swapLocations}
-                whileHover={{ scale: 1.1, rotate: 180 }}
-                whileTap={{ scale: 0.9 }}
-                className="w-9 h-9 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm flex items-center justify-center hover:border-[#E10600] hover:text-[#E10600] transition-all z-10"
-                title="Swap Locations"
+                title="Swap locations"
+                className="text-[10px] text-gray-400 hover:text-[#E10600] flex items-center gap-1 transition-colors"
               >
-                <ArrowDownUp className="w-4 h-4 text-gray-600 hover:text-[#E10600]" />
-              </motion.button>
+                <ArrowRightLeft className="w-2.5 h-2.5" />
+                <span>Swap</span>
+              </button>
+            </div>
+            <div className="relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white">
+              <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center shrink-0">
+                <MapPin className="w-3.5 h-3.5 text-gray-400" />
+              </div>
+              <input
+                ref={toInputRef}
+                placeholder="Where to?"
+                defaultValue={toCity}
+                onChange={(e) => {
+                  setToCity(e.target.value);
+                  fetchPredictions(e.target.value, "to");
+                }}
+                onFocus={() => {
+                  setShowFromPredictions(false);
+                  setShowToPredictions(true);
+                  const val = toInputRef.current?.value || "";
+                  if (val.trim()) fetchPredictions(val, "to");
+                }}
+                className="w-full text-sm font-semibold text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
+              />
             </div>
 
-            {/* To Location */}
-            <div className={`relative transition-all ${showToPredictions ? "z-30" : "z-10"}`} ref={toContainerRef}>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                  Destination
-                </div>
-              </label>
-              <div className="relative group">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                </div>
-                <input
-                  ref={toInputRef}
-                  placeholder="Where do you want to go?"
-                  onChange={(e) => fetchPredictions(e.target.value, "to")}
-                  onFocus={() => {
-                    setShowFromPredictions(false);
-                    setShowToPredictions(true);
-                    const val = toInputRef.current?.value || "";
-                    if (val.trim()) {
-                      fetchPredictions(val, "to");
-                    }
-                  }}
-                  className="w-full pl-15 pr-4 py-3.5 bg-gray-50/60 border border-[var(--border-subtle)] rounded-xl focus:bg-[var(--bg-surface)] focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900 placeholder-gray-400 shadow-xs hover:border-gray-300"
-                />
-
-                {/* Predictions Dropdown */}
-                <AnimatePresence>
-                  {showToPredictions && toPredictions.length > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                      className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] shadow-card-hover max-h-64 overflow-y-auto hide-scrollbar"
+            {/* To Predictions Dropdown */}
+            <AnimatePresence>
+              {showToPredictions && toPredictions.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  className="absolute z-50 left-0 right-0 mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl max-h-60 overflow-y-auto"
+                >
+                  {toPredictions.map((p) => (
+                    <button
+                      key={p.place_id}
+                      type="button"
+                      onClick={() => selectPlace(p.place_id, p.description, "to")}
+                      className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-red-50/50 transition-colors"
                     >
-                      {toPredictions.map((p) => (
-                        <motion.button
-                          key={p.place_id}
-                          type="button"
-                          onClick={() =>
-                            selectPlace(p.place_id, p.description, "to")
-                          }
-                          whileHover={{ backgroundColor: "#F9FAFB" }}
-                          className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-red-50/40 transition-colors"
-                        >
-                          <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <div className="text-left min-w-0">
-                            <p className="font-semibold text-sm text-gray-900 truncate">
-                              {p.structured_formatting.main_text}
-                            </p>
-                            <p className="text-xs text-gray-500 truncate">
-                              {p.structured_formatting.secondary_text}
-                            </p>
-                          </div>
-                        </motion.button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
+                      <MapPin className="w-4 h-4 text-[#E10600] shrink-0" />
+                      <div className="text-left min-w-0">
+                        <p className="font-semibold text-xs text-gray-900 truncate">
+                          {p.structured_formatting.main_text}
+                        </p>
+                        <p className="text-[11px] text-gray-500 truncate">
+                          {p.structured_formatting.secondary_text}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-            {/* Date Selection */}
-            <div className="space-y-2 relative z-0">
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
-                Departure Date
-              </label>
-              <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <input
-                  type="date"
-                  value={date}
-                  min={getTodayDate()}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50/60 border border-[var(--border-subtle)] rounded-xl focus:bg-[var(--bg-surface)] focus:border-[#E10600] focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-sm font-medium text-gray-900"
-                />
-              </div>
+          {/* 3. DATE */}
+          <div className="lg:col-span-2 relative">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+              DATE
+            </label>
+            <div className="relative flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white">
+              <input
+                type="date"
+                value={date}
+                min={getTodayDate()}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full text-xs font-semibold text-gray-800 outline-none bg-transparent cursor-pointer"
+              />
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-5 mt-5 border-t border-[var(--border-subtle)]">
-            <motion.button
-              type="button"
-              onClick={clearForm}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium text-sm text-gray-700 flex items-center gap-2 transition-all"
-            >
-              <Trash2 className="w-4 h-4" />
-              Clear
-            </motion.button>
+          {/* 4. PASSENGERS */}
+          <div className="lg:col-span-2 relative">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+              PASSENGERS
+            </label>
+            <div className="relative flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white cursor-pointer">
+              <select
+                value={passengers}
+                onChange={(e) => setPassengers(e.target.value)}
+                className="w-full text-xs font-semibold text-gray-800 outline-none bg-transparent cursor-pointer appearance-none pr-4"
+              >
+                <option value="1">1 Seat</option>
+                <option value="2">2 Seats</option>
+                <option value="3">3 Seats</option>
+                <option value="4">4 Seats</option>
+                <option value="5">5 Seats</option>
+                <option value="6">6 Seats</option>
+              </select>
+              <ChevronDown className="w-4 h-4 text-gray-400 pointer-events-none absolute right-3 shrink-0" />
+            </div>
+          </div>
 
+          {/* 5. SEARCH RIDES BUTTON */}
+          <div className="lg:col-span-2">
             <motion.button
-              type="button"
-              onClick={handleSearch}
-              disabled={
-                isSearching ||
-                !fromInputRef.current?.value ||
-                !toInputRef.current?.value
-              }
+              type="submit"
+              disabled={isSearching}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="btn-water btn-water-up btn-water-bg-red flex-1 py-3 px-6 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white rounded-xl font-bold text-sm shadow-md hover:shadow-red-glow transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-[42px] md:h-[44px] bg-[#E10600] hover:bg-[#c90500] text-white font-bold text-sm tracking-wide rounded-xl shadow-md hover:shadow-red-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
             >
               {isSearching ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Searching...</span>
-                </>
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <>
-                  <Search className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                  <span>Search Rides</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
+                <Search className="w-4 h-4 stroke-[2.5]" />
               )}
+              <span className="whitespace-nowrap font-bold">Search Rides</span>
             </motion.button>
           </div>
-
-          {/* Popular Routes */}
-          <div className="pt-5 mt-5 border-t border-[var(--border-subtle)]">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#E10600]" />
-                <span className="text-xs font-bold text-gray-800">
-                  Popular Routes
-                </span>
-              </div>
-              <span className="text-[11px] text-gray-400 font-medium">Trending now</span>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {popularRoutes.filter(Boolean).map((route) => (
-                <motion.button
-                  key={`${route.from}-${route.to}`}
-                  type="button"
-                  whileHover={{ scale: 1.02, y: -1 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => {
-                    fromInputRef.current.value = route.from;
-                    toInputRef.current.value = route.to;
-                    setFromCity(route.from);
-                    setToCity(route.to);
-                    setFromPredictions([]);
-                    setToPredictions([]);
-                  }}
-                  className="p-2.5 bg-gray-50/80 hover:bg-red-50/50 rounded-xl border border-[var(--border-subtle)]/60 hover:border-red-200 transition-all text-left group"
-                >
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <Route className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#E10600] transition-colors" />
-                    <span className="text-xs font-bold text-gray-900 truncate">
-                      {route.from} → {route.to}
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-gray-500">
-                    Daily rides available
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
 export default RideSearchCard;
-
-/* ---------------- UTILS ---------------- */
-
-function getTodayDate() {
-  const d = new Date();
-  d.setDate(d.getDate());
-  return d.toISOString().split("T")[0];
-}
-
-function getWeekendDate() {
-  const d = new Date();
-  // Get next Saturday
-  d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7));
-  return d.toISOString().split("T")[0];
-}

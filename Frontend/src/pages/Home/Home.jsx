@@ -58,6 +58,7 @@ import DownloadPopup from "../../components/DownloadPopup";
 import { useTypewriter } from "../../hooks/useTypewriter";
 import KycGuard from "../../components/KycGuard";
 import FloatingActionButtons from "../../components/FloatingActionButtons";
+import { handlePlayStoreClick, handleAppStoreClick, handleSendAppLink } from "../../utils/appDownload";
 
 // Format helper for ride departure time
 const formatRideTime = (timeStr) => {
@@ -114,6 +115,18 @@ const Home = () => {
   const [loadingBlogs, setLoadingBlogs] = useState(true);
   const [blogError, setBlogError] = useState(null);
   const [recentRides, setRecentRides] = useState([]);
+  const [appMobileNumber, setAppMobileNumber] = useState("");
+  const [sendingAppLink, setSendingAppLink] = useState(false);
+
+  const onGetAppLink = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    setSendingAppLink(true);
+    const success = await handleSendAppLink(appMobileNumber);
+    if (success) {
+      setAppMobileNumber("");
+    }
+    setSendingAppLink(false);
+  };
 
   // Typewriter effect for Hero section
   const typedHeadline = useTypewriter({
@@ -567,61 +580,61 @@ const Home = () => {
         </div>
 
         <div className="container mx-auto px-4 lg:px-6 max-w-7xl relative z-10">
-          <div className="flex justify-center items-center min-h-[75vh] lg:min-h-[85vh] pt-10 pb-16">
+          <div className="flex justify-center items-center min-h-[60vh] lg:min-h-[70vh] pt-6 pb-14">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="w-full max-w-4xl"
+              className="w-full max-w-5xl"
             >
-
-
-
+              {/* Dynamic Ride Search Card */}
+              <div className="mb-8 w-full">
+                <RideSearchCard />
+              </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row justify-center gap-6 mb-8">
-                <KycGuard>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8">
+                <KycGuard className="w-full sm:w-72">
                   <motion.button
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate("/rides")}
-                    className="btn-water btn-water-right btn-water-bg-red px-10 py-4 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-red-glow transition-all duration-300 flex items-center justify-center gap-3 group w-full sm:w-64 mx-auto sm:mx-0"
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => navigate("/user/send-parcel")}
+                    className="btn-water btn-water-right btn-water-bg-red w-full h-[60px] px-6 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-red-glow transition-all duration-300 flex items-center justify-center gap-3 group border-2 border-transparent box-border"
                   >
-                    <Car size={24} />
-                    <span>Find a Ride Now</span>
+                    <img
+                      src="/icons/parcel.png"
+                      alt="Send Parcel"
+                      className="w-9 h-9 object-contain shrink-0 group-hover:scale-110 drop-shadow-md transition-transform"
+                    />
+                    <span className="whitespace-nowrap">Send Parcel</span>
                     <ArrowRight
                       size={20}
-                      className="group-hover:translate-x-1 transition-transform"
+                      className="shrink-0 group-hover:translate-x-1 transition-transform ml-auto sm:ml-0"
                     />
                   </motion.button>
                 </KycGuard>
 
-                <KycGuard>
+                <KycGuard className="w-full sm:w-72">
                   <motion.button
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => navigate("/offer-ride")}
-                    className="btn-water btn-water-up btn-water-bg-light-red px-10 py-4 bg-[var(--bg-surface)]/95 backdrop-blur-md border-2 border-red-100 text-[#111111] font-bold text-lg rounded-2xl hover:border-red-400 hover:text-[#E10600] shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group w-full sm:w-64 mx-auto sm:mx-0"
+                    className="btn-water btn-water-up btn-water-bg-light-red w-full h-[60px] px-6 bg-[var(--bg-surface)]/95 backdrop-blur-md border-2 border-red-100 text-[#111111] font-bold text-lg rounded-2xl hover:border-red-400 hover:text-[#E10600] shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group box-border"
                   >
-                  <Zap size={24} className="text-[#E10600]" />
-                  <span>Offer a Ride</span>
-                </motion.button>
+                    <img
+                      src="/icons/car.png"
+                      alt="Offer a Ride"
+                      className="w-10 h-10 object-contain shrink-0 group-hover:scale-110 drop-shadow-sm transition-transform"
+                    />
+                    <span className="whitespace-nowrap">Offer a Ride</span>
+                    <ArrowRight
+                      size={20}
+                      className="shrink-0 group-hover:translate-x-1 transition-transform opacity-0 group-hover:opacity-100 ml-auto sm:ml-0"
+                    />
+                  </motion.button>
                 </KycGuard>
               </div>
             </motion.div>
-          </div>
-        </div>
-        {/* Bottom Marquee */}
-        <div className="absolute bottom-0 left-0 w-full bg-[#1A1A1A] py-3 overflow-hidden border-t border-b border-[#333333] z-20">
-          <div className="animate-marquee-horizontal flex items-center whitespace-nowrap">
-            {[...Array(15)].map((_, i) => (
-              <div key={i} className="flex items-center">
-                <span className="text-white text-xl md:text-2xl font-black uppercase tracking-wider">
-                  HUMRA<span className="text-[#E10600]">HII</span>
-                </span>
-                <span className="text-white mx-6 md:mx-10 text-xl">✦</span>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -1094,27 +1107,39 @@ const Home = () => {
                 Download App Now
               </h3>
               
-              <div className="flex flex-row items-center w-full max-w-md bg-white rounded-xl shadow-sm border border-gray-200 p-1.5 sm:p-2 mb-8">
+              <form onSubmit={onGetAppLink} className="flex flex-row items-center w-full max-w-md bg-white rounded-xl shadow-sm border border-gray-200 p-1.5 sm:p-2 mb-8">
                 <div className="flex flex-1 items-center bg-transparent min-w-0">
                   <span className="px-2 sm:px-4 text-gray-500 border-r border-gray-200 font-medium text-sm sm:text-base shrink-0">+91</span>
                   <input 
-                    type="text" 
-                    placeholder="Enter mobile number" 
+                    type="tel" 
+                    maxLength={10}
+                    value={appMobileNumber}
+                    onChange={(e) => setAppMobileNumber(e.target.value.replace(/\D/g, ""))}
+                    placeholder="Enter 10-digit number" 
                     className="flex-1 w-full min-w-0 px-2 sm:px-4 py-2 outline-none text-gray-700 bg-transparent text-sm sm:text-base"
                   />
                 </div>
-                <button className="bg-[#1877F2] hover:bg-blue-600 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors whitespace-nowrap text-center flex items-center justify-center text-xs sm:text-base shrink-0">
-                  Get App Link
+                <button 
+                  type="submit"
+                  disabled={sendingAppLink}
+                  className="bg-[#1877F2] hover:bg-blue-600 disabled:opacity-60 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors whitespace-nowrap text-center flex items-center justify-center text-xs sm:text-base shrink-0 cursor-pointer">
+                  {sendingAppLink ? "Sending..." : "Get App Link"}
                 </button>
-              </div>
+              </form>
 
               <div className="flex items-center gap-4">
-                <a href="#" className="block hover:opacity-90 transition-opacity">
+                <button 
+                  type="button"
+                  onClick={handlePlayStoreClick}
+                  className="block hover:opacity-90 hover:scale-105 transition-all cursor-pointer bg-transparent border-0 p-0">
                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-[52px]" />
-                </a>
-                <a href="#" className="block hover:opacity-90 transition-opacity">
+                </button>
+                <button 
+                  type="button"
+                  onClick={handleAppStoreClick}
+                  className="block hover:opacity-90 hover:scale-105 transition-all cursor-pointer bg-transparent border-0 p-0">
                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" className="h-[52px]" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -1200,7 +1225,7 @@ const Home = () => {
       </section>
 
       <DownloadPopup />
-      <FloatingActionButtons whatsappNumber="916688684504" message="Hi Humrahii, I need some help!" />
+      <FloatingActionButtons whatsappNumber="918081333082" message="Hi Humrahii, I need some help!" />
     </div>
   );
 };

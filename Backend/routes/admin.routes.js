@@ -1,6 +1,6 @@
 
 import {Router} from "express"
-import { createBanner, getBanners, getDashboardOverview, getDriverStats, getPerformanceMetrics, getPopularRoutes, getRecentRides, getRevenueAnalytics, handleAdminAddWalletMoney, handleBroadcast, handleDeleteBanner, handleGetAdminDetails, handleGetAllMessage, handleGetAllRides, handleGetAllUsers, handleGetAllUserWithPagination, handleGetRideStats, handleGetSingleUserDetails, handleLogOut, handleSendLoginOtp, handleUpdateCommision, handleUpdateUserVerificationStatus, handleVerifyOtpAndLogin, updateBanner, handleGetAllParcels } from "../controller/admin.controller.js"
+import { createBanner, getBanners, getDashboardOverview, getDriverStats, getPerformanceMetrics, getPopularRoutes, getRecentRides, getRevenueAnalytics, handleAdminAddWalletMoney, handleBroadcast, handleDeleteBanner, handleGetAdminDetails, handleGetAllMessage, handleGetAllRides, handleGetAllUsers, handleGetAllUserWithPagination, handleGetRideStats, handleGetSingleUserDetails, handleLogOut, handleSendLoginOtp, handleUpdateCommision, handleUpdateUserVerificationStatus, handleAdminUpdateKycStatus, handleVerifyOtpAndLogin, updateBanner, handleGetAllParcels } from "../controller/admin.controller.js"
 import { isAdmin } from "../middleware/isAdmin.js"
 import { getPlatformHealth } from "../controller/platformHealth.controller.js"
 import { createParcelSlab, getParcelSlabs, updateParcelSlab, deleteParcelSlab } from "../controller/parcelSlab.controller.js"
@@ -18,6 +18,7 @@ adminRouter.get("/get-user-with-pagination" , isAdmin , handleGetAllUserWithPagi
 adminRouter.get("/get-user/:userId", isAdmin, handleGetSingleUserDetails)
 adminRouter.post("/get-user/:userId", isAdmin, handleGetSingleUserDetails)
 adminRouter.post("/update-user-status" , isAdmin , handleUpdateUserVerificationStatus)
+adminRouter.post("/update-kyc-status" , isAdmin , handleAdminUpdateKycStatus)
 adminRouter.post("/get-rides-stats" , isAdmin, handleGetRideStats)
 adminRouter.post("/get-all-message", isAdmin, handleGetAllMessage)
 adminRouter.get("/dashboard-overview", isAdmin, getDashboardOverview)

@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import data from '../../assets/data.json'
-import logo from "../../assets/logo.jpg"
+import logo from "../../assets/logo.jpg";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -63,21 +63,6 @@ const Footer = () => {
     { icon: <Twitter size={18} />, href: "#", label: "Twitter" },
     { icon: <Instagram size={18} />, href: "#", label: "Instagram" },
     { icon: <Linkedin size={18} />, href: "#", label: "LinkedIn" },
-  ];
-
-  const appStores = [
-    {
-      platform: "App Store",
-      icon: "🍎",
-      href: "#",
-      label: "Download on the App Store",
-    },
-    {
-      platform: "Google Play",
-      icon: "▶️",
-      href: "#",
-      label: "Get it on Google Play",
-    },
   ];
 
   const scrollToTop = () => {
@@ -154,7 +139,7 @@ const Footer = () => {
                 </div> */}
 
 
-                  <img src={logo} className="h-15" alt="" />
+                <img src={logo} className="h-15" alt="" />
 
               </Link>
             </div>
@@ -202,8 +187,8 @@ const Footer = () => {
                       <Link
                         to={link.href}
                         className={`flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-200 group ${link.highlight
-                            ? "font-semibold text-amber-400 hover:text-amber-300"
-                            : ""
+                          ? "font-semibold text-amber-400 hover:text-amber-300"
+                          : ""
                           }`}
                       >
                         {link.icon && (
@@ -244,7 +229,7 @@ const Footer = () => {
               </a>
             ))}
           </div>
-          
+
           <div className="flex items-center gap-3">
             <span className="text-gray-400 text-sm font-medium mr-2 hidden sm:inline-block">Secure Payments:</span>
             {[
@@ -255,9 +240,9 @@ const Footer = () => {
               { name: "RuPay", src: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" }
             ].map((payment, idx) => (
               <div key={idx} className="bg-white px-2 py-1 rounded-md border border-gray-200 flex items-center justify-center w-[50px] h-[30px] hover:shadow-md transition-shadow">
-                <img 
-                  src={payment.src} 
-                  alt={payment.name} 
+                <img
+                  src={payment.src}
+                  alt={payment.name}
                   className="max-w-full max-h-full object-contain"
                 />
               </div>

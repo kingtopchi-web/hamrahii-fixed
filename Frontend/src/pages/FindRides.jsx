@@ -19,6 +19,7 @@ import {
   Award,
   Percent,
   CheckCircle,
+  ChevronDown,
   ChevronRight,
   ChevronLeft,
   Heart,
@@ -67,6 +68,11 @@ import { api } from "../services/endpoints";
 import Axios from "../services/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCarImageUrl } from "../utils/profileImageHelper";
+import {
+  getBrowserCoords,
+  getCityFromCoords,
+  getlocationFromCoords,
+} from "../utils/GetLocation";
 
 /* ---------------- GOOGLE MAP LOADER ---------------- */
 const libraries = ["places", "geometry"];
@@ -131,6 +137,9 @@ const gotTodayDate = () => {
 };
 
 const FindRides = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // Google Maps State
   const [isMapsLoaded, setIsMapsLoaded] = useState(false);
   const [from, setFrom] = useState(null);
@@ -168,12 +177,14 @@ const FindRides = () => {
   const [favoriteRides, setFavoriteRides] = useState([]);
   const [timeFilter, setTimeFilter] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 5000]);
-  const [seatPreference, setSeatPreference] = useState("any");
+  const [seatPreference, setSeatPreference] = useState(
+    location?.state?.seats ? String(location.state.seats) : "any"
+  );
+  const [passengers, setPassengers] = useState(
+    location?.state?.seats ? String(location.state.seats) : "1"
+  );
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [sortBy, setSortBy] = useState("recommended");
-
-  const navigate = useNavigate();
-  const location = useLocation();
 
   // Refs
   const fromRef = useRef(null);
@@ -270,60 +281,61 @@ const FindRides = () => {
 
   /* ---------------- DETECT CURRENT LOCATION ---------------- */
   const detectCurrentLocation = useCallback(
-    async (autoSearch = true) => {
-      if (!navigator.geolocation) {
-        setLocationPermission("unsupported");
-        return;
-      }
-
+    async (autoSearch = false) => {
       setIsLocating(true);
       setError(null);
 
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          setUserCoords({ lat, lng });
-          setLocationPermission("granted");
+      try {
+        const { lat, lng } = await getBrowserCoords();
+        setUserCoords({ lat, lng });
+        setLocationPermission("granted");
 
-          // Reverse geocode to get city name
+        let streetLocation = "";
+        let city = "";
+
+        if (window.google?.maps) {
+          try {
+            streetLocation = await getlocationFromCoords(lat, lng);
+            city = await getCityFromCoords(lat, lng);
+          } catch (e) {
+            // fallback if geocoding fails
+          }
+        }
+
+        if (!streetLocation) {
           const geoRes = await reverseGeocode(lat, lng);
-          const detectedCity = geoRes?.city || "";
-          const detectedAddress = geoRes?.formattedAddress || "Current Location";
+          streetLocation = geoRes?.formattedAddress || geoRes?.city || "Current Location";
+          city = geoRes?.city || "";
+        }
 
-          if (detectedCity) {
-            setCurrentCity(detectedCity);
-            setFromCity(detectedCity);
-          }
-          if (fromInputRef.current) {
-            fromInputRef.current.value = detectedCity || detectedAddress;
-          }
+        const detectedCity = city || (streetLocation ? streetLocation.split(",")[0]?.trim() : "");
 
-          if (autoSearch) {
-            fetchNearbyRides({
-              userLat: lat,
-              userLng: lng,
-              maxDistanceKm: maxDistanceKm || 50,
-              dateParam: date || gotTodayDate(),
-            });
-          } else {
-            setIsLocating(false);
-          }
-        },
-        (err) => {
-          setIsLocating(false);
-          if (err.code === 1) {
-            setLocationPermission("denied");
-          } else {
-            setLocationPermission("error");
-          }
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 60000,
-        },
-      );
+        if (detectedCity) {
+          setCurrentCity(detectedCity);
+          setFromCity(detectedCity);
+        }
+
+        if (fromInputRef.current && (streetLocation || detectedCity)) {
+          fromInputRef.current.value = streetLocation || detectedCity;
+        }
+
+        if (autoSearch) {
+          fetchNearbyRides({
+            userLat: lat,
+            userLng: lng,
+            maxDistanceKm: maxDistanceKm || 50,
+            dateParam: date || gotTodayDate(),
+          });
+        }
+      } catch (err) {
+        if (err?.code === 1 || String(err).toLowerCase().includes("denied")) {
+          setLocationPermission("denied");
+        } else {
+          setLocationPermission("error");
+        }
+      } finally {
+        setIsLocating(false);
+      }
     },
     [date, maxDistanceKm],
   );
@@ -349,6 +361,21 @@ const FindRides = () => {
     if (!isMapsLoaded) return;
 
     if (location?.state?.fromCity) {
+      if (fromInputRef.current) {
+        fromInputRef.current.value = location.state.fromLocation || location.state.fromCity;
+      }
+      if (toInputRef.current) {
+        toInputRef.current.value = location.state.toLocation || location.state.toCity;
+      }
+      setFromCity(location.state.fromCity);
+      setToCity(location.state.toCity);
+      if (location.state.date) {
+        setDate(location.state.date);
+      }
+      if (location.state.seats) {
+        setPassengers(String(location.state.seats));
+        setSeatPreference(String(location.state.seats));
+      }
       fetchRedirectRides(
         location?.state?.fromCity,
         location?.state?.toCity,
@@ -362,17 +389,18 @@ const FindRides = () => {
       setShowToPredictions(false);
       setSelectedRide(null);
     } else {
-      // Automatically detect user location and fetch nearby rides
-      detectCurrentLocation(true);
+      // Detect user location without auto-searching
+      detectCurrentLocation(false);
     }
   }, [isMapsLoaded, location]);
 
-  const fetchRedirectRides = async (from, to, date) => {
+  const fetchRedirectRides = async (from, to, dateParam) => {
     try {
+      const targetDate = dateParam || date || gotTodayDate();
       const res = await Axios.post(api.ride.find, {
         fromLocation: from,
         toLocation: to,
-        date: date || gotTodayDate(),
+        date: targetDate,
       });
 
       if (res.data?.success) {
@@ -812,6 +840,16 @@ const FindRides = () => {
   const displayedRides = useMemo(() => {
     let list = [...searchResults];
 
+    // Date filter: only display rides on the exact searched date
+    if (date && typeof date === "string" && date.trim()) {
+      const selectedDay = date.trim().split("T")[0];
+      list = list.filter((r) => {
+        if (!r.departureDate) return false;
+        const rideDay = (r.departureDate || "").split("T")[0];
+        return rideDay === selectedDay;
+      });
+    }
+
     // Price filter
     if (priceRange && priceRange.length === 2) {
       list = list.filter(
@@ -945,404 +983,335 @@ const FindRides = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
+        {/* Search Section - Sleek Horizontal Bar matching Home page */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-12"
-        >
-        </motion.div>
-
-        {/* Search Section - Glass Morphism */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative mb-16"
+          transition={{ duration: 0.5 }}
+          className="relative mb-8 z-30"
           ref={formRef}
         >
-          {/* Background Blur */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-red-50/30 rounded-3xl blur-2xl" />
-          <div className="absolute -inset-1 bg-gradient-to-r from-red-500/10 via-transparent to-blue-500/10 rounded-3xl blur-xl" />
-
-          {/* Main Card */}
-          <div className="relative bg-[var(--bg-surface)]/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-[var(--border-subtle)]/50 p-4 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl">
-            {/* Form Header */}
-            <div className="flex items-center justify-between mb-4 sm:mb-8">
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="hidden md:block w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
-                  <Compass className="w-6 h-6 text-white" />
+          {/* Location Permission Alert Banner */}
+          <AnimatePresence>
+            {locationPermission === "denied" && !locationBannerDismissed && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-between gap-3 shadow-sm"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <Compass className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-amber-900">
+                      Location access is disabled in your browser
+                    </p>
+                    <p className="text-[11px] text-amber-700">
+                      Enter your pickup city manually below, or enable browser location to view rides departing closest to you.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                    Smart Ride Search
-                  </h2>
-                  <p className="text-xs sm:text-sm text-gray-600">
-                    Find the perfect ride in seconds
-                  </p>
+                <button
+                  type="button"
+                  onClick={() => setLocationBannerDismissed(true)}
+                  className="p-1 hover:bg-amber-100 rounded-lg text-amber-600 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form
+            onSubmit={handleSearch}
+            className="bg-white rounded-2xl md:rounded-3xl shadow-xl border border-gray-100 p-4 md:p-5"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 md:gap-4 items-end">
+              {/* 1. LEAVING FROM */}
+              <div className="lg:col-span-3 relative" ref={fromRef}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                    LEAVING FROM
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => detectCurrentLocation(false)}
+                    title="Use current location"
+                    className="text-[10px] text-gray-400 hover:text-[#E10600] flex items-center gap-1 transition-colors"
+                  >
+                    {isLocating ? (
+                      <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                    ) : (
+                      <Navigation className="w-2.5 h-2.5" />
+                    )}
+                    <span>Current</span>
+                  </button>
+                </div>
+                <div className="relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white">
+                  <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center shrink-0">
+                    <div className="w-2 h-2 rounded-full bg-gray-400" />
+                  </div>
+                  <input
+                    ref={fromInputRef}
+                    placeholder="Where from?"
+                    defaultValue={fromCity}
+                    onChange={(e) => {
+                      setFromCity(e.target.value);
+                      fetchPredictions(e.target.value, "from");
+                      if (userCoords && e.target.value !== currentCity) {
+                        setUserCoords(null);
+                      }
+                    }}
+                    onFocus={() => {
+                      setShowToPredictions(false);
+                      setShowFromPredictions(true);
+                      const val = fromInputRef.current?.value || "";
+                      if (val.trim()) fetchPredictions(val, "from");
+                    }}
+                    className="w-full text-sm font-semibold text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
+                  />
+                </div>
+
+                {/* From Predictions Dropdown */}
+                <AnimatePresence>
+                  {showFromPredictions && fromPredictions.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      className="absolute z-50 left-0 right-0 mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl max-h-60 overflow-y-auto"
+                    >
+                      {fromPredictions.map((p) => (
+                        <button
+                          key={p.place_id}
+                          type="button"
+                          onClick={() => selectPlace(p.place_id, p.description, "from")}
+                          className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-red-50/50 transition-colors"
+                        >
+                          <MapPin className="w-4 h-4 text-[#E10600] shrink-0" />
+                          <div className="text-left min-w-0">
+                            <p className="font-semibold text-xs text-gray-900 truncate">
+                              {p.structured_formatting.main_text}
+                            </p>
+                            <p className="text-[11px] text-gray-500 truncate">
+                              {p.structured_formatting.secondary_text}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* 2. GOING TO */}
+              <div className="lg:col-span-3 relative" ref={toRef}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                    GOING TO
+                  </label>
+                  <button
+                    type="button"
+                    onClick={swapLocations}
+                    title="Swap locations"
+                    className="text-[10px] text-gray-400 hover:text-[#E10600] flex items-center gap-1 transition-colors"
+                  >
+                    <ArrowRightLeft className="w-2.5 h-2.5" />
+                    <span>Swap</span>
+                  </button>
+                </div>
+                <div className="relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white">
+                  <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center shrink-0">
+                    <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                  </div>
+                  <input
+                    ref={toInputRef}
+                    placeholder="Where to?"
+                    defaultValue={toCity}
+                    onChange={(e) => {
+                      setToCity(e.target.value);
+                      fetchPredictions(e.target.value, "to");
+                    }}
+                    onFocus={() => {
+                      setShowFromPredictions(false);
+                      setShowToPredictions(true);
+                      const val = toInputRef.current?.value || "";
+                      if (val.trim()) fetchPredictions(val, "to");
+                    }}
+                    className="w-full text-sm font-semibold text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
+                  />
+                </div>
+
+                {/* To Predictions Dropdown */}
+                <AnimatePresence>
+                  {showToPredictions && toPredictions.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      className="absolute z-50 left-0 right-0 mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl max-h-60 overflow-y-auto"
+                    >
+                      {toPredictions.map((p) => (
+                        <button
+                          key={p.place_id}
+                          type="button"
+                          onClick={() => selectPlace(p.place_id, p.description, "to")}
+                          className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 flex items-center gap-3 hover:bg-red-50/50 transition-colors"
+                        >
+                          <MapPin className="w-4 h-4 text-[#E10600] shrink-0" />
+                          <div className="text-left min-w-0">
+                            <p className="font-semibold text-xs text-gray-900 truncate">
+                              {p.structured_formatting.main_text}
+                            </p>
+                            <p className="text-[11px] text-gray-500 truncate">
+                              {p.structured_formatting.secondary_text}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* 3. DATE */}
+              <div className="lg:col-span-2 relative">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                  DATE
+                </label>
+                <div className="relative flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white">
+                  <input
+                    type="date"
+                    value={date}
+                    min={gotTodayDate()}
+                    onChange={(e) => {
+                      const newDate = e.target.value;
+                      setDate(newDate);
+                      if (hasSearched) {
+                        const fromValue = fromInputRef.current?.value || "";
+                        const toValue = toInputRef.current?.value || "";
+                        if (userCoords) {
+                          fetchNearbyRides({
+                            userLat: userCoords.lat,
+                            userLng: userCoords.lng,
+                            maxDistanceKm,
+                            toCityParam: toCity || toValue,
+                            dateParam: newDate,
+                          });
+                        } else if (fromCity || fromValue) {
+                          fetchRedirectRides(fromCity || fromValue, toCity || toValue, newDate);
+                        }
+                      }
+                    }}
+                    className="w-full text-xs font-semibold text-gray-800 outline-none bg-transparent cursor-pointer"
+                  />
                 </div>
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={clearSearch}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium text-xs sm:text-sm text-gray-700 flex items-center gap-1.5 sm:gap-2"
-              >
-                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span>Clear</span>
-              </motion.button>
+              {/* 4. PASSENGERS */}
+              <div className="lg:col-span-2 relative">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                  PASSENGERS
+                </label>
+                <div className="relative flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white cursor-pointer">
+                  <select
+                    value={passengers}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setPassengers(val);
+                      setSeatPreference(val);
+                    }}
+                    className="w-full text-xs font-semibold text-gray-800 outline-none bg-transparent cursor-pointer appearance-none pr-4"
+                  >
+                    <option value="1">1 Seat</option>
+                    <option value="2">2 Seats</option>
+                    <option value="3">3 Seats</option>
+                    <option value="4">4 Seats</option>
+                    <option value="5">5 Seats</option>
+                    <option value="6">6 Seats</option>
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-gray-400 pointer-events-none absolute right-3 shrink-0" />
+                </div>
+              </div>
+
+              {/* 5. SEARCH RIDES BUTTON */}
+              <div className="lg:col-span-2">
+                <motion.button
+                  type="submit"
+                  disabled={searching}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full h-[42px] md:h-[44px] bg-[#E10600] hover:bg-[#c90500] text-white font-bold text-sm tracking-wide rounded-xl shadow-md hover:shadow-red-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                >
+                  {searching ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Searching...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Search className="w-4 h-4" />
+                      <span>Search Rides</span>
+                    </>
+                  )}
+                </motion.button>
+              </div>
             </div>
 
-            {/* Location Permission Alert Banner */}
+            {/* Error Message */}
             <AnimatePresence>
-              {locationPermission === "denied" && !locationBannerDismissed && (
+              {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mb-6 p-4 bg-amber-50/90 backdrop-blur-sm border border-amber-200/80 rounded-2xl flex items-center justify-between gap-4 shadow-sm"
+                  className="overflow-hidden mt-3"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                      <Compass className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-amber-900">
-                        Location access is disabled in your browser
-                      </p>
-                      <p className="text-xs text-amber-700">
-                        Enter your pickup city manually below, or enable browser location to view rides departing closest to you.
-                      </p>
-                    </div>
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
+                    <X className="w-4 h-4 text-red-600 shrink-0" />
+                    <span className="text-red-700 font-medium text-xs sm:text-sm">{error}</span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setLocationBannerDismissed(true)}
-                    className="p-1.5 hover:bg-amber-100 rounded-lg text-amber-600 transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
+          </form>
 
-            {/* Search Form */}
-            <form onSubmit={handleSearch} className="space-y-2 md:space-y-6">
-              {/* Location Inputs Row */}
-              <div className={`grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6 relative transition-all ${showFromPredictions || showToPredictions ? "z-30" : "z-10"}`}>
-                {/* From Location */}
-                <div className={`relative transition-all ${showFromPredictions ? "z-40" : "z-20"}`} ref={fromRef}>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-500" />
-                        From Location
-                      </div>
-                      {userCoords && (
-                        <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          GPS Detected
-                        </span>
-                      )}
-                    </div>
-                  </label>
-                  <div className="relative group">
-                    <input
-                      ref={fromInputRef}
-                      type="text"
-                      onChange={(e) => {
-                        fetchPredictions(e.target.value, "from");
-                        if (userCoords && e.target.value !== currentCity) {
-                          setUserCoords(null);
-                        }
-                      }}
-                      onFocus={() => {
-                        setShowToPredictions(false);
-                        setShowFromPredictions(true);
-                        const val = fromInputRef.current?.value || "";
-                        if (val.trim()) {
-                          fetchPredictions(val, "from");
-                        }
-                      }}
-                      className="w-full pl-10 md:pl-14 pr-24 py-4 bg-[var(--bg-surface)]/50 border-2 border-[var(--border-subtle)] rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all text-gray-900 placeholder-gray-400"
-                      placeholder="Where are you starting?"
-                    />
-                    <div className="absolute left-0 md:left-4 top-1/2 transform -translate-y-1/2">
-                      <div className="w-10 h-10 flex items-center justify-center">
-                        <Navigation className="w-5 h-5 text-gray-500" />
-                      </div>
-                    </div>
-
-                    {/* Current Location Quick Button */}
-                    <div className="absolute right-2.5 top-1/2 transform -translate-y-1/2 flex items-center">
-                      <motion.button
-                        type="button"
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => detectCurrentLocation(true)}
-                        title="Detect and use current location"
-                        className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
-                          isLocating
-                            ? "bg-red-50 text-red-600 border border-red-200 animate-pulse"
-                            : userCoords
-                            ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
-                            : "bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600 border border-[var(--border-subtle)]"
-                        }`}
-                      >
-                        {isLocating ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            <span className="hidden sm:inline">Locating...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Compass
-                              className={`w-3.5 h-3.5 ${
-                                userCoords ? "text-emerald-600 fill-emerald-100" : "text-gray-500"
-                              }`}
-                            />
-                            <span className="hidden sm:inline">
-                              {userCoords ? "Near You" : "Current"}
-                            </span>
-                          </>
-                        )}
-                      </motion.button>
-                    </div>
-                  </div>
-
-                  {/* Google Places Suggestions Dropdown */}
-                  <AnimatePresence>
-                    {showFromPredictions && fromPredictions.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-2xl max-h-64 overflow-y-auto hide-scrollbar"
-                      >
-                        {fromPredictions.map((p) => (
-                          <motion.button
-                            key={p.place_id}
-                            type="button"
-                            onClick={() =>
-                              selectPlace(p.place_id, p.description, "from")
-                            }
-                            whileHover={{ backgroundColor: "#F9FAFB" }}
-                            className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-gradient-to-r hover:from-red-50/50 hover:to-orange-50/50 transition-all"
-                          >
-                            <MapPin className="w-5 h-5 text-gray-400 shrink-0" />
-                            <div className="text-left min-w-0">
-                              <p className="font-medium text-gray-900 truncate">
-                                {p.structured_formatting.main_text}
-                              </p>
-                              <p className="text-sm text-gray-500 truncate">
-                                {p.structured_formatting.secondary_text}
-                              </p>
-                            </div>
-                          </motion.button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Swap Button */}
-                <div className="flex items-center lg:items-end justify-center z-10 py-1 lg:py-0">
+          {/* Popular Routes */}
+          {!hasSearched && (
+            <div className="mt-4 p-4 bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-red-500" />
+                  Popular Routes
+                </h3>
+                <span className="text-[11px] text-gray-400">Trending now</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {popularRoutes.map((route, idx) => (
                   <motion.button
+                    key={idx}
                     type="button"
-                    onClick={swapLocations}
-                    whileHover={{ scale: 1.1, rotate: 180 }}
-                    whileTap={{ scale: 0.9 }}
-                    title="Swap pickup and destination"
-                    className="w-10 h-10 lg:w-16 lg:h-16 rounded-full lg:rounded-2xl bg-gradient-to-br from-gray-100 to-white border-2 border-[var(--border-subtle)] flex items-center justify-center hover:border-red-500 hover:shadow-lg transition-all shadow-sm"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => {
+                      if (fromInputRef.current) fromInputRef.current.value = route.from;
+                      if (toInputRef.current) toInputRef.current.value = route.to;
+                      setFromCity(route.from);
+                      setToCity(route.to);
+                      setFromPredictions([]);
+                      setToPredictions([]);
+                    }}
+                    className="px-3 py-1.5 bg-gray-50 hover:bg-red-50 border border-gray-200/80 hover:border-red-300 rounded-lg text-xs font-medium text-gray-700 hover:text-red-600 transition-all flex items-center gap-1.5 group"
                   >
-                    <ArrowDownUp className="w-4 h-4 lg:hidden text-gray-700" />
-                    <ArrowLeftRight className="hidden lg:block w-6 h-6 text-gray-700" />
+                    <CornerDownRight className="w-3 h-3 text-gray-400 group-hover:text-red-500" />
+                    {route.from} → {route.to}
                   </motion.button>
-                </div>
-
-                {/* To Location */}
-                <div className={`relative transition-all ${showToPredictions ? "z-40" : "z-20"}`} ref={toRef}>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500" />
-                      To Location
-                    </div>
-                  </label>
-                  <div className="relative group">
-                    <input
-                      ref={toInputRef}
-                      type="text"
-                      onChange={(e) => fetchPredictions(e.target.value, "to")}
-                      onFocus={() => {
-                        setShowFromPredictions(false);
-                        setShowToPredictions(true);
-                        const val = toInputRef.current?.value || "";
-                        if (val.trim()) {
-                          fetchPredictions(val, "to");
-                        }
-                      }}
-                      className="w-full pl-10 md:pl-14 pr-4 py-4 bg-[var(--bg-surface)]/50 border-2 border-[var(--border-subtle)] rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all text-gray-900 placeholder-gray-400"
-                      placeholder="Where to? (Optional for nearby rides)"
-                    />
-                    <div className="absolute left-0 md:left-4 top-1/2 transform -translate-y-1/2">
-                      <div className="w-10 h-10  flex items-center justify-center">
-                        <MapPin className="w-5 h-5 text-gray-500" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Google Places Suggestions Dropdown */}
-                  <AnimatePresence>
-                    {showToPredictions && toPredictions.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="absolute z-50 left-0 right-0 w-full mt-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] shadow-2xl max-h-64 overflow-y-auto hide-scrollbar"
-                      >
-                        {toPredictions.map((p) => (
-                          <motion.button
-                            key={p.place_id}
-                            type="button"
-                            onClick={() =>
-                              selectPlace(p.place_id, p.description, "to")
-                            }
-                            whileHover={{ backgroundColor: "#F9FAFB" }}
-                            className="w-full px-4 py-3 text-left border-b border-[var(--border-subtle)] last:border-b-0 flex items-center gap-3 hover:bg-gradient-to-r hover:from-red-50/50 hover:to-orange-50/50 transition-all"
-                          >
-                            <MapPin className="w-5 h-5 text-gray-400 shrink-0" />
-                            <div className="text-left min-w-0">
-                              <p className="font-medium text-gray-900 truncate">
-                                {p.structured_formatting.main_text}
-                              </p>
-                              <p className="text-sm text-gray-500 truncate">
-                                {p.structured_formatting.secondary_text}
-                              </p>
-                            </div>
-                          </motion.button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                ))}
               </div>
-
-              {/* Date and Action Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 relative z-0">
-                {/* Date Input */}
-                <div className="relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-red-500" />
-                      Travel Date
-                    </div>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="date"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      min={gotTodayDate()}
-                      className="w-full pl-12 sm:pl-14 pr-4 py-3.5 sm:py-4 bg-[var(--bg-surface)]/50 border-2 border-[var(--border-subtle)] rounded-xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none text-gray-900 text-sm sm:text-base"
-                    />
-                    <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
-                  </div>
-                </div>
-
-                {/* Quick Date Buttons - hidden on mobile/tablet */}
-                <div className="hidden lg:flex items-end gap-2">
-                </div>
-
-                {/* Search Button */}
-                <div className="flex items-end">
-                  <motion.button
-                    type="submit"
-                    disabled={
-                      searching ||
-                      (!fromInputRef.current?.value && !userCoords)
-                    }
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl font-bold text-base sm:text-lg hover:shadow-xl hover:shadow-red-500/30 transition-all flex items-center justify-center gap-2.5 sm:gap-3 group disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-                  >
-                    {searching ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Searching...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Search className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                        <span>Find Rides</span>
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
-                      </>
-                    )}
-                  </motion.button>
-                </div>
-              </div>
-
-              {/* Error Message */}
-              <AnimatePresence>
-                {error && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-xl p-4 flex items-center gap-3">
-                      <X className="w-5 h-5 text-red-600 flex-shrink-0" />
-                      <span className="text-red-700 font-medium">{error}</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </form>
-
-            {/* Popular Routes */}
-            {!hasSearched ? (
-              <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]/50">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-red-500" />
-                    Popular Routes
-                  </h3>
-                  <span className="text-xs text-gray-500">Trending now</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {popularRoutes.map((route, idx) => {
-                    return (
-                      <motion.button
-                        key={idx}
-                        type="button"
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          if (fromInputRef.current) {
-                            fromInputRef.current.value = route.from;
-                          }
-                          if (toInputRef.current) {
-                            toInputRef.current.value = route.to;
-                          }
-                          setFromCity(route.from);
-                          setToCity(route.to);
-                          setFromPredictions([]);
-                          setToPredictions([]);
-                        }}
-                        className="px-4 py-2.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300 font-medium text-gray-700 flex items-center gap-2 group"
-                      >
-                        <CornerDownRight className="w-4 h-4 text-gray-400 group-hover:text-red-500" />
-                        {route.from} → {route.to}
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Results Section - REST OF YOUR EXISTING CODE REMAINS THE SAME */}

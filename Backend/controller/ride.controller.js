@@ -580,15 +580,32 @@ export const handleFindRides = async (req, res, next) => {
     };
 
     const todayIST = getTodayDateIST();
-    const searchDate = date && date >= todayIST ? date : todayIST;
+    let exactSearchDate = null;
+    if (date && typeof date === "string" && date.trim()) {
+      const trimmedDate = date.trim().split("T")[0];
+      if (/^\d{4}-\d{2}-\d{2}$/.test(trimmedDate)) {
+        exactSearchDate = trimmedDate;
+      }
+    }
 
     // Base query conditions
     const filterConditions = [
       { status: "scheduled" },
       { availableSeats: { $gt: 0 } },
       { isDeleted: { $ne: true } },
-      { departureDate: { $gte: searchDate } },
     ];
+
+    if (exactSearchDate) {
+      // ONLY search rides of THAT EXACT DATE selected by the user
+      filterConditions.push({
+        $or: [
+          { departureDate: exactSearchDate },
+          { departureDate: { $regex: `^${exactSearchDate}` } },
+        ],
+      });
+    } else {
+      filterConditions.push({ departureDate: { $gte: todayIST } });
+    }
 
     // Destination filter if provided
     if (toLocation && toLocation.trim()) {

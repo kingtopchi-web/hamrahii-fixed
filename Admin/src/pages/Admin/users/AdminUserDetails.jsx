@@ -153,6 +153,12 @@ const AdminUserDetails = () => {
           ...prev,
           isVerified: verificationAction === "verify" ? "verified" : "rejected",
           verificationMessage: adminMessage,
+          kyc: {
+            ...(prev.kyc || {}),
+            status: verificationAction === "verify" ? "VERIFIED" : "REJECTED",
+            verifiedAt: verificationAction === "verify" ? new Date() : null,
+            rejectionReason: verificationAction === "reject" ? adminMessage : null
+          }
         }));
         toast.success(res?.data?.message);
       }
@@ -160,10 +166,39 @@ const AdminUserDetails = () => {
       setShowVerificationModal(false);
       setAdminMessage("");
       setSelectedCommonMessage("");
-
     } catch (err) {
-      // console.error("Error updating verification:", err);
       toast.info(err?.response?.data?.message || "Failed to update verification status");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleDirectKycUpdate = async (action, customReason) => {
+    const isApprove = action === "VERIFIED";
+    const reasonText = customReason || (isApprove ? "KYC approved by Admin." : "KYC rejected by Admin.");
+    setIsUpdating(true);
+    try {
+      const res = await Axios.post(api.user.updateKycStatus, {
+        userId: user?._id,
+        status: action,
+        reason: reasonText
+      });
+      if (res?.data?.success) {
+        setUser((prev) => ({
+          ...prev,
+          isVerified: isApprove ? "verified" : "rejected",
+          verificationMessage: reasonText,
+          kyc: {
+            ...(prev.kyc || {}),
+            status: action,
+            verifiedAt: isApprove ? new Date() : null,
+            rejectionReason: isApprove ? null : reasonText
+          }
+        }));
+        toast.success(res?.data?.message || `KYC ${action.toLowerCase()} successfully`);
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to update KYC status");
     } finally {
       setIsUpdating(false);
     }
@@ -596,6 +631,121 @@ const AdminUserDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Info Card */}
           <div className="lg:col-span-2 space-y-6">
+            {/* KYC Details & Documents Card */}
+            <div className="bg-[#FFFFFF] rounded-xl p-6 border border-[#E5E5E5] shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b border-[#E5E5E5] gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                    <Shield className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-[#111111]">
+                      Aadhaar / Government KYC Verification
+                    </h2>
+                    <p className="text-xs text-[#64748B]">Review user's submitted ID details and documents</p>
+                  </div>
+                </div>
+                <div>{getKycBadge(user.kyc?.status)}</div>
+              </div>
+
+              {/* KYC Details Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 mb-5">
+                <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
+                  <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider block">Document Type</span>
+                  <span className="text-sm font-semibold text-[#0F172A] mt-0.5 block">{user.kyc?.documentType || "Aadhaar Card"}</span>
+                </div>
+                <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
+                  <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider block">Full Name on ID</span>
+                  <span className="text-sm font-semibold text-[#0F172A] mt-0.5 block">{user.kyc?.fullName || formatUserName(user)}</span>
+                </div>
+                <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
+                  <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider block">Document / Aadhaar No.</span>
+                  <span className="text-sm font-semibold text-[#0F172A] mt-0.5 block font-mono">{user.kyc?.documentNumber || "Not submitted"}</span>
+                </div>
+                {user.kyc?.dob && (
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
+                    <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider block">Date of Birth</span>
+                    <span className="text-sm font-semibold text-[#0F172A] mt-0.5 block">{user.kyc.dob}</span>
+                  </div>
+                )}
+                {user.kyc?.submittedAt && (
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
+                    <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider block">Submitted On</span>
+                    <span className="text-sm font-semibold text-[#0F172A] mt-0.5 block">{formatDate(user.kyc.submittedAt)}</span>
+                  </div>
+                )}
+                {user.kyc?.verifiedAt && (
+                  <div className="p-3 bg-green-50 rounded-xl border border-green-200">
+                    <span className="text-[11px] font-bold text-green-700 uppercase tracking-wider block">Verified On</span>
+                    <span className="text-sm font-semibold text-green-900 mt-0.5 block">{formatDate(user.kyc.verifiedAt)}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Rejection Reason if any */}
+              {user.kyc?.rejectionReason && (
+                <div className="mb-5 p-3.5 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700">
+                  <span className="font-bold">Rejection Reason:</span> {user.kyc.rejectionReason}
+                </div>
+              )}
+
+              {/* Document Photos if uploaded */}
+              {(user.kyc?.frontImage || user.kyc?.backImage) && (
+                <div className="mb-5">
+                  <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider block mb-2">Uploaded Document Photos</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {user.kyc?.frontImage && (
+                      <div className="border border-[#E2E8F0] rounded-xl overflow-hidden bg-[#F8FAFC] p-2">
+                        <span className="text-[11px] font-semibold text-gray-500 mb-1.5 block">Front Side</span>
+                        <a href={getUserAvatarUrl(user.kyc.frontImage)} target="_blank" rel="noreferrer" className="block relative group">
+                          <img src={getUserAvatarUrl(user.kyc.frontImage)} alt="Front Document" className="w-full h-44 object-cover rounded-lg group-hover:opacity-90 transition" />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 rounded-lg transition text-white text-xs font-bold">
+                            View Full Photo
+                          </div>
+                        </a>
+                      </div>
+                    )}
+                    {user.kyc?.backImage && (
+                      <div className="border border-[#E2E8F0] rounded-xl overflow-hidden bg-[#F8FAFC] p-2">
+                        <span className="text-[11px] font-semibold text-gray-500 mb-1.5 block">Back Side</span>
+                        <a href={getUserAvatarUrl(user.kyc.backImage)} target="_blank" rel="noreferrer" className="block relative group">
+                          <img src={getUserAvatarUrl(user.kyc.backImage)} alt="Back Document" className="w-full h-44 object-cover rounded-lg group-hover:opacity-90 transition" />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 rounded-lg transition text-white text-xs font-bold">
+                            View Full Photo
+                          </div>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Direct KYC Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-[#E5E5E5]">
+                <button
+                  onClick={() => handleDirectKycUpdate("VERIFIED")}
+                  disabled={isUpdating || user.kyc?.status === "VERIFIED"}
+                  className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs sm:text-sm font-bold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-sm"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  <span>{user.kyc?.status === "VERIFIED" ? "KYC Already Approved" : "Approve KYC"}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    const reason = window.prompt("Enter rejection reason for KYC:", "Document details do not match or photo is unclear. Please re-submit.");
+                    if (reason !== null && reason.trim()) {
+                      handleDirectKycUpdate("REJECTED", reason.trim());
+                    }
+                  }}
+                  disabled={isUpdating || user.kyc?.status === "REJECTED"}
+                  className="px-5 py-2.5 bg-[#DC2626] hover:bg-red-700 text-white rounded-xl text-xs sm:text-sm font-bold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-sm"
+                >
+                  <XCircle className="w-4 h-4" />
+                  <span>Reject KYC</span>
+                </button>
+              </div>
+            </div>
+
             {/* Personal Information */}
             <div className="bg-[#F7F7F7] rounded-xl p-6 border border-[#E5E5E5]">
               <h2 className="text-xl font-bold text-[#111111] mb-6 flex items-center">

@@ -39,6 +39,7 @@ import Axios from '../services/axios.js';
 import { api } from '../services/endpoints';
 import { useNavigate } from 'react-router-dom';
 import data from '../assets/data.json'
+import { handlePlayStoreClick, handleAppStoreClick } from '../utils/appDownload';
 
 const Help = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -817,10 +818,16 @@ const Help = () => {
               <h3 className="font-semibold text-[#111111] mb-2">Download App</h3>
               <p className="text-[#555555] mb-4">Get the latest version of Humrahii app</p>
               <div className="flex justify-center space-x-3">
-                <button className="px-4 py-2 bg-[#111111] text-white rounded-lg text-sm">
+                <button 
+                  type="button"
+                  onClick={handleAppStoreClick}
+                  className="px-4 py-2 bg-[#111111] hover:bg-black text-white rounded-lg text-sm transition-colors cursor-pointer">
                   App Store
                 </button>
-                <button className="px-4 py-2 bg-[#111111] text-white rounded-lg text-sm">
+                <button 
+                  type="button"
+                  onClick={handlePlayStoreClick}
+                  className="px-4 py-2 bg-[#111111] hover:bg-black text-white rounded-lg text-sm transition-colors cursor-pointer">
                   Google Play
                 </button>
               </div>

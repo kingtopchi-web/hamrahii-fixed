@@ -20,6 +20,7 @@ import paymentRouter from "./routes/payment/payment.routes.js";
 import parcelRouter from "./routes/parcel.routes.js";
 import weatherRouter from "./routes/weather.routes.js";
 import kycRouter from "./routes/kyc.routes.js";
+import appConfigRouter from "./routes/appConfig.routes.js";
 import userModel from "./models/user.model.js";
 import supportModel from "./models/support.model.js";
 import vehicleDataModel from "./models/vehicleData.model.js";
@@ -81,6 +82,8 @@ app.use("/api/payment", paymentRouter)
 app.use("/api/parcel", parcelRouter)
 app.use("/api/weather", weatherRouter)
 app.use("/api/kyc", kycRouter)
+app.use("/api/app", appConfigRouter)
+app.use("/download", appConfigRouter)
 
 const uploadsDir = fs.existsSync("/pictures") ? "/pictures" : path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadsDir)) {

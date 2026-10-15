@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from "react";
-import { 
-  Menu, X, Car, User, Search, Shield, HelpCircle, 
+import {
+  Menu, X, Car, User, Search, Shield, HelpCircle,
   LogOut, Wallet, UserCircle, Car as CarIcon,
-  Info, Phone, ChevronDown , MapMinus , Home, Bell, CheckCheck, Clock, Package
+  Info, Phone, ChevronDown, MapMinus, Home, Bell, CheckCheck, Clock, Package
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -157,16 +157,16 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: "Find Rides", path: "/rides", icon: Search },
-    { name: "Offer Ride", path: "/offer-ride", icon: CarIcon },
-    { name: "Parcel", path: "/user/send-parcel", icon: Package },
+    { name: "Find Rides", path: "/rides", image: "/icons/find-ride.png", icon: Search },
+    { name: "Offer Ride", path: "/offer-ride", image: "/icons/car.png", icon: CarIcon },
+    { name: "Parcel", path: "/user/send-parcel", image: "/icons/parcel.png", icon: Package },
   ];
 
   const mobileNavItems = [
     { name: "Home", path: "/", icon: Home },
-    { name: "Find", path: "/rides", icon: Search },
-    { name: "Offer", path: "/offer-ride", icon: MapMinus },
-    { name: "Cars", path: "/my-profile/cars", icon: CarIcon },
+    { name: "Find", path: "/rides", image: "/icons/find-ride.png", icon: Search },
+    { name: "Offer", path: "/offer-ride", image: "/icons/car.png", icon: MapMinus },
+    { name: "Parcel", path: "/user/send-parcel", image: "/icons/parcel.png", icon: Package },
     { name: "Menu", path: "#", icon: Menu },
   ];
 
@@ -237,9 +237,8 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop & Tablet Navbar */}
-      <nav className={`hidden md:block fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? "glass-nav shadow-card-subtle border-b border-[var(--border-subtle)]/80 py-1.5" : "bg-transparent border-b border-transparent py-2.5"
-      }`}>
+      <nav className={`hidden md:block fixed w-full z-50 transition-all duration-300 bg-white border-b border-gray-200/90 shadow-xs ${isScrolled ? "py-1.5" : "py-2.5"
+        }`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -261,23 +260,26 @@ const Navbar = () => {
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname.startsWith(item.path);
-                
+
                 return (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`btn-water btn-water-up btn-water-bg-gray relative flex items-center gap-2 px-4 py-2 rounded-xl text-lg font-bold transition-all duration-200 ${
-                      isActive 
+                    className={`btn-water btn-water-up btn-water-bg-gray relative flex items-center gap-2 px-4 py-2 rounded-xl text-base font-bold transition-all duration-200 ${isActive
                         ? "text-[#E10600] bg-red-50/70"
-                        : "text-black hover:text-[#E10600]"
-                    }`}
+                        : "text-[#111111] hover:text-[#E10600]"
+                      }`}
                   >
-                    <Icon size={20} className={`transition-transform duration-200 ${isActive ? "text-[#E10600]" : "text-black group-hover:text-[#E10600]"}`} />
+                    {item.image ? (
+                      <img src={item.image} alt={item.name} className="w-6 h-6 object-contain shrink-0 group-hover:scale-110 transition-transform" />
+                    ) : (
+                      <Icon size={19} className={`transition-transform duration-200 ${isActive ? "text-[#E10600]" : "text-[#111111] group-hover:text-[#E10600]"}`} />
+                    )}
                     <span>{item.name}</span>
                     {isActive && (
-                      <motion.div 
+                      <motion.div
                         layoutId="activeNavIndicator"
-                        className={`absolute inset-0 rounded-xl border -z-10 ${isScrolled ? "border-red-200/80" : "border-white/30"}`}
+                        className="absolute inset-0 rounded-xl border -z-10 border-red-200/80"
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}
@@ -299,7 +301,7 @@ const Navbar = () => {
                         setShowNotificationDropdown(!showNotificationDropdown);
                         setShowUserDropdown(false);
                       }}
-                      className={`relative p-2 rounded-full transition-colors focus:outline-none ${isScrolled ? "text-[#343030] hover:text-[#E10600] hover:bg-[#F7F7F7]" : "text-white hover:text-white hover:bg-[var(--bg-surface)]/10"}`}
+                      className="relative p-2 rounded-full transition-colors focus:outline-none text-[#343030] hover:text-[#E10600] hover:bg-[#F7F7F7]"
                       title="Notifications"
                     >
                       <Bell size={20} />
@@ -354,9 +356,8 @@ const Navbar = () => {
                                 <div
                                   key={n._id}
                                   onClick={() => handleNotificationClick(n)}
-                                  className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${
-                                    !n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
-                                  }`}
+                                  className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${!n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
+                                    }`}
                                 >
                                   {n.icon || n.image ? (
                                     <img
@@ -403,9 +404,9 @@ const Navbar = () => {
                         setShowUserDropdown(!showUserDropdown);
                         setShowNotificationDropdown(false);
                       }}
-                      className={`flex items-center space-x-2.5 px-3 py-1.5 rounded-xl transition-all duration-200 border ${isScrolled ? "hover:bg-[#F7F7F7] border-[var(--border-subtle)]/60" : "hover:bg-[var(--bg-surface)]/10 border-white/20"}`}
+                      className="flex items-center space-x-2.5 px-3 py-1.5 rounded-full transition-all duration-200 border border-gray-200/90 hover:bg-[#F7F7F7] bg-white shadow-xs"
                     >
-                      <div className="w-8 h-8 rounded-full bg-red-100 ring-2 ring-red-200/60 flex items-center justify-center overflow-hidden">
+                      <div className="w-8 h-8 rounded-full bg-orange-100 ring-1 ring-orange-200 flex items-center justify-center overflow-hidden">
                         {(user?.profilePhotos?.length || user?.profilePhoto) ? (
                           <img
                             src={getDefaultProfilePhoto(user)}
@@ -416,19 +417,18 @@ const Navbar = () => {
                             }}
                           />
                         ) : (
-                          <span className="text-xs font-bold text-[#E10600]">
+                          <span className="text-xs font-bold text-orange-600">
                             {getUserFullName().charAt(0).toUpperCase()}
                           </span>
                         )}
                       </div>
-                      <span className={`text-sm font-semibold ${isScrolled ? "text-[#111111]" : "text-white"}`}>
+                      <span className="text-sm font-semibold text-[#111111]">
                         {getUserFullName().split(" ")[0]}
                       </span>
-                      <ChevronDown 
-                        size={15} 
-                        className={`transition-transform duration-200 ${
-                          showUserDropdown ? "rotate-180" : ""
-                        } ${isScrolled ? "text-[#555555]" : "text-white/80"}`}
+                      <ChevronDown
+                        size={15}
+                        className={`transition-transform duration-200 ${showUserDropdown ? "rotate-180" : ""
+                          } text-[#555555]`}
                       />
                     </motion.button>
 
@@ -450,41 +450,41 @@ const Navbar = () => {
                               {user?.phone}
                             </div>
                           </div>
-                          
-                            <div className="space-y-0.5">
-                              <Link
-                                to="/user/dashboard"
-                                onClick={() => setShowUserDropdown(false)}
-                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
-                              >
-                                <Home size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
-                                <span>My Dashboard</span>
-                              </Link>
-                              <Link
-                                to="/my-profile"
-                                onClick={() => setShowUserDropdown(false)}
-                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
-                              >
-                                <UserCircle size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
-                                <span>My Profile</span>
-                              </Link>
-                              <Link
-                                to="/user/my-parcels"
-                                onClick={() => setShowUserDropdown(false)}
-                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
-                              >
-                                <MapMinus size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
-                                <span>My Parcels</span>
-                              </Link>
-                              <Link
-                                to="/my-profile/wallet"
-                                onClick={() => setShowUserDropdown(false)}
-                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
-                              >
-                                <Wallet size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
-                                <span>Wallet</span>
-                              </Link>
-                            
+
+                          <div className="space-y-0.5">
+                            <Link
+                              to="/user/dashboard"
+                              onClick={() => setShowUserDropdown(false)}
+                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                            >
+                              <Home size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>My Dashboard</span>
+                            </Link>
+                            <Link
+                              to="/my-profile"
+                              onClick={() => setShowUserDropdown(false)}
+                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                            >
+                              <UserCircle size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>My Profile</span>
+                            </Link>
+                            <Link
+                              to="/user/my-parcels"
+                              onClick={() => setShowUserDropdown(false)}
+                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                            >
+                              <MapMinus size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>My Parcels</span>
+                            </Link>
+                            <Link
+                              to="/my-profile/wallet"
+                              onClick={() => setShowUserDropdown(false)}
+                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                            >
+                              <Wallet size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>Wallet</span>
+                            </Link>
+
                             <div className="pt-1 mt-1 border-t border-[var(--border-subtle)]">
                               <button
                                 onClick={handleSignOut}
@@ -524,9 +524,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Top Bar */}
-      <nav className={`md:hidden fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled ? "glass-nav border-b border-[var(--border-subtle)]/80" : "bg-transparent border-b border-transparent"
-      }`}>
+      <nav className="md:hidden fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-white border-b border-gray-200/90 shadow-xs">
         <div className="max-w-[90%] mx-auto px-4 h-14 flex items-center justify-between">
           <motion.div
             whileTap={{ scale: 0.95 }}
@@ -539,7 +537,7 @@ const Navbar = () => {
               className="h-10 sm:h-11 object-contain rounded-xl shadow-sm hover:opacity-95 transition-opacity"
             />
           </motion.div>
-          
+
           {!isLoggedIn ? (
             <button
               onClick={() => navigate("/register")}
@@ -553,7 +551,7 @@ const Navbar = () => {
               <div className="relative notification-dropdown-container">
                 <button
                   onClick={() => setShowNotificationDropdown(!showNotificationDropdown)}
-                  className={`relative p-2 rounded-full focus:outline-none ${isScrolled ? "text-[#343030] hover:bg-[#F7F7F7]" : "text-white hover:bg-[var(--bg-surface)]/10"}`}
+                  className="relative p-2 rounded-full focus:outline-none text-[#343030] hover:bg-[#F7F7F7]"
                   title="Notifications"
                 >
                   <Bell size={20} />
@@ -607,9 +605,8 @@ const Navbar = () => {
                             <div
                               key={n._id}
                               onClick={() => handleNotificationClick(n)}
-                              className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${
-                                !n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
-                              }`}
+                              className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${!n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
+                                }`}
                             >
                               {n.icon || n.image ? (
                                 <img
@@ -674,23 +671,21 @@ const Navbar = () => {
           {mobileNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
-            
+
             return item.name === "Menu" ? (
               <button
                 key={item.name}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="relative flex flex-col items-center justify-center py-1 flex-1 group"
               >
-                <div className={`transition-all duration-200 ${
-                  isMenuOpen 
-                    ? "text-[#E10600] scale-110" 
+                <div className={`transition-all duration-200 ${isMenuOpen
+                    ? "text-[#E10600] scale-110"
                     : "text-gray-400 group-hover:text-[#E10600]"
-                }`}>
+                  }`}>
                   {isMenuOpen ? <X size={20} /> : <Icon size={20} />}
                 </div>
-                <span className={`text-[11px] mt-0.5 font-medium transition-colors ${
-                  isMenuOpen ? "text-[#E10600] font-semibold" : "text-gray-500"
-                }`}>
+                <span className={`text-[11px] mt-0.5 font-medium transition-colors ${isMenuOpen ? "text-[#E10600] font-semibold" : "text-gray-500"
+                  }`}>
                   Menu
                 </span>
                 {isMenuOpen && (
@@ -703,16 +698,18 @@ const Navbar = () => {
                 to={item.path}
                 className="relative flex flex-col items-center justify-center py-1 flex-1 group"
               >
-                <div className={`transition-all duration-200 ${
-                  isActive 
-                    ? "text-[#E10600] scale-110" 
+                <div className={`transition-all duration-200 ${isActive
+                    ? "text-[#E10600] scale-110"
                     : "text-gray-400 group-hover:text-[#E10600]"
-                }`}>
-                  <Icon size={20} />
+                  }`}>
+                  {item.image ? (
+                    <img src={item.image} alt={item.name} className="w-6 h-6 object-contain shrink-0" />
+                  ) : (
+                    <Icon size={20} />
+                  )}
                 </div>
-                <span className={`text-[11px] mt-0.5 font-medium transition-colors ${
-                  isActive ? "text-[#E10600] font-semibold" : "text-gray-500"
-                }`}>
+                <span className={`text-[11px] mt-0.5 font-medium transition-colors ${isActive ? "text-[#E10600] font-semibold" : "text-gray-500"
+                  }`}>
                   {item.name}
                 </span>
                 {isActive && (
@@ -732,7 +729,7 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
               className="md:hidden fixed inset-0 bg-black/20 z-40"
             />
-            
+
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -756,7 +753,7 @@ const Navbar = () => {
                   {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = location.pathname === item.path;
-                    
+
                     return (
                       <Link
                         key={item.name}
@@ -764,18 +761,20 @@ const Navbar = () => {
                         onClick={() => setIsMenuOpen(false)}
                         className="group flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-[#F7F7F7] transition-colors"
                       >
-                        <div className={`transition-all duration-200 group-hover:scale-110 ${
-                          isActive 
-                            ? "text-[#E10600]" 
+                        <div className={`transition-all duration-200 group-hover:scale-110 ${isActive
+                            ? "text-[#E10600]"
                             : "text-[#B8B8B8] group-hover:text-[#E10600]"
-                        }`}>
-                          <Icon size={18} />
+                          }`}>
+                          {item.image ? (
+                            <img src={item.image} alt={item.name} className="w-5 h-5 object-contain shrink-0" />
+                          ) : (
+                            <Icon size={18} />
+                          )}
                         </div>
-                        <span className={`font-medium transition-colors ${
-                          isActive 
-                            ? "text-[#111111]" 
+                        <span className={`font-medium transition-colors ${isActive
+                            ? "text-[#111111]"
                             : "text-[#555555] group-hover:text-[#111111]"
-                        }`}>
+                          }`}>
                           {item.name}
                         </span>
                       </Link>
@@ -794,7 +793,7 @@ const Navbar = () => {
                         {user?.phone}
                       </div>
                     </div>
-                    
+
                     <div className="space-y-1">
                       <Link
                         to="/my-profile"
@@ -843,13 +842,9 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Spacers - Hidden on Home page so the hero background sits directly under the transparent navbar */}
-      {location.pathname !== "/" && (
-        <>
-          <div className="hidden md:block h-20"></div>
-          <div className="md:hidden h-14 mb-1"></div> 
-        </>
-      )}
+      {/* Spacers for fixed top navbar */}
+      <div className="hidden md:block h-20"></div>
+      <div className="md:hidden h-14 mb-1"></div>
     </>
   );
 };

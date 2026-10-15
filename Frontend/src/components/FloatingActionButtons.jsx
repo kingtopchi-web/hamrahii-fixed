@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronUp } from "lucide-react";
 
-const FloatingActionButtons = ({ whatsappNumber = "916688684504", message = "Hello Humrahii support!" }) => {
+const FloatingActionButtons = ({ whatsappNumber = "918081333082", message = "Hello Humrahii support!" }) => {
   const [showTopBtn, setShowTopBtn] = useState(false);
 
   useEffect(() => {

@@ -1,8 +1,65 @@
 import User from '../models/user.model.js';
 import crypto from 'crypto';
 
-// This is a mocked provider abstraction.
-// In production, this would call a real Aadhaar KYC provider API.
+// Submit KYC details for Admin verification
+export const submitKycDetails = async (req, res) => {
+    try {
+        const { documentType, documentNumber, fullName, dob, frontImage, backImage } = req.body;
+
+        if (!documentNumber || !documentNumber.trim()) {
+            return res.status(400).json({ success: false, message: "Aadhaar / Document number is required." });
+        }
+
+        if (!fullName || !fullName.trim()) {
+            return res.status(400).json({ success: false, message: "Full Name (as per document) is required." });
+        }
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found." });
+        }
+
+        if (user.kyc?.status === 'VERIFIED') {
+            return res.status(400).json({ success: false, message: "Your KYC is already verified." });
+        }
+
+        const reference = crypto.randomUUID();
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.userId,
+            {
+                $set: {
+                    kyc: {
+                        status: 'PENDING',
+                        documentType: documentType || 'Aadhaar Card',
+                        documentNumber: documentNumber.trim(),
+                        fullName: fullName.trim(),
+                        dob: dob || null,
+                        frontImage: frontImage || null,
+                        backImage: backImage || null,
+                        provider: 'manual_admin',
+                        verificationReference: reference,
+                        submittedAt: new Date(),
+                        verifiedAt: null,
+                        rejectionReason: null
+                    },
+                    isVerified: 'pending'
+                }
+            },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "KYC submitted successfully. Awaiting Admin verification.",
+            kyc: updatedUser.kyc
+        });
+    } catch (error) {
+        console.error("Error submitting KYC:", error);
+        return res.status(500).json({ success: false, message: error.message || "Internal server error." });
+    }
+};
+
 export const startKycSession = async (req, res) => {
     try {
         const user = await User.findById(req.userId);
@@ -14,28 +71,27 @@ export const startKycSession = async (req, res) => {
             return res.status(400).json({ success: false, message: "KYC is already verified." });
         }
 
-        // Mock generating a session reference
         const reference = crypto.randomUUID();
 
-        // Update status to PENDING using findByIdAndUpdate to avoid validation errors on other fields
+        // Update status to PENDING awaiting Admin approval
         await User.findByIdAndUpdate(req.userId, {
             $set: {
                 kyc: {
+                    ...(user.kyc?.toObject ? user.kyc.toObject() : (user.kyc || {})),
                     status: 'PENDING',
-                    provider: 'mock_aadhaar_provider',
+                    provider: 'manual_admin',
                     verificationReference: reference,
+                    submittedAt: new Date(),
                     rejectionReason: null
-                }
+                },
+                isVerified: 'pending'
             }
         });
 
-        // In a real scenario, you would return a session URL or token for the frontend to open
         res.status(200).json({
             success: true,
-            message: "KYC session started.",
-            reference: reference,
-            // For testing purposes, we provide a mock webhook url.
-            // In reality the user completes this in a provider modal.
+            message: "KYC verification request submitted. Awaiting Admin review.",
+            reference: reference
         });
     } catch (error) {
         console.error("Error starting KYC session:", error);
@@ -52,7 +108,7 @@ export const getKycStatus = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            kyc: user.kyc
+            kyc: user.kyc || { status: 'NOT_SUBMITTED' }
         });
     } catch (error) {
         console.error("Error fetching KYC status:", error);
@@ -60,14 +116,10 @@ export const getKycStatus = async (req, res) => {
     }
 };
 
-// Webhook for provider to call
+// Webhook for external provider to call if integrated
 export const kycCallback = async (req, res) => {
     try {
-        const { reference, status, reason } = req.body; // Mock payload
-
-        // In production:
-        // 1. Verify webhook signature (e.g. HMAC with KYC_WEBHOOK_SECRET)
-        // 2. Validate payload
+        const { reference, status, reason } = req.body;
 
         const user = await User.findOne({ "kyc.verificationReference": reference });
         if (!user) {
@@ -78,11 +130,14 @@ export const kycCallback = async (req, res) => {
             user.kyc.status = 'VERIFIED';
             user.kyc.verifiedAt = new Date();
             user.kyc.rejectionReason = null;
+            user.isVerified = 'verified';
         } else if (status === 'REJECTED') {
             user.kyc.status = 'REJECTED';
-            user.kyc.rejectionReason = reason || "Verification failed by provider.";
+            user.kyc.rejectionReason = reason || "Verification failed.";
+            user.isVerified = 'rejected';
         } else {
             user.kyc.status = 'PENDING';
+            user.isVerified = 'pending';
         }
 
         await user.save();
@@ -91,41 +146,5 @@ export const kycCallback = async (req, res) => {
     } catch (error) {
         console.error("Error in KYC callback:", error);
         res.status(500).json({ success: false, message: "Internal server error." });
-    }
-};
-
-// FOR MOCK TESTING PURPOSES ONLY - allows frontend to simulate completion since there's no real provider modal
-export const mockCompleteKyc = async (req, res) => {
-    try {
-        const user = await User.findById(req.userId);
-        if (!user || user.kyc?.status !== 'PENDING') {
-            return res.status(400).json({ success: false, message: "No pending session." });
-        }
-
-        // Simulate success or fail based on body
-        const { action } = req.body; 
-
-        if (action === 'fail') {
-             await User.findByIdAndUpdate(req.userId, {
-                 $set: {
-                     "kyc.status": 'REJECTED',
-                     "kyc.rejectionReason": "Name mismatch on Aadhaar."
-                 }
-             });
-        } else {
-             await User.findByIdAndUpdate(req.userId, {
-                 $set: {
-                     "kyc.status": 'VERIFIED',
-                     "kyc.verifiedAt": new Date(),
-                     "kyc.rejectionReason": null
-                 }
-             });
-        }
-
-        const updatedUser = await User.findById(req.userId);
-
-        res.status(200).json({ success: true, kyc: updatedUser.kyc });
-    } catch (error) {
-        res.status(500).json({ success: false });
     }
 };

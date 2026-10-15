@@ -95,6 +95,6 @@ export const api = {
     kyc: {
         status: base_url + "/kyc/status",
         start: base_url + "/kyc/start",
-        mockComplete: base_url + "/kyc/mock-complete",
+        submit: base_url + "/kyc/submit",
     }
 }

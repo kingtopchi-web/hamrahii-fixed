@@ -259,12 +259,40 @@ const userSchema = mongoose.Schema({
             enum: ["NOT_SUBMITTED", "PENDING", "VERIFIED", "REJECTED"],
             default: "NOT_SUBMITTED"
         },
-        provider: {
+        documentType: {
+            type: String,
+            default: "Aadhaar Card"
+        },
+        documentNumber: {
             type: String,
             default: null
         },
+        fullName: {
+            type: String,
+            default: null
+        },
+        dob: {
+            type: String,
+            default: null
+        },
+        frontImage: {
+            type: String,
+            default: null
+        },
+        backImage: {
+            type: String,
+            default: null
+        },
+        provider: {
+            type: String,
+            default: "manual_admin"
+        },
         verificationReference: {
             type: String,
+            default: null
+        },
+        submittedAt: {
+            type: Date,
             default: null
         },
         verifiedAt: {

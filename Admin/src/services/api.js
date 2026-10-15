@@ -24,6 +24,7 @@ export const api = {
     getWithPagination: base_Url + "/admin/get-user-with-pagination",
     getUserDetails: base_Url + "/admin/get-user",
     updateStatus: base_Url + "/admin/update-user-status",
+    updateKycStatus: base_Url + "/admin/update-kyc-status",
     addWalletMoney: base_Url + "/admin/add-wallet-money",
     addVirtualMoney: base_Url + "/admin/add-wallet-money",
   },

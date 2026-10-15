@@ -1,2 +1,4 @@
 Backend/config/firebase/firebase-services.json
 Backend/config/serviceAccount.json
+Backend/uploads/
+Frontend/scratch/
