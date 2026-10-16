@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Trash2, Edit, Plus } from "lucide-react";
 import Axios from "../../services/axios";

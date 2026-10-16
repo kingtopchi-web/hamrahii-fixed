@@ -1,10 +1,20 @@
 import axios from "axios";
 
-const rawBaseUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:9898/api";
-const cleanBaseUrl = rawBaseUrl.trim();
+const getDefaultBaseUrl = () => {
+  const envUrl = (import.meta.env.VITE_BACKEND_URL || "").trim();
+  if (envUrl) return envUrl;
+  if (
+    typeof window !== "undefined" &&
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
+  ) {
+    return "https://server.humrahii.com/api";
+  }
+  return "http://localhost:9898/api";
+};
 
 const Axios = axios.create({
-  baseURL: cleanBaseUrl,
+  baseURL: getDefaultBaseUrl(),
   withCredentials: true,
 });
 

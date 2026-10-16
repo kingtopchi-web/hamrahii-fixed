@@ -8,6 +8,8 @@ import {
   ArrowRightLeft,
   Navigation,
   Loader2,
+  Users,
+  Check,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -64,12 +66,14 @@ const RideSearchCard = () => {
   const [toPredictions, setToPredictions] = useState([]);
   const [showFromPredictions, setShowFromPredictions] = useState(false);
   const [showToPredictions, setShowToPredictions] = useState(false);
+  const [showPassengerDropdown, setShowPassengerDropdown] = useState(false);
 
   /* ---------------- REFS ---------------- */
   const fromInputRef = useRef(null);
   const toInputRef = useRef(null);
   const fromContainerRef = useRef(null);
   const toContainerRef = useRef(null);
+  const passengerContainerRef = useRef(null);
 
   const autocompleteServiceRef = useRef(null);
   const placesServiceRef = useRef(null);
@@ -252,6 +256,9 @@ const RideSearchCard = () => {
       if (toContainerRef.current && !toContainerRef.current.contains(event.target)) {
         setShowToPredictions(false);
       }
+      if (passengerContainerRef.current && !passengerContainerRef.current.contains(event.target)) {
+        setShowPassengerDropdown(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -426,24 +433,69 @@ const RideSearchCard = () => {
           </div>
 
           {/* 4. PASSENGERS */}
-          <div className="lg:col-span-2 relative">
+          <div className="lg:col-span-2 relative" ref={passengerContainerRef}>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
               PASSENGERS
             </label>
-            <div className="relative flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-gray-200/90 hover:border-gray-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100 transition-all bg-white cursor-pointer">
-              <select
-                value={passengers}
-                onChange={(e) => setPassengers(e.target.value)}
-                className="w-full text-xs font-semibold text-gray-800 outline-none bg-transparent cursor-pointer appearance-none pr-4"
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowPassengerDropdown((prev) => !prev)}
+                className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl border transition-all bg-white cursor-pointer ${
+                  showPassengerDropdown
+                    ? "border-red-400 ring-2 ring-red-100"
+                    : "border-gray-200/90 hover:border-gray-300"
+                }`}
               >
-                <option value="1">1 Seat</option>
-                <option value="2">2 Seats</option>
-                <option value="3">3 Seats</option>
-                <option value="4">4 Seats</option>
-                <option value="5">5 Seats</option>
-                <option value="6">6 Seats</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-gray-400 pointer-events-none absolute right-3 shrink-0" />
+                <div className="flex items-center gap-2 min-w-0">
+                  <Users className="w-4 h-4 text-gray-400 shrink-0" />
+                  <span className="text-xs font-semibold text-gray-800 truncate">
+                    {passengers} {parseInt(passengers, 10) === 1 ? "Seat" : "Seats"}
+                  </span>
+                </div>
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0 ${
+                    showPassengerDropdown ? "rotate-180 text-[#E10600]" : ""
+                  }`}
+                />
+              </button>
+
+              <AnimatePresence>
+                {showPassengerDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute z-50 left-0 right-0 mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl p-1.5 overflow-hidden"
+                  >
+                    {[1, 2, 3, 4, 5, 6].map((num) => {
+                      const isSelected = String(passengers) === String(num);
+                      return (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => {
+                            setPassengers(String(num));
+                            setShowPassengerDropdown(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                            isSelected
+                              ? "bg-red-50 text-[#E10600] font-bold"
+                              : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Users className={`w-3.5 h-3.5 ${isSelected ? "text-[#E10600]" : "text-gray-400"}`} />
+                            <span>{num} {num === 1 ? "Seat" : "Seats"}</span>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-[#E10600]" />}
+                        </button>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
 

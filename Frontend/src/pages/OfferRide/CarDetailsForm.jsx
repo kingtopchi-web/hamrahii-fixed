@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useAnimate } from "framer-motion";
-import { 
-  Car, 
-  ChevronLeft, 
-  ChevronRight, 
-  Palette, 
-  FileText, 
+import {
+  Car,
+  ChevronLeft,
+  ChevronRight,
+  Palette,
+  FileText,
   Users,
   Fuel,
   Calendar,
@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 import Axios from "../../services/axios";
 import { api } from "../../services/endpoints";
-import {toast} from "react-toastify"
-import {useNavigate} from "react-router-dom"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 import { getCarImageUrl } from "../../utils/profileImageHelper";
 
 // CarDetailsForm.jsx
@@ -32,8 +32,8 @@ export const CarDetailsForm = ({ data, updateData, nextStep, prevStep }) => {
     try {
       setLoading(true);
       setError("");
-      const res = await Axios.get(api.car.getByUser); 
-      
+      const res = await Axios.get(api.car.getByUser);
+
       if (res?.data?.success && Array.isArray(res?.data?.cars)) {
         setUserCars(res.data.cars);
         // Only keep selected if data is a valid car that exists in the user's current car list
@@ -122,7 +122,7 @@ export const CarDetailsForm = ({ data, updateData, nextStep, prevStep }) => {
       <div className="space-y-8">
         {/* Loading State */}
         {loading ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-col justify-center items-center py-16 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] shadow-lg"
@@ -135,114 +135,113 @@ export const CarDetailsForm = ({ data, updateData, nextStep, prevStep }) => {
             {/* Cars Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {userCars.map((car, index) => {
-                  console.log(car , "this is car")
-                  if(car?.status != "approved") return
+                console.log(car, "this is car")
+                if (car?.status != "approved") return
                 return (
-                <motion.div
-                  key={car._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  className={`cursor-pointer rounded-2xl border-2 overflow-hidden transition-all duration-300 ${
-                    selectedCar?._id === car._id
-                      ? 'border-[#E10600] shadow-lg shadow-[#E10600]/10'
-                      : 'border-[var(--border-subtle)] hover:border-[#B8B8B8]'
-                  }`}
-                  onClick={() => handleCarSelect(car)}
-                >
-                  {/* Car Image */}
-                  <div className="relative h-48 bg-gradient-to-br from-[#F7F7F7] to-[#E5E5E5]">
-                    <img 
-                      src={getCarImageUrl(car)} 
-                      alt={car.model || "Car"}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = "/default-car.svg";
-                      }}
-                    />
-                    
-                    {/* Selected Indicator */}
-                    {selectedCar?._id === car._id && (
-                      <div className="absolute top-4 right-4">
-                        <div className="w-10 h-10 rounded-full bg-[#E10600] flex items-center justify-center shadow-lg">
-                          <CheckCircle className="text-white" size={20} />
+                  <motion.div
+                    key={car._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                    className={`cursor-pointer rounded-2xl border-2 overflow-hidden transition-all duration-300 ${selectedCar?._id === car._id
+                        ? 'border-[#E10600] shadow-lg shadow-[#E10600]/10'
+                        : 'border-[var(--border-subtle)] hover:border-[#B8B8B8]'
+                      }`}
+                    onClick={() => handleCarSelect(car)}
+                  >
+                    {/* Car Image */}
+                    <div className="relative h-48 bg-gradient-to-br from-[#F7F7F7] to-[#E5E5E5]">
+                      <img
+                        src={getCarImageUrl(car)}
+                        alt={car.model || "Car"}
+                        className="w-full h-full object-cover object-center"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "/default-car.svg";
+                        }}
+                      />
+
+                      {/* Selected Indicator */}
+                      {selectedCar?._id === car._id && (
+                        <div className="absolute top-4 right-4">
+                          <div className="w-10 h-10 rounded-full bg-[#E10600] flex items-center justify-center shadow-lg">
+                            <CheckCircle className="text-white" size={20} />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Badge */}
+                      <div className="absolute bottom-4 left-4">
+                        <span className="px-3 py-1 bg-[#111111]/90 text-white text-xs font-semibold rounded-full">
+                          {car.seats} Seats
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Car Details */}
+                    <div className="p-5 bg-[var(--bg-surface)]">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="text-xl font-bold text-[#111111]">{car.brand} {car.model}</h3>
+                          <p className="text-sm text-[#555555]">{car.year}</p>
                         </div>
                       </div>
-                    )}
-                    
-                    {/* Badge */}
-                    <div className="absolute bottom-4 left-4">
-                      <span className="px-3 py-1 bg-[#111111]/90 text-white text-xs font-semibold rounded-full">
-                        {car.seats} Seats
-                      </span>
+
+                      {/* Car Specs */}
+                      <div className="grid grid-cols-2 gap-3 mb-4">
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-4 h-4 text-[#555555]" />
+                          <span className="text-sm text-[#111111] font-medium">
+                            {formatPlateNumber(car.plateNumber)}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <Fuel className="w-4 h-4 text-[#555555]" />
+                          <span className="text-sm text-[#111111] font-medium">
+                            {car.fuelType}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-[#555555]" />
+                          <span className="text-sm text-[#111111] font-medium">
+                            {car.seats} seats
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <Settings className="w-4 h-4 text-[#555555]" />
+                          <span className="text-sm text-[#111111] font-medium">
+                            {car.transmission}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Select Button */}
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`w-full py-3 rounded-lg text-sm font-semibold transition-colors duration-200 ${selectedCar?._id === car._id
+                            ? 'bg-[#E10600] text-white'
+                            : 'bg-[#F7F7F7] text-[#111111] hover:bg-[#E5E5E5]'
+                          }`}
+                        onClick={() => handleCarSelect(car)}
+                      >
+                        {selectedCar?._id === car._id ? 'Selected' : 'Select Car'}
+                      </motion.button>
                     </div>
-                  </div>
-                  
-                  {/* Car Details */}
-                  <div className="p-5 bg-[var(--bg-surface)]">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="text-xl font-bold text-[#111111]">{car.brand} {car.model}</h3>
-                        <p className="text-sm text-[#555555]">{car.year}</p>
-                      </div>
-                    </div>
-                    
-                    {/* Car Specs */}
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-[#555555]" />
-                        <span className="text-sm text-[#111111] font-medium">
-                          {formatPlateNumber(car.plateNumber)}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <Fuel className="w-4 h-4 text-[#555555]" />
-                        <span className="text-sm text-[#111111] font-medium">
-                          {car.fuelType}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-[#555555]" />
-                        <span className="text-sm text-[#111111] font-medium">
-                          {car.seats} seats
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <Settings className="w-4 h-4 text-[#555555]" />
-                        <span className="text-sm text-[#111111] font-medium">
-                          {car.transmission}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Select Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`w-full py-3 rounded-lg text-sm font-semibold transition-colors duration-200 ${
-                        selectedCar?._id === car._id
-                          ? 'bg-[#E10600] text-white'
-                          : 'bg-[#F7F7F7] text-[#111111] hover:bg-[#E5E5E5]'
-                      }`}
-                      onClick={() => handleCarSelect(car)}
-                    >
-                      {selectedCar?._id === car._id ? 'Selected' : 'Select Car'}
-                    </motion.button>
-                  </div>
-                </motion.div>
-              )})}
+                  </motion.div>
+                )
+              })}
             </div>
 
 
           </div>
         ) : (
           /* No Cars State */
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-12 text-center shadow-lg"

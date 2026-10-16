@@ -1,34 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { ShieldAlert, X } from 'lucide-react';
+import { toast } from 'react-toastify';
 import Axios from '../services/axios';
 import { api } from '../services/endpoints';
 
 const KycGuard = ({ children, fallback, className = "" }) => {
+    const user = useSelector((state) => state.user);
+    const reduxLoggedIn = !!(user?._id || user?.phone);
+
+    const [isLoggedIn, setIsLoggedIn] = useState(reduxLoggedIn);
     const [kycStatus, setKycStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
+        if (reduxLoggedIn) {
+            setIsLoggedIn(true);
+        }
+    }, [reduxLoggedIn]);
+
+    useEffect(() => {
+        let isMounted = true;
+
         const fetchStatus = async () => {
             try {
                 const res = await Axios.get(api.kyc.status);
 
-                if (res.data.success && res.data.kyc) {
+                if (isMounted && res.data?.success && res.data?.kyc) {
+                    setIsLoggedIn(true);
                     setKycStatus(res.data.kyc.status);
                 }
             } catch (error) {
-                // If 401 or not logged in, status remains unverified
+                if (isMounted) {
+                    if (error?.response?.status === 401) {
+                        setIsLoggedIn(false);
+                        setKycStatus(null);
+                    } else if (reduxLoggedIn) {
+                        setIsLoggedIn(true);
+                        setKycStatus('NOT_SUBMITTED');
+                    } else {
+                        setIsLoggedIn(false);
+                        setKycStatus(null);
+                    }
+                }
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchStatus();
-    }, []);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [reduxLoggedIn]);
 
     const handleClickCapture = (e) => {
+        // 1. Agar login nahi hai, toh pehle login mange
+        if (!isLoggedIn) {
+            e.preventDefault();
+            e.stopPropagation();
+            toast.info("Please login first to continue");
+            navigate('/login', { state: { from: location.pathname } });
+            return;
+        }
+
+        // 2. Agar login ho chuka hai, tab check kare ki KYC verified hai ya nahi
         if (kycStatus !== 'VERIFIED') {
             e.preventDefault();
             e.stopPropagation();
@@ -40,10 +83,21 @@ const KycGuard = ({ children, fallback, className = "" }) => {
         return <div className={`relative ${className}`}>{children}</div>;
     }
 
-    if (kycStatus === 'VERIFIED') {
+    // Agar user logged in hai aur KYC verified hai -> normal render bina kisi restriction ke
+    if (isLoggedIn && kycStatus === 'VERIFIED') {
         return <div className={`relative ${className}`}>{children}</div>;
     }
 
+    // Agar user logged in NAHI hai -> normal button bina KYC shield badge ke, click karne par login mange
+    if (!isLoggedIn) {
+        return (
+            <div onClickCapture={handleClickCapture} className={`relative group cursor-pointer ${className}`}>
+                {children}
+            </div>
+        );
+    }
+
+    // Agar user logged in HAI lekin KYC verified nahi hai -> KYC restriction badge show kare aur modal open kare
     return (
         <>
             {/* The wrapped element that triggers the modal if unverified */}
@@ -82,7 +136,7 @@ const KycGuard = ({ children, fallback, className = "" }) => {
                                     setShowModal(false);
                                     navigate('/my-profile/kyc');
                                 }}
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors shadow-lg shadow-blue-200"
+                                className="w-full bg-[#E10600] hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors shadow-lg shadow-red-500/20"
                             >
                                 Complete KYC Now
                             </button>

@@ -723,24 +723,61 @@ const Home = () => {
               </button>
             </div>
 
-            {/* Images Group */}
-            <div className="z-10 w-full md:w-1/2 flex justify-center md:justify-end items-end gap-2 md:gap-4 relative h-48 md:h-64">
-              <motion.img 
-                initial={{ x: 50, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=400&q=80" 
-                alt="Sedan Car"
-                className="w-32 md:w-48 h-auto object-contain drop-shadow-xl z-20 absolute left-0 md:left-10 bottom-0 rounded-lg"
-              />
-              <motion.img 
-                initial={{ x: 50, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=400&q=80" 
-                alt="SUV Car"
-                className="w-40 md:w-56 h-auto object-contain drop-shadow-2xl z-30 relative bottom-0 rounded-lg border-4 border-white shadow-lg"
-              />
+            {/* Vehicles Showcase Grid */}
+            <div className="z-10 w-full md:w-1/2 grid grid-cols-2 gap-3 sm:gap-4">
+              {[
+                { 
+                  name: "Hatchback", 
+                  seats: "Up to 3 Seats", 
+                  img: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=400&q=80",
+                  tag: "Economical"
+                },
+                { 
+                  name: "Sedan", 
+                  seats: "Up to 4 Seats", 
+                  img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=400&q=80",
+                  tag: "Comfort"
+                },
+                { 
+                  name: "SUV", 
+                  seats: "Up to 6 Seats", 
+                  img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=400&q=80",
+                  tag: "Spacious"
+                },
+                { 
+                  name: "Bike / Scooter", 
+                  seats: "1 Seat", 
+                  img: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=400&q=80",
+                  tag: "Fastest"
+                },
+              ].map((vehicle, idx) => (
+                <motion.div
+                  key={idx}
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => navigate("/vehicles")}
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
+                >
+                  <div className="h-28 sm:h-32 w-full overflow-hidden bg-gray-100 relative">
+                    <img
+                      src={vehicle.img}
+                      alt={vehicle.name}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/60 text-white backdrop-blur-md">
+                      {vehicle.tag}
+                    </div>
+                  </div>
+                  <div className="p-3 bg-white">
+                    <h4 className="font-bold text-gray-900 text-sm group-hover:text-[#E10600] transition-colors truncate">
+                      {vehicle.name}
+                    </h4>
+                    <p className="text-xs text-gray-500 font-medium">
+                      {vehicle.seats}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>

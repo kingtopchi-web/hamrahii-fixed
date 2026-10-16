@@ -555,8 +555,12 @@ const SendParcel = () => {
         
         {/* Header */}
         <div className="text-center mb-3 sm:mb-4">
-          <div className="inline-flex items-center justify-center p-2.5 bg-red-50 text-[#E10600] rounded-2xl mb-1.5 shadow-xs">
-            <Package size={26} />
+          <div className="inline-flex items-center justify-center mb-1.5">
+            <img
+              src="/icons/parcel.png"
+              alt="Parcel"
+              className="w-12 h-12 sm:w-14 sm:h-14 object-contain"
+            />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Send a Parcel</h1>
         </div>
@@ -595,7 +599,7 @@ const SendParcel = () => {
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-bold text-gray-900">Where is the pickup?</h2>
                 </div>
-                <div className="relative z-50">
+                <div className="relative z-20">
                   <button
                     type="button"
                     onClick={() => handleOpenMapPicker("pickup")}
@@ -638,7 +642,7 @@ const SendParcel = () => {
                     </button>
                   </div>
                   {showPickupSuggestions && pickupSuggestions.length > 0 && (
-                    <div className="absolute z-[100] w-full mt-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div className="absolute z-30 w-full mt-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl shadow-lg max-h-60 overflow-y-auto">
                       {pickupSuggestions.map((s) => (
                         <div key={s.place_id} onClick={() => selectPickup(s.place_id, s.description)} className="p-3 hover:bg-gray-50 cursor-pointer border-b border-[var(--border-subtle)] flex flex-col gap-0.5 text-left">
                           <span className="font-semibold text-sm text-gray-900">{s.structured_formatting?.main_text || s.description}</span>
@@ -691,7 +695,7 @@ const SendParcel = () => {
                   </button>
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 mt-6">Where is it going?</h2>
-                <div className="relative z-50">
+                <div className="relative z-20">
                   <button
                     type="button"
                     onClick={() => handleOpenMapPicker("dropoff")}
@@ -734,7 +738,7 @@ const SendParcel = () => {
                     </button>
                   </div>
                   {showDropoffSuggestions && dropoffSuggestions.length > 0 && (
-                    <div className="absolute z-10 w-full mt-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div className="absolute z-30 w-full mt-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl shadow-lg max-h-60 overflow-y-auto">
                       {dropoffSuggestions.map((s) => (
                         <div key={s.place_id} onClick={() => selectDropoff(s.place_id, s.description)} className="p-3 hover:bg-gray-50 cursor-pointer border-b border-[var(--border-subtle)] flex flex-col gap-0.5 text-left">
                           <span className="font-semibold text-sm text-gray-900">{s.structured_formatting?.main_text || s.description}</span>

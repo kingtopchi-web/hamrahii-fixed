@@ -697,7 +697,7 @@ const ViewRideDetails = () => {
                       <img
                         src={getCarImageUrl(carImages[selectedCarImage])}
                         alt={`${rideDetails.carDetails?.brand} ${rideDetails.carDetails?.model}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-center"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.src = "/default-car.svg";
@@ -735,7 +735,7 @@ const ViewRideDetails = () => {
                           <img
                             src={getCarImageUrl(img)}
                             alt={`Car view ${index + 1}`}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-center"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
                               e.currentTarget.src = "/default-car.svg";

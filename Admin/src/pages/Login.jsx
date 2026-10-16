@@ -9,7 +9,6 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
-import axios from "axios";
 import { api } from "../services/api";
 import { toast } from "react-toastify";
 import Axios from "../services/axios";
@@ -106,7 +105,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(api.admin.sendLoginOtp, formData);
+      const res = await Axios.post(api.admin.sendLoginOtp, formData);
 
       if (res?.data?.success) {
         setEmailForOtp(formData.email);
@@ -115,7 +114,7 @@ const Login = () => {
         toast.success(res?.data?.message);
         setOtp(["", "", "", "", "", ""]);
       } else {
-        setError(data.message || "Failed to send OTP");
+        setError(res?.data?.message || "Failed to send OTP");
       }
     } catch (err) {
       setError(

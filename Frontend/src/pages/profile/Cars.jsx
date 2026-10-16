@@ -271,7 +271,7 @@ const Cars = () => {
                         <img
                           src={getCarImageUrl(car.images?.[0])}
                           alt={`${car.brand || "Vehicle"} ${car.model || ""}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                           onError={(e) => {
                             e.currentTarget.onerror = null;
@@ -399,7 +399,7 @@ const Cars = () => {
                           <img
                             src={getCarImageUrl(car.images?.[0])}
                             alt={`${car.brand || "Vehicle"} ${car.model || ""}`}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-center"
                             loading="lazy"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
@@ -589,7 +589,7 @@ const Cars = () => {
                         <img
                           src={getCarImageUrl(img)}
                           alt={`Car view ${idx + 1}`}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform"
+                          className="w-full h-full object-cover object-center hover:scale-105 transition-transform"
                           loading="lazy"
                           onError={(e) => {
                             e.currentTarget.onerror = null;

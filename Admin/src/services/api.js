@@ -1,4 +1,17 @@
-const base_Url = (import.meta.env.VITE_BACKEND_URL || "").trim().replace(/\/$/, "");
+const getDefaultBaseUrl = () => {
+  const envUrl = (import.meta.env.VITE_BACKEND_URL || "").trim();
+  if (envUrl) return envUrl.replace(/\/$/, "");
+  if (
+    typeof window !== "undefined" &&
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
+  ) {
+    return "https://server.humrahii.com/api";
+  }
+  return "http://localhost:9898/api";
+};
+
+const base_Url = getDefaultBaseUrl();
 export const api = {
   admin: {
     sendLoginOtp: base_Url + "/admin/send-login-otp",

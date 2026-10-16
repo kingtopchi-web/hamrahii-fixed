@@ -237,7 +237,7 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop & Tablet Navbar */}
-      <nav className={`hidden md:block fixed w-full z-50 transition-all duration-300 bg-white border-b border-gray-200/90 shadow-xs ${isScrolled ? "py-1.5" : "py-2.5"
+      <nav className={`hidden md:block fixed w-full z-[1000] transition-all duration-300 bg-white border-b border-gray-200/90 shadow-xs ${isScrolled ? "py-1.5" : "py-2.5"
         }`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
@@ -301,7 +301,7 @@ const Navbar = () => {
                         setShowNotificationDropdown(!showNotificationDropdown);
                         setShowUserDropdown(false);
                       }}
-                      className="relative p-2 rounded-full transition-colors focus:outline-none text-[#343030] hover:text-[#E10600] hover:bg-[#F7F7F7]"
+                      className="relative p-2 rounded-full transition-colors focus:outline-none text-[#343030] hover:text-[#E10600] hover:bg-[#F7F7F7] cursor-pointer"
                       title="Notifications"
                     >
                       <Bell size={20} />
@@ -320,21 +320,25 @@ const Navbar = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8, scale: 0.98 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute right-0 mt-2 w-80 sm:w-96 bg-[var(--bg-surface)] rounded-xl shadow-2xl border border-[var(--border-subtle)] overflow-hidden z-50"
+                          className="absolute right-0 mt-2.5 w-[360px] sm:w-[410px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-gray-200/90 overflow-hidden z-[1050]"
                         >
-                          <div className="p-3 border-b border-[var(--border-subtle)] bg-[#F7F7F7] flex items-center justify-between">
+                          <div className="p-3.5 px-4 border-b border-gray-100 bg-gray-50/90 flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <span className="text-sm font-semibold text-[#111111]">Notifications</span>
-                              {unreadCount > 0 && (
-                                <span className="bg-[#fee2e2] text-[#E10600] text-xs font-medium px-2 py-0.5 rounded-full">
+                              <span className="text-sm font-bold text-gray-900">Notifications</span>
+                              {unreadCount > 0 ? (
+                                <span className="bg-red-50 text-[#E10600] border border-red-200/80 text-[11px] font-semibold px-2 py-0.5 rounded-full">
                                   {unreadCount} new
+                                </span>
+                              ) : (
+                                <span className="bg-gray-100 text-gray-500 text-[11px] font-medium px-2 py-0.5 rounded-full">
+                                  All caught up
                                 </span>
                               )}
                             </div>
                             {unreadCount > 0 && (
                               <button
                                 onClick={handleMarkAllRead}
-                                className="text-xs text-[#E10600] hover:text-[#b00500] font-medium flex items-center space-x-1 transition-colors"
+                                className="text-xs text-[#E10600] hover:text-[#b00500] font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
                               >
                                 <CheckCheck size={14} />
                                 <span>Mark all read</span>
@@ -342,55 +346,83 @@ const Navbar = () => {
                             )}
                           </div>
 
-                          <div className="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                          <div className="max-h-[380px] sm:max-h-[420px] overflow-y-auto divide-y divide-gray-100/90 overscroll-contain">
                             {loadingNotifications ? (
-                              <div className="py-8 text-center text-xs text-gray-400">Loading notifications...</div>
+                              <div className="py-10 text-center flex flex-col items-center justify-center gap-2">
+                                <div className="w-5 h-5 border-2 border-[#E10600] border-t-transparent rounded-full animate-spin" />
+                                <span className="text-xs text-gray-400 font-medium">Loading notifications...</span>
+                              </div>
                             ) : notifications.length === 0 ? (
-                              <div className="py-8 px-4 text-center">
-                                <Bell size={28} className="mx-auto text-gray-300 mb-2" />
-                                <p className="text-xs text-gray-500 font-medium">No notifications yet</p>
-                                <p className="text-[11px] text-gray-400 mt-0.5">You will receive broadcast alerts and updates here</p>
+                              <div className="py-10 px-4 text-center">
+                                <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-2.5">
+                                  <Bell size={22} />
+                                </div>
+                                <p className="text-sm text-gray-700 font-semibold">No notifications yet</p>
+                                <p className="text-xs text-gray-400 mt-1 max-w-xs mx-auto">
+                                  You'll receive trip updates, parcel requests, and alerts here
+                                </p>
                               </div>
                             ) : (
                               notifications.map((n) => (
                                 <div
                                   key={n._id}
                                   onClick={() => handleNotificationClick(n)}
-                                  className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${!n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
-                                    }`}
+                                  className={`p-3.5 px-4 text-left transition-all duration-150 cursor-pointer flex space-x-3 items-start ${
+                                    !n.isRead
+                                      ? "bg-red-50/45 hover:bg-red-50/75 border-l-[3px] border-l-[#E10600]"
+                                      : "bg-white hover:bg-gray-50/90 border-l-[3px] border-l-transparent"
+                                  }`}
                                 >
                                   {n.icon || n.image ? (
                                     <img
                                       src={n.icon || n.image}
                                       alt=""
-                                      className="w-9 h-9 rounded-full object-cover border border-[var(--border-subtle)] mt-0.5 shrink-0"
-                                      onError={(e) => { e.target.style.display = 'none'; }}
+                                      className="w-9 h-9 rounded-full object-cover border border-gray-200 mt-0.5 shrink-0 shadow-2xs"
+                                      onError={(e) => {
+                                        e.target.style.display = "none";
+                                      }}
                                     />
                                   ) : (
-                                    <div className="w-9 h-9 rounded-full bg-red-100 text-[#E10600] flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+                                    <div
+                                      className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs shadow-2xs ${
+                                        !n.isRead
+                                          ? "bg-red-100 text-[#E10600]"
+                                          : "bg-gray-100 text-gray-500"
+                                      }`}
+                                    >
                                       🔔
                                     </div>
                                   )}
                                   <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between">
-                                      <h4 className={`text-xs font-semibold truncate ${!n.isRead ? "text-[#111111]" : "text-gray-600"}`}>
+                                    <div className="flex items-center justify-between gap-2">
+                                      <h4
+                                        className={`text-xs font-bold truncate ${
+                                          !n.isRead ? "text-gray-900" : "text-gray-700"
+                                        }`}
+                                      >
                                         {n.title || "Hamrahii"}
                                       </h4>
-                                      <span className="text-[10px] text-gray-400 shrink-0 ml-2">
+                                      <span className="text-[10px] text-gray-400 shrink-0 font-medium">
                                         {formatTimeAgo(n.createdAt)}
                                       </span>
                                     </div>
-                                    <p className="text-xs text-gray-600 mt-0.5 line-clamp-2">
+                                    <p className="text-xs text-gray-600 mt-1 line-clamp-2 leading-relaxed">
                                       {n.body || n.message}
                                     </p>
                                   </div>
                                   {!n.isRead && (
-                                    <span className="w-2 h-2 rounded-full bg-[#E10600] shrink-0 mt-1.5" />
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#E10600] shrink-0 mt-1.5 ring-2 ring-white shadow-2xs" />
                                   )}
                                 </div>
                               ))
                             )}
                           </div>
+
+                          {notifications.length > 0 && (
+                            <div className="py-2 px-3 bg-gray-50/70 border-t border-gray-100 text-center">
+                              <span className="text-[11px] text-gray-400 font-medium">Showing recent notifications</span>
+                            </div>
+                          )}
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -440,7 +472,7 @@ const Navbar = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8, scale: 0.98 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute right-0 mt-2 w-56 bg-[var(--bg-surface)] rounded-2xl shadow-card-hover border border-[var(--border-subtle)] overflow-hidden z-50 p-1.5"
+                          className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-200/90 overflow-hidden z-[1050] p-1.5"
                         >
                           <div className="p-3 bg-[#F7F7F7] rounded-xl mb-1">
                             <div className="text-sm font-bold text-[#111111]">
@@ -524,7 +556,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Top Bar */}
-      <nav className="md:hidden fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-white border-b border-gray-200/90 shadow-xs">
+      <nav className="md:hidden fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 bg-white border-b border-gray-200/90 shadow-xs">
         <div className="max-w-[90%] mx-auto px-4 h-14 flex items-center justify-between">
           <motion.div
             whileTap={{ scale: 0.95 }}
@@ -551,7 +583,7 @@ const Navbar = () => {
               <div className="relative notification-dropdown-container">
                 <button
                   onClick={() => setShowNotificationDropdown(!showNotificationDropdown)}
-                  className="relative p-2 rounded-full focus:outline-none text-[#343030] hover:bg-[#F7F7F7]"
+                  className="relative p-2 rounded-full focus:outline-none text-[#343030] hover:bg-[#F7F7F7] cursor-pointer"
                   title="Notifications"
                 >
                   <Bell size={20} />
@@ -570,21 +602,25 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.15 }}
-                      className="fixed left-4 right-4 top-16 bg-[var(--bg-surface)] rounded-xl shadow-2xl border border-[var(--border-subtle)] overflow-hidden z-50 max-h-[75vh] flex flex-col"
+                      className="fixed left-3 right-3 top-16 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.22)] border border-gray-200/90 overflow-hidden z-[1050] max-h-[78vh] flex flex-col"
                     >
-                      <div className="p-3 border-b border-[var(--border-subtle)] bg-[#F7F7F7] flex items-center justify-between">
+                      <div className="p-3.5 px-4 border-b border-gray-100 bg-gray-50/90 flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <span className="text-sm font-semibold text-[#111111]">Notifications</span>
-                          {unreadCount > 0 && (
-                            <span className="bg-[#fee2e2] text-[#E10600] text-xs font-medium px-2 py-0.5 rounded-full">
+                          <span className="text-sm font-bold text-gray-900">Notifications</span>
+                          {unreadCount > 0 ? (
+                            <span className="bg-red-50 text-[#E10600] border border-red-200/80 text-[11px] font-semibold px-2 py-0.5 rounded-full">
                               {unreadCount} new
+                            </span>
+                          ) : (
+                            <span className="bg-gray-100 text-gray-500 text-[11px] font-medium px-2 py-0.5 rounded-full">
+                              All caught up
                             </span>
                           )}
                         </div>
                         {unreadCount > 0 && (
                           <button
                             onClick={handleMarkAllRead}
-                            className="text-xs text-[#E10600] hover:text-[#b00500] font-medium flex items-center space-x-1"
+                            className="text-xs text-[#E10600] hover:text-[#b00500] font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
                           >
                             <CheckCheck size={14} />
                             <span>Mark all read</span>
@@ -592,54 +628,83 @@ const Navbar = () => {
                         )}
                       </div>
 
-                      <div className="overflow-y-auto divide-y divide-gray-100 flex-1">
+                      <div className="overflow-y-auto divide-y divide-gray-100/90 flex-1 overscroll-contain">
                         {loadingNotifications ? (
-                          <div className="py-8 text-center text-xs text-gray-400">Loading notifications...</div>
+                          <div className="py-10 text-center flex flex-col items-center justify-center gap-2">
+                            <div className="w-5 h-5 border-2 border-[#E10600] border-t-transparent rounded-full animate-spin" />
+                            <span className="text-xs text-gray-400 font-medium">Loading notifications...</span>
+                          </div>
                         ) : notifications.length === 0 ? (
-                          <div className="py-8 px-4 text-center">
-                            <Bell size={28} className="mx-auto text-gray-300 mb-2" />
-                            <p className="text-xs text-gray-500 font-medium">No notifications yet</p>
+                          <div className="py-10 px-4 text-center">
+                            <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-2.5">
+                              <Bell size={22} />
+                            </div>
+                            <p className="text-sm text-gray-700 font-semibold">No notifications yet</p>
+                            <p className="text-xs text-gray-400 mt-1 max-w-xs mx-auto">
+                              You'll receive trip updates, parcel requests, and alerts here
+                            </p>
                           </div>
                         ) : (
                           notifications.map((n) => (
                             <div
                               key={n._id}
                               onClick={() => handleNotificationClick(n)}
-                              className={`p-3 text-left transition-colors cursor-pointer hover:bg-[#F9FAFB] flex space-x-3 items-start ${!n.isRead ? "bg-red-50/40" : "bg-[var(--bg-surface)]"
-                                }`}
+                              className={`p-3.5 px-4 text-left transition-all duration-150 cursor-pointer flex space-x-3 items-start ${
+                                !n.isRead
+                                  ? "bg-red-50/45 hover:bg-red-50/75 border-l-[3px] border-l-[#E10600]"
+                                  : "bg-white hover:bg-gray-50/90 border-l-[3px] border-l-transparent"
+                              }`}
                             >
                               {n.icon || n.image ? (
                                 <img
                                   src={n.icon || n.image}
                                   alt=""
-                                  className="w-9 h-9 rounded-full object-cover border border-[var(--border-subtle)] mt-0.5 shrink-0"
-                                  onError={(e) => { e.target.style.display = 'none'; }}
+                                  className="w-9 h-9 rounded-full object-cover border border-gray-200 mt-0.5 shrink-0 shadow-2xs"
+                                  onError={(e) => {
+                                    e.target.style.display = "none";
+                                  }}
                                 />
                               ) : (
-                                <div className="w-9 h-9 rounded-full bg-red-100 text-[#E10600] flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+                                <div
+                                  className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs shadow-2xs ${
+                                    !n.isRead
+                                      ? "bg-red-100 text-[#E10600]"
+                                      : "bg-gray-100 text-gray-500"
+                                  }`}
+                                >
                                   🔔
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between">
-                                  <h4 className={`text-xs font-semibold truncate ${!n.isRead ? "text-[#111111]" : "text-gray-600"}`}>
+                                <div className="flex items-center justify-between gap-2">
+                                  <h4
+                                    className={`text-xs font-bold truncate ${
+                                      !n.isRead ? "text-gray-900" : "text-gray-700"
+                                    }`}
+                                  >
                                     {n.title || "Hamrahii"}
                                   </h4>
-                                  <span className="text-[10px] text-gray-400 shrink-0 ml-2">
+                                  <span className="text-[10px] text-gray-400 shrink-0 font-medium">
                                     {formatTimeAgo(n.createdAt)}
                                   </span>
                                 </div>
-                                <p className="text-xs text-gray-600 mt-0.5 line-clamp-2">
+                                <p className="text-xs text-gray-600 mt-1 line-clamp-2 leading-relaxed">
                                   {n.body || n.message}
                                 </p>
                               </div>
                               {!n.isRead && (
-                                <span className="w-2 h-2 rounded-full bg-[#E10600] shrink-0 mt-1.5" />
+                                <span className="w-2.5 h-2.5 rounded-full bg-[#E10600] shrink-0 mt-1.5 ring-2 ring-white shadow-2xs" />
                               )}
                             </div>
                           ))
                         )}
                       </div>
+
+                      {notifications.length > 0 && (
+                        <div className="py-2 px-3 bg-gray-50/70 border-t border-gray-100 text-center">
+                          <span className="text-[11px] text-gray-400 font-medium">Showing recent notifications</span>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -666,7 +731,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-[var(--border-subtle)]/80 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-white border-t border-gray-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="flex items-center justify-around h-14 max-w-lg mx-auto px-2">
           {mobileNavItems.map((item) => {
             const Icon = item.icon;
@@ -727,7 +792,7 @@ const Navbar = () => {
           <>
             <div
               onClick={() => setIsMenuOpen(false)}
-              className="md:hidden fixed inset-0 bg-black/20 z-40"
+              className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-xs z-[1040]"
             />
 
             <motion.div
@@ -735,7 +800,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 20 }}
-              className="md:hidden fixed inset-y-0 right-0 w-64 bg-[var(--bg-surface)] z-50 shadow-lg"
+              className="md:hidden fixed inset-y-0 right-0 w-64 bg-white z-[1050] shadow-2xl"
             >
               <div className="p-4">
                 <div className="flex items-center justify-between mb-6">
