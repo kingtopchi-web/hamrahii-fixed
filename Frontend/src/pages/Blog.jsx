@@ -13,10 +13,12 @@ import {
   TrendingUp,
   Filter
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { api } from '../services/endpoints'
-import { getBlogImageUrl, getFallbackBlogImage } from '../utils/blogImageHelper'
+import { getBlogImageUrl, getFallbackBlogImage, createSafeSlug } from '../utils/blogImageHelper'
 
 const Blog = () => {
+  const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
@@ -115,7 +117,7 @@ const Blog = () => {
       // Additional fields from API
       content: blog.content || '',
       tags: blog.tags || [],
-      slug: blog.slug || blog.title?.toLowerCase().replace(/\s+/g, '-') || ''
+      slug: createSafeSlug(blog.slug || blog.title) || (blog._id ? String(blog._id) : '')
     }))
   }
 
@@ -425,6 +427,7 @@ const Blog = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ y: -8 }}
+                    onClick={() => navigate(`/blog/${post.slug}`, { state: { blog: post } })}
                     className="group cursor-pointer"
                   >
                     <div className="rounded-2xl overflow-hidden mb-4 relative"
@@ -620,19 +623,23 @@ const Blog = () => {
               </h3>
               <div className="space-y-3">
                 {blogs.slice(0, 4).map((post, index) => (
-                  <div key={post.id || index} className="flex items-start gap-3">
+                  <div
+                    key={post.id || index}
+                    onClick={() => navigate(`/blog/${post.slug}`, { state: { blog: post } })}
+                    className="flex items-start gap-3 cursor-pointer group"
+                  >
                     <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
                       <img 
                         src={getBlogImageUrl(post.image, index + 2, post.category)} 
                         alt={post.title || "Recent Post"}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         onError={(e) => {
                           e.target.src = getFallbackBlogImage(index + 2, post.category);
                         }}
                       />
                     </div>
                     <div>
-                      <div className="text-sm font-medium line-clamp-2" style={{ color: colors.textPrimary }}>
+                      <div className="text-sm font-medium line-clamp-2 group-hover:text-[#E10600] transition-colors" style={{ color: colors.textPrimary }}>
                         {post.title}
                       </div>
                       <div className="text-xs mt-1" style={{ color: colors.textSecondary }}>

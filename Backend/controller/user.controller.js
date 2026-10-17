@@ -1788,19 +1788,28 @@ export const handleGetUserNotifications = async (req, res, next) => {
         { reciever: userId },
         { reciever: null },
         { type: "broadcast" }
-      ]
+      ],
+      deletedBy: { $ne: userId }
     };
 
     const notifications = await notificationModel
       .find(query)
       .sort({ createdAt: -1 })
-      .limit(30);
+      .limit(50);
+
+    const formatted = notifications.map((n) => {
+      const isUserRead = n.isRead || (n.readBy && n.readBy.some((id) => id?.toString() === userId?.toString()));
+      return {
+        ...n.toObject(),
+        isRead: !!isUserRead
+      };
+    });
 
     return res.status(200).json({
       success: true,
       message: "Notifications fetched successfully",
-      data: notifications,
-      unreadCount: notifications.filter((n) => !n.isRead).length
+      data: formatted,
+      unreadCount: formatted.filter((n) => !n.isRead).length
     });
   } catch (error) {
     next(error);
@@ -1812,7 +1821,10 @@ export const handleMarkNotificationsAsRead = async (req, res, next) => {
     const userId = req.userId;
     const { notificationId } = req.body || {};
     if (notificationId) {
-      await notificationModel.findByIdAndUpdate(notificationId, { isRead: true });
+      await notificationModel.findByIdAndUpdate(notificationId, {
+        isRead: true,
+        $addToSet: { readBy: userId }
+      });
     } else {
       await notificationModel.updateMany(
         {
@@ -1821,9 +1833,12 @@ export const handleMarkNotificationsAsRead = async (req, res, next) => {
             { reciever: null },
             { type: "broadcast" }
           ],
-          isRead: false
+          deletedBy: { $ne: userId }
         },
-        { isRead: true }
+        {
+          isRead: true,
+          $addToSet: { readBy: userId }
+        }
       );
     }
     return res.status(200).json({
@@ -1833,7 +1848,47 @@ export const handleMarkNotificationsAsRead = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};export const handleToggleLiveLocation = async (req, res, next) => {
+};
+
+export const handleDeleteNotifications = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { notificationId } = req.body || {};
+
+    if (notificationId) {
+      // Mark as deleted for this user
+      await notificationModel.findByIdAndUpdate(notificationId, {
+        $addToSet: { deletedBy: userId }
+      });
+      // If it belongs exclusively to this user, delete permanently from DB
+      await notificationModel.deleteOne({ _id: notificationId, reciever: userId });
+    } else {
+      // Mark all visible notifications as deleted for this user
+      await notificationModel.updateMany(
+        {
+          $or: [
+            { reciever: userId },
+            { reciever: null },
+            { type: "broadcast" }
+          ]
+        },
+        {
+          $addToSet: { deletedBy: userId }
+        }
+      );
+      // Hard delete user-specific notifications to keep collection clean
+      await notificationModel.deleteMany({ reciever: userId });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: notificationId ? "Notification deleted successfully" : "All notifications deleted successfully"
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const handleToggleLiveLocation = async (req, res, next) => {
   try {
     const { liveLocationEnabled, maxParcelWeight } = req.body;
     const userId = req.userId;

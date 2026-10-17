@@ -1,9 +1,10 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Menu, X, Car, User, Search, Shield, HelpCircle,
   LogOut, Wallet, UserCircle, Car as CarIcon,
-  Info, Phone, ChevronDown, MapMinus, Home, Bell, CheckCheck, Clock, Package
+  Info, Phone, ChevronDown, MapMinus, Home, Bell, CheckCheck, Clock, Package, Trash2,
+  CheckCircle, PlusCircle, Users, Truck, LayoutDashboard, LogIn, UserPlus
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -21,10 +22,55 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [showLoginDropdown, setShowLoginDropdown] = useState(false);
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loadingNotifications, setLoadingNotifications] = useState(false);
+  const [hoveredNav, setHoveredNav] = useState(null);
+  const navLeaveTimeoutRef = useRef(null);
+  const userLeaveTimeoutRef = useRef(null);
+  const loginLeaveTimeoutRef = useRef(null);
+
+  const handleNavMouseEnter = (name) => {
+    if (navLeaveTimeoutRef.current) {
+      clearTimeout(navLeaveTimeoutRef.current);
+    }
+    setHoveredNav(name);
+  };
+
+  const handleNavMouseLeave = () => {
+    navLeaveTimeoutRef.current = setTimeout(() => {
+      setHoveredNav(null);
+    }, 200);
+  };
+
+  const handleUserMouseEnter = () => {
+    if (userLeaveTimeoutRef.current) {
+      clearTimeout(userLeaveTimeoutRef.current);
+    }
+    setShowUserDropdown(true);
+    setShowNotificationDropdown(false);
+  };
+
+  const handleUserMouseLeave = () => {
+    userLeaveTimeoutRef.current = setTimeout(() => {
+      setShowUserDropdown(false);
+    }, 200);
+  };
+
+  const handleLoginMouseEnter = () => {
+    if (loginLeaveTimeoutRef.current) {
+      clearTimeout(loginLeaveTimeoutRef.current);
+    }
+    setShowLoginDropdown(true);
+  };
+
+  const handleLoginMouseLeave = () => {
+    loginLeaveTimeoutRef.current = setTimeout(() => {
+      setShowLoginDropdown(false);
+    }, 200);
+  };
 
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -63,8 +109,36 @@ const Navbar = () => {
       await Axios.post(api.user.markNotificationsRead, {});
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
       setUnreadCount(0);
+      toast.success("All notifications marked as read", { autoClose: 2000 });
     } catch (error) {
-      // console.log("Failed to mark notifications read:", error);
+      toast.error("Failed to mark notifications read");
+    }
+  };
+
+  const handleDeleteAllNotifications = async () => {
+    if (!window.confirm("Are you sure you want to delete all notifications?")) return;
+    try {
+      await Axios.post(api.user.deleteNotifications, {});
+      setNotifications([]);
+      setUnreadCount(0);
+      toast.success("All notifications deleted", { autoClose: 2000 });
+    } catch (error) {
+      toast.error("Failed to delete notifications");
+    }
+  };
+
+  const handleDeleteSingleNotification = async (e, notifId) => {
+    e.stopPropagation();
+    try {
+      await Axios.post(api.user.deleteNotifications, { notificationId: notifId });
+      setNotifications((prev) => prev.filter((n) => n._id !== notifId));
+      setUnreadCount((prev) => {
+        const notif = notifications.find((n) => n._id === notifId);
+        return notif && !notif.isRead ? Math.max(0, prev - 1) : prev;
+      });
+      toast.success("Notification deleted", { autoClose: 1500 });
+    } catch (error) {
+      toast.error("Failed to delete notification");
     }
   };
 
@@ -157,9 +231,84 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: "Find Rides", path: "/rides", image: "/icons/find-ride.png", icon: Search },
-    { name: "Offer Ride", path: "/offer-ride", image: "/icons/car.png", icon: CarIcon },
-    { name: "Parcel", path: "/user/send-parcel", image: "/icons/parcel.png", icon: Package },
+    {
+      name: "Find Rides",
+      path: "/rides",
+      image: "/icons/find-ride.png",
+      icon: Search,
+      dropdown: [
+        {
+          title: "Search Rides",
+          desc: "Available rides search karne ke liye.",
+          path: "/rides",
+          icon: Search
+        },
+        {
+          title: "My Bookings",
+          desc: "Booked rides aur unka current status.",
+          path: "/my-profile/bookings",
+          icon: CheckCircle
+        },
+        {
+          title: "Ride History",
+          desc: "Completed aur cancelled rides.",
+          path: "/my-profile/booking-history",
+          icon: Clock
+        }
+      ]
+    },
+    {
+      name: "Offer Ride",
+      path: "/offer-ride",
+      image: "/icons/car.png",
+      icon: CarIcon,
+      dropdown: [
+        {
+          title: "Create Ride",
+          desc: "Apni car me khali seats share karein.",
+          path: "/offer-ride",
+          icon: PlusCircle
+        },
+        {
+          title: "My Offers",
+          desc: "Aapke dwara publish kiye gaye rides.",
+          path: "/my-profile/offered-rides",
+          icon: CarIcon
+        },
+        {
+          title: "Ride Requests",
+          desc: "Passengers se aayi ride booking requests.",
+          path: "/my-profile/offered-rides",
+          icon: Users
+        }
+      ]
+    },
+    {
+      name: "Parcel",
+      path: "/user/send-parcel",
+      image: "/icons/parcel.png",
+      icon: Package,
+      dropdown: [
+        {
+          title: "Send Parcel",
+          desc: "Urgent package transport karne ke liye.",
+          path: "/user/send-parcel",
+          icon: Package
+        },
+        {
+          title: "Parcel Delivery",
+          desc: "Delivery vehicles aur routes explore karein.",
+          path: "/user/parcel-delivery",
+          icon: Truck
+        },
+        {
+          title: "My Parcels",
+          desc: "Aapke sent aur received parcels ka status.",
+          path: "/user/my-parcels",
+          icon: CheckCircle
+        }
+      ]
+    },
   ];
 
   const mobileNavItems = [
@@ -216,15 +365,25 @@ const Navbar = () => {
       if (showNotificationDropdown && !e.target.closest(".notification-dropdown-container")) {
         setShowNotificationDropdown(false);
       }
+      if (showLoginDropdown && !e.target.closest(".login-dropdown-container")) {
+        setShowLoginDropdown(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showUserDropdown, showNotificationDropdown]);
+  }, [showUserDropdown, showNotificationDropdown, showLoginDropdown]);
 
   useEffect(() => {
     setIsMenuOpen(false);
     setShowUserDropdown(false);
     setShowNotificationDropdown(false);
+    setShowLoginDropdown(false);
+    if (userLeaveTimeoutRef.current) {
+      clearTimeout(userLeaveTimeoutRef.current);
+    }
+    if (loginLeaveTimeoutRef.current) {
+      clearTimeout(loginLeaveTimeoutRef.current);
+    }
   }, [location.pathname]);
 
   const getUserFullName = () => {
@@ -255,35 +414,112 @@ const Navbar = () => {
               />
             </motion.div>
 
-            {/* Navigation Links */}
-            <div className="flex items-center space-x-6 lg:space-x-12">
+            {/* Navigation Links with Hover Dropdown */}
+            <div className="flex items-center space-x-3 lg:space-x-8">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname.startsWith(item.path);
+                const isNavActive = location.pathname.startsWith(item.path);
+                const isDropdownOpen = hoveredNav === item.name;
 
                 return (
-                  <Link
+                  <div
                     key={item.name}
-                    to={item.path}
-                    className={`btn-water btn-water-up btn-water-bg-gray relative flex items-center gap-2 px-4 py-2 rounded-xl text-base font-bold transition-all duration-200 ${isActive
-                        ? "text-[#E10600] bg-red-50/70"
-                        : "text-[#111111] hover:text-[#E10600]"
-                      }`}
+                    className="relative"
+                    onMouseEnter={() => handleNavMouseEnter(item.name)}
+                    onMouseLeave={handleNavMouseLeave}
                   >
-                    {item.image ? (
-                      <img src={item.image} alt={item.name} className="w-6 h-6 object-contain shrink-0 group-hover:scale-110 transition-transform" />
-                    ) : (
-                      <Icon size={19} className={`transition-transform duration-200 ${isActive ? "text-[#E10600]" : "text-[#111111] group-hover:text-[#E10600]"}`} />
-                    )}
-                    <span>{item.name}</span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeNavIndicator"
-                        className="absolute inset-0 rounded-xl border -z-10 border-red-200/80"
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    <Link
+                      to={item.path}
+                      onClick={() => setHoveredNav(null)}
+                      className={`btn-water btn-water-up btn-water-bg-gray relative flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-base font-bold transition-all duration-200 cursor-pointer ${
+                        isNavActive || isDropdownOpen
+                          ? "text-[#E10600] bg-red-50/70"
+                          : "text-[#111111] hover:text-[#E10600]"
+                      }`}
+                    >
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-6 h-6 object-contain shrink-0 group-hover:scale-110 transition-transform"
+                        />
+                      ) : (
+                        <Icon
+                          size={19}
+                          className={`transition-transform duration-200 ${
+                            isNavActive ? "text-[#E10600]" : "text-[#111111] group-hover:text-[#E10600]"
+                          }`}
+                        />
+                      )}
+                      <span>{item.name}</span>
+                      <ChevronDown
+                        size={14}
+                        className={`transition-transform duration-200 ${
+                          isDropdownOpen ? "rotate-180 text-[#E10600]" : "text-gray-400 group-hover:text-[#E10600]"
+                        }`}
                       />
-                    )}
-                  </Link>
+                      {isNavActive && (
+                        <motion.div
+                          layoutId="activeNavIndicator"
+                          className="absolute inset-0 rounded-xl border -z-10 border-red-200/80"
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                    </Link>
+
+                    {/* Hover Dropdown Menu */}
+                    <AnimatePresence>
+                      {isDropdownOpen && item.dropdown && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                          transition={{ duration: 0.16, ease: "easeOut" }}
+                          className="absolute top-full left-0 mt-2 w-[340px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.16)] border border-gray-200/90 overflow-hidden z-[1060] p-2"
+                        >
+                          {/* Invisible bridge to catch cursor between button and dropdown */}
+                          <div className="absolute -top-3 left-0 right-0 h-3" />
+
+                          <div className="space-y-1">
+                            {item.dropdown.map((sub) => {
+                              const SubIcon = sub.icon;
+                              const isSubActive = location.pathname === sub.path;
+                              return (
+                                <Link
+                                  key={sub.title}
+                                  to={sub.path}
+                                  onClick={() => setHoveredNav(null)}
+                                  className={`flex items-start gap-3 p-3 rounded-xl transition-all duration-200 group/sub cursor-pointer ${
+                                    isSubActive
+                                      ? "bg-red-50/80 border border-red-100"
+                                      : "hover:bg-gray-50/90"
+                                  }`}
+                                >
+                                  <div
+                                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-200 mt-0.5 ${
+                                      isSubActive
+                                        ? "bg-[#E10600] text-white"
+                                        : "bg-red-50 text-[#E10600] group-hover/sub:bg-[#E10600] group-hover/sub:text-white"
+                                    }`}
+                                  >
+                                    <SubIcon size={18} />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                      <span className="text-sm font-bold text-gray-900 group-hover/sub:text-[#E10600] transition-colors">
+                                        {sub.title}
+                                      </span>
+                                    <p className="text-xs text-gray-500 group-hover/sub:text-gray-700 leading-snug mt-0.5 transition-colors">
+                                      {sub.desc}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 );
               })}
             </div>
@@ -322,7 +558,7 @@ const Navbar = () => {
                           transition={{ duration: 0.15 }}
                           className="absolute right-0 mt-2.5 w-[360px] sm:w-[410px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-gray-200/90 overflow-hidden z-[1050]"
                         >
-                          <div className="p-3.5 px-4 border-b border-gray-100 bg-gray-50/90 flex items-center justify-between">
+                          <div className="p-3 px-4 border-b border-gray-100 bg-gray-50/90 flex items-center justify-between gap-2">
                             <div className="flex items-center space-x-2">
                               <span className="text-sm font-bold text-gray-900">Notifications</span>
                               {unreadCount > 0 ? (
@@ -335,14 +571,27 @@ const Navbar = () => {
                                 </span>
                               )}
                             </div>
-                            {unreadCount > 0 && (
-                              <button
-                                onClick={handleMarkAllRead}
-                                className="text-xs text-[#E10600] hover:text-[#b00500] font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
-                              >
-                                <CheckCheck size={14} />
-                                <span>Mark all read</span>
-                              </button>
+                            {notifications.length > 0 && (
+                              <div className="flex items-center space-x-2.5">
+                                {unreadCount > 0 && (
+                                  <button
+                                    onClick={handleMarkAllRead}
+                                    className="text-xs text-[#E10600] hover:text-red-700 font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
+                                    title="Mark all as read"
+                                  >
+                                    <CheckCheck size={14} />
+                                    <span>All Read</span>
+                                  </button>
+                                )}
+                                <button
+                                  onClick={handleDeleteAllNotifications}
+                                  className="text-xs text-gray-500 hover:text-red-600 font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
+                                  title="Delete all notifications"
+                                >
+                                  <Trash2 size={13} />
+                                  <span>All Delete</span>
+                                </button>
+                              </div>
                             )}
                           </div>
 
@@ -367,7 +616,7 @@ const Navbar = () => {
                                 <div
                                   key={n._id}
                                   onClick={() => handleNotificationClick(n)}
-                                  className={`p-3.5 px-4 text-left transition-all duration-150 cursor-pointer flex space-x-3 items-start ${
+                                  className={`p-3.5 px-4 text-left transition-all duration-150 cursor-pointer flex space-x-3 items-start group/notif relative ${
                                     !n.isRead
                                       ? "bg-red-50/45 hover:bg-red-50/75 border-l-[3px] border-l-[#E10600]"
                                       : "bg-white hover:bg-gray-50/90 border-l-[3px] border-l-transparent"
@@ -393,7 +642,7 @@ const Navbar = () => {
                                       🔔
                                     </div>
                                   )}
-                                  <div className="flex-1 min-w-0">
+                                  <div className="flex-1 min-w-0 pr-6">
                                     <div className="flex items-center justify-between gap-2">
                                       <h4
                                         className={`text-xs font-bold truncate ${
@@ -413,6 +662,13 @@ const Navbar = () => {
                                   {!n.isRead && (
                                     <span className="w-2.5 h-2.5 rounded-full bg-[#E10600] shrink-0 mt-1.5 ring-2 ring-white shadow-2xs" />
                                   )}
+                                  <button
+                                    onClick={(e) => handleDeleteSingleNotification(e, n._id)}
+                                    className="opacity-0 group-hover/notif:opacity-100 transition-opacity p-1 text-gray-400 hover:text-red-600 rounded hover:bg-gray-100 absolute right-2.5 top-3 cursor-pointer"
+                                    title="Delete notification"
+                                  >
+                                    <Trash2 size={13} />
+                                  </button>
                                 </div>
                               ))
                             )}
@@ -428,15 +684,16 @@ const Navbar = () => {
                     </AnimatePresence>
                   </div>
 
-                  <div className="relative user-dropdown-container">
+                  <div
+                    className="relative user-dropdown-container"
+                    onMouseEnter={handleUserMouseEnter}
+                    onMouseLeave={handleUserMouseLeave}
+                  >
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => {
-                        setShowUserDropdown(!showUserDropdown);
-                        setShowNotificationDropdown(false);
-                      }}
-                      className="flex items-center space-x-2.5 px-3 py-1.5 rounded-full transition-all duration-200 border border-gray-200/90 hover:bg-[#F7F7F7] bg-white shadow-xs"
+                      onClick={() => setShowUserDropdown(!showUserDropdown)}
+                      className="flex items-center space-x-2.5 px-3 py-1.5 rounded-full transition-all duration-200 border border-gray-200/90 hover:bg-[#F7F7F7] bg-white shadow-xs cursor-pointer"
                     >
                       <div className="w-8 h-8 rounded-full bg-orange-100 ring-1 ring-orange-200 flex items-center justify-center overflow-hidden">
                         {(user?.profilePhotos?.length || user?.profilePhoto) ? (
@@ -459,8 +716,9 @@ const Navbar = () => {
                       </span>
                       <ChevronDown
                         size={15}
-                        className={`transition-transform duration-200 ${showUserDropdown ? "rotate-180" : ""
-                          } text-[#555555]`}
+                        className={`transition-transform duration-200 ${
+                          showUserDropdown ? "rotate-180" : ""
+                        } text-[#555555]`}
                       />
                     </motion.button>
 
@@ -474,8 +732,11 @@ const Navbar = () => {
                           transition={{ duration: 0.15 }}
                           className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-200/90 overflow-hidden z-[1050] p-1.5"
                         >
+                          {/* Invisible hover bridge to prevent menu from closing when cursor moves */}
+                          <div className="absolute -top-3 right-0 left-0 h-3" />
+
                           <div className="p-3 bg-[#F7F7F7] rounded-xl mb-1">
-                            <div className="text-sm font-bold text-[#111111]">
+                            <div className="text-sm font-bold text-[#111111] truncate">
                               {getUserFullName()}
                             </div>
                             <div className="text-xs text-[#555555] truncate mt-0.5">
@@ -489,25 +750,10 @@ const Navbar = () => {
                               onClick={() => setShowUserDropdown(false)}
                               className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
                             >
-                              <Home size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
-                              <span>My Dashboard</span>
+                              <LayoutDashboard size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>Dashboard</span>
                             </Link>
-                            <Link
-                              to="/my-profile"
-                              onClick={() => setShowUserDropdown(false)}
-                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
-                            >
-                              <UserCircle size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
-                              <span>My Profile</span>
-                            </Link>
-                            <Link
-                              to="/user/my-parcels"
-                              onClick={() => setShowUserDropdown(false)}
-                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
-                            >
-                              <MapMinus size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
-                              <span>My Parcels</span>
-                            </Link>
+
                             <Link
                               to="/my-profile/wallet"
                               onClick={() => setShowUserDropdown(false)}
@@ -517,13 +763,22 @@ const Navbar = () => {
                               <span>Wallet</span>
                             </Link>
 
+                            <Link
+                              to="/my-profile"
+                              onClick={() => setShowUserDropdown(false)}
+                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                            >
+                              <UserCircle size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>Profile</span>
+                            </Link>
+
                             <div className="pt-1 mt-1 border-t border-[var(--border-subtle)]">
                               <button
                                 onClick={handleSignOut}
-                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 w-full px-3 py-2 text-sm text-[#E10600] rounded-xl transition-colors font-semibold"
+                                className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 w-full px-3 py-2 text-sm text-[#E10600] rounded-xl transition-colors font-semibold cursor-pointer"
                               >
                                 <LogOut size={17} />
-                                <span>Sign out</span>
+                                <span>Logout</span>
                               </button>
                             </div>
                           </div>
@@ -533,18 +788,66 @@ const Navbar = () => {
                   </div>
                 </>
               ) : (
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={handleSignIn}
-                    className="btn-water btn-water-up btn-water-bg-gray px-5 py-2.5 text-lg font-bold text-black hover:text-[#E10600] rounded-xl transition-all"
+                <div className="flex items-center space-x-3">
+                  <div
+                    className="relative login-dropdown-container"
+                    onMouseEnter={handleLoginMouseEnter}
+                    onMouseLeave={handleLoginMouseLeave}
                   >
-                    Login
-                  </button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleSignIn}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer shadow-xs border ${
+                        showLoginDropdown
+                          ? "ring-2 ring-[#E10600] border-transparent bg-red-50 text-[#E10600]"
+                          : "border-gray-200/90 hover:border-[#E10600] bg-white text-gray-700 hover:text-[#E10600]"
+                      }`}
+                      title="Login"
+                    >
+                      <UserCircle size={28} className="stroke-[1.75]" />
+                    </motion.button>
+
+                    {/* Login Dropdown on hover */}
+                    <AnimatePresence>
+                      {showLoginDropdown && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-gray-200/90 overflow-hidden z-[1050] p-1.5"
+                        >
+                          <div className="absolute -top-3 right-0 left-0 h-3" />
+
+                          <div className="space-y-0.5">
+                            <button
+                              onClick={handleSignIn}
+                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 w-full px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium text-left cursor-pointer"
+                            >
+                              <LogIn size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>Login</span>
+                            </button>
+
+                            <Link
+                              to="/register"
+                              onClick={() => setShowLoginDropdown(false)}
+                              className="btn-water btn-water-right btn-water-bg-light-red group flex items-center space-x-2.5 px-3 py-2 text-sm text-[#111111] hover:text-[#E10600] rounded-xl transition-colors font-medium"
+                            >
+                              <UserPlus size={17} className="text-[#B8B8B8] group-hover:text-[#E10600] transition-colors" />
+                              <span>Register</span>
+                            </Link>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate("/register")}
-                    className="btn-water btn-water-right btn-water-bg-red px-6 py-2.5 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white text-base font-bold rounded-xl shadow-sm hover:shadow-red-glow transition-all flex items-center gap-1"
+                    className="btn-water btn-water-right btn-water-bg-red px-5 py-2.5 bg-gradient-to-r from-[#E10600] to-[#FF3B30] text-white text-sm font-bold rounded-xl shadow-sm hover:shadow-red-glow transition-all flex items-center gap-1 cursor-pointer"
                   >
                     Get Started
                   </motion.button>
@@ -571,12 +874,21 @@ const Navbar = () => {
           </motion.div>
 
           {!isLoggedIn ? (
-            <button
-              onClick={() => navigate("/register")}
-              className="px-3 py-1.5 bg-[#E10600] text-white rounded-lg font-medium text-xs"
-            >
-              Get Started
-            </button>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => navigate("/register")}
+                className="px-3 py-1.5 bg-[#E10600] text-white rounded-lg font-medium text-xs cursor-pointer"
+              >
+                Get Started
+              </button>
+              <button
+                onClick={handleSignIn}
+                className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-700 hover:text-[#E10600] bg-white cursor-pointer"
+                title="Login"
+              >
+                <UserCircle size={22} className="stroke-[1.75]" />
+              </button>
+            </div>
           ) : (
             <div className="flex items-center space-x-2">
               {/* Notification Bell Mobile */}
@@ -604,7 +916,7 @@ const Navbar = () => {
                       transition={{ duration: 0.15 }}
                       className="fixed left-3 right-3 top-16 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.22)] border border-gray-200/90 overflow-hidden z-[1050] max-h-[78vh] flex flex-col"
                     >
-                      <div className="p-3.5 px-4 border-b border-gray-100 bg-gray-50/90 flex items-center justify-between">
+                      <div className="p-3 px-4 border-b border-gray-100 bg-gray-50/90 flex items-center justify-between gap-2">
                         <div className="flex items-center space-x-2">
                           <span className="text-sm font-bold text-gray-900">Notifications</span>
                           {unreadCount > 0 ? (
@@ -617,14 +929,27 @@ const Navbar = () => {
                             </span>
                           )}
                         </div>
-                        {unreadCount > 0 && (
-                          <button
-                            onClick={handleMarkAllRead}
-                            className="text-xs text-[#E10600] hover:text-[#b00500] font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
-                          >
-                            <CheckCheck size={14} />
-                            <span>Mark all read</span>
-                          </button>
+                        {notifications.length > 0 && (
+                          <div className="flex items-center space-x-2.5">
+                            {unreadCount > 0 && (
+                              <button
+                                onClick={handleMarkAllRead}
+                                className="text-xs text-[#E10600] hover:text-red-700 font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
+                                title="Mark all as read"
+                              >
+                                <CheckCheck size={14} />
+                                <span>All Read</span>
+                              </button>
+                            )}
+                            <button
+                              onClick={handleDeleteAllNotifications}
+                              className="text-xs text-gray-500 hover:text-red-600 font-semibold flex items-center space-x-1 transition-colors hover:underline cursor-pointer"
+                              title="Delete all notifications"
+                            >
+                              <Trash2 size={13} />
+                              <span>All Delete</span>
+                            </button>
+                          </div>
                         )}
                       </div>
 
@@ -649,7 +974,7 @@ const Navbar = () => {
                             <div
                               key={n._id}
                               onClick={() => handleNotificationClick(n)}
-                              className={`p-3.5 px-4 text-left transition-all duration-150 cursor-pointer flex space-x-3 items-start ${
+                              className={`p-3.5 px-4 text-left transition-all duration-150 cursor-pointer flex space-x-3 items-start group/notif relative ${
                                 !n.isRead
                                   ? "bg-red-50/45 hover:bg-red-50/75 border-l-[3px] border-l-[#E10600]"
                                   : "bg-white hover:bg-gray-50/90 border-l-[3px] border-l-transparent"
@@ -675,7 +1000,7 @@ const Navbar = () => {
                                   🔔
                                 </div>
                               )}
-                              <div className="flex-1 min-w-0">
+                              <div className="flex-1 min-w-0 pr-6">
                                 <div className="flex items-center justify-between gap-2">
                                   <h4
                                     className={`text-xs font-bold truncate ${
@@ -695,6 +1020,13 @@ const Navbar = () => {
                               {!n.isRead && (
                                 <span className="w-2.5 h-2.5 rounded-full bg-[#E10600] shrink-0 mt-1.5 ring-2 ring-white shadow-2xs" />
                               )}
+                              <button
+                                onClick={(e) => handleDeleteSingleNotification(e, n._id)}
+                                className="opacity-0 group-hover/notif:opacity-100 transition-opacity p-1 text-gray-400 hover:text-red-600 rounded hover:bg-gray-100 absolute right-2.5 top-3 cursor-pointer"
+                                title="Delete notification"
+                              >
+                                <Trash2 size={13} />
+                              </button>
                             </div>
                           ))
                         )}
@@ -814,35 +1146,55 @@ const Navbar = () => {
                 </div>
 
                 {/* Navigation Links */}
-                <div className="space-y-1 mb-6">
+                <div className="space-y-2 mb-6">
                   {navItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = location.pathname === item.path;
+                    const isActive = location.pathname.startsWith(item.path);
 
                     return (
-                      <Link
-                        key={item.name}
-                        to={item.path}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="group flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-[#F7F7F7] transition-colors"
-                      >
-                        <div className={`transition-all duration-200 group-hover:scale-110 ${isActive
-                            ? "text-[#E10600]"
-                            : "text-[#B8B8B8] group-hover:text-[#E10600]"
-                          }`}>
-                          {item.image ? (
-                            <img src={item.image} alt={item.name} className="w-5 h-5 object-contain shrink-0" />
-                          ) : (
-                            <Icon size={18} />
-                          )}
-                        </div>
-                        <span className={`font-medium transition-colors ${isActive
-                            ? "text-[#111111]"
-                            : "text-[#555555] group-hover:text-[#111111]"
-                          }`}>
-                          {item.name}
-                        </span>
-                      </Link>
+                      <div key={item.name} className="space-y-1">
+                        <Link
+                          to={item.path}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`group flex items-center justify-between px-3 py-2.5 rounded-xl transition-colors ${
+                            isActive ? "bg-red-50 text-[#E10600]" : "hover:bg-[#F7F7F7] text-[#111111]"
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="transition-all duration-200">
+                              {item.image ? (
+                                <img src={item.image} alt={item.name} className="w-5 h-5 object-contain shrink-0" />
+                              ) : (
+                                <Icon size={18} />
+                              )}
+                            </div>
+                            <span className="font-bold text-sm">
+                              {item.name}
+                            </span>
+                          </div>
+                        </Link>
+                        {item.dropdown && (
+                          <div className="pl-8 pr-2 space-y-1 pb-1">
+                            {item.dropdown.map((sub) => {
+                              const isSubActive = location.pathname === sub.path;
+                              return (
+                                <Link
+                                  key={sub.title}
+                                  to={sub.path}
+                                  onClick={() => setIsMenuOpen(false)}
+                                  className={`block px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                    isSubActive
+                                      ? "text-[#E10600] font-bold bg-red-50/50"
+                                      : "text-gray-600 hover:text-[#E10600] hover:bg-gray-50"
+                                  }`}
+                                >
+                                  • {sub.title}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
                 </div>

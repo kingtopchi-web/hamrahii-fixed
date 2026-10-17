@@ -38,7 +38,15 @@ const notificationSchema = mongoose.Schema({
     isRead: {
         type: Boolean,
         default: false
-    }
+    },
+    readBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    deletedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }]
 }, { timestamps: true });
 
 export default mongoose.model("Notification", notificationSchema);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {  handeGetTransactionDetails, handleAddBio, handleConfirmDlDetails, handleCreditWallet, handleEditBasicDetails, handleGetFullUserDetails, handleGetReferralDetails, handleGetRidesBooking, handleGetUserNotifications, handleMarkNotificationsAsRead, handlegetVirtualTransaction, handleGoogleLogin, handleGoogleSignIn, handleRegisterUser, handleSaveMobileFcm, handleSaveNewFcmToken, handleSendOtpForPasswordReset, handleUpdateUserLocation, handleToggleLiveLocation, handleUpdateLiveLocation, handleUploadProfilePic, handleUserContactSupport, handleUserLogin, handleUserLogout, handleVerifyDrivingLicences, handleVerifyOtpAndResetPassword, sendEmailVerificationOTP, sendPhoneVerificationOTP, updatePreferences, verifyEmailOTP, verifyPhoneOTP } from "../controller/user.controller.js";
+import {  handeGetTransactionDetails, handleAddBio, handleConfirmDlDetails, handleCreditWallet, handleEditBasicDetails, handleGetFullUserDetails, handleGetReferralDetails, handleGetRidesBooking, handleGetUserNotifications, handleMarkNotificationsAsRead, handleDeleteNotifications, handlegetVirtualTransaction, handleGoogleLogin, handleGoogleSignIn, handleRegisterUser, handleSaveMobileFcm, handleSaveNewFcmToken, handleSendOtpForPasswordReset, handleUpdateUserLocation, handleToggleLiveLocation, handleUpdateLiveLocation, handleUploadProfilePic, handleUserContactSupport, handleUserLogin, handleUserLogout, handleVerifyDrivingLicences, handleVerifyOtpAndResetPassword, sendEmailVerificationOTP, sendPhoneVerificationOTP, updatePreferences, verifyEmailOTP, verifyPhoneOTP } from "../controller/user.controller.js";
 import { auth } from "../middleware/auth.js";
 import { handleExe } from "../controller/ride.controller.js";
 import { handleGetCommision } from "../controller/default.controller.js";
@@ -41,6 +41,8 @@ userRouter.post("/update-location" , auth , handleUpdateUserLocation)
 userRouter.get("/commision" , handleGetCommision)
 userRouter.get("/notifications", auth, handleGetUserNotifications)
 userRouter.post("/notifications/mark-read", auth, handleMarkNotificationsAsRead)
+userRouter.delete("/notifications", auth, handleDeleteNotifications)
+userRouter.post("/notifications/delete", auth, handleDeleteNotifications)
 
 userRouter.post("/toggle-live-location", auth, handleToggleLiveLocation);
 userRouter.post("/update-live-location", auth, handleUpdateLiveLocation);

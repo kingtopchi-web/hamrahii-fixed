@@ -34,7 +34,8 @@ export const api = {
         confirmDlDetails: base_url + "/user/confirm-dl-details",
         updateLocation: base_url + "/user/update-location",
         notifications: base_url + "/user/notifications",
-        markNotificationsRead: base_url + "/user/notifications/mark-read"
+        markNotificationsRead: base_url + "/user/notifications/mark-read",
+        deleteNotifications: base_url + "/user/notifications/delete"
     },
     file: {
         uploadImage: base_url + "/file/upload-image"

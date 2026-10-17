@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/Home/Home";
 import About from "../pages/About/About";
@@ -27,6 +27,7 @@ import WalletPage from "../pages/profile/wallet/Wallet";
 import Career from "../pages/Career";
 import Press from "../pages/Press";
 import Blog from "../pages/Blog";
+import BlogDetail from "../pages/BlogDetail";
 import Parterns from "../pages/Parterns";
 import Sustainability from "../pages/Sustainability";
 import Support from "../pages/profile/Support";
@@ -86,6 +87,10 @@ const routes = createBrowserRouter([
       {
         path: "/blog",
         element: <Blog />
+      },
+      {
+        path: "/blog/:slug",
+        element: <BlogDetail />
       },
       {
         path: "/sustainability",
@@ -256,6 +261,14 @@ const routes = createBrowserRouter([
       {
         path: "/vehicles",
         element: <Vehicles />,
+      },
+      {
+        path: "/my-rides",
+        element: <Navigate to="/my-profile/bookings" replace />,
+      },
+      {
+        path: "/my-bookings",
+        element: <Navigate to="/my-profile/bookings" replace />,
       },
       {
         path: "*",

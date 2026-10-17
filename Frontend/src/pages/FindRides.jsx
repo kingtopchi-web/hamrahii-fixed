@@ -90,9 +90,8 @@ const loadGoogleMaps = () => {
 
   googleMapsLoadingPromise = new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${
-      import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-    }&libraries=${libraries.join(",")}`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+      }&libraries=${libraries.join(",")}`;
     script.async = true;
     script.defer = true;
 
@@ -364,14 +363,19 @@ const FindRides = () => {
     if (!isMapsLoaded) return;
 
     if (location?.state?.fromCity) {
+      const cityFrom = location.state.fromLocation || location.state.fromCity;
+      const cityTo = location.state.toLocation || location.state.toCity;
+
       if (fromInputRef.current) {
-        fromInputRef.current.value = location.state.fromLocation || location.state.fromCity;
-      }
-      if (toInputRef.current) {
-        toInputRef.current.value = location.state.toLocation || location.state.toCity;
+        fromInputRef.current.value = cityFrom;
       }
       setFromCity(location.state.fromCity);
-      setToCity(location.state.toCity);
+
+      if (toInputRef.current) {
+        toInputRef.current.value = cityTo || "";
+      }
+      setToCity(cityTo || "");
+
       if (location.state.date) {
         setDate(location.state.date);
       }
@@ -379,14 +383,32 @@ const FindRides = () => {
         setPassengers(String(location.state.seats));
         setSeatPreference(String(location.state.seats));
       }
-      fetchRedirectRides(
-        location?.state?.fromCity,
-        location?.state?.toCity,
-        location?.state?.date,
-      );
-      setHasSearched(true);
-      setHasManuallySearched(true);
-      setSearching(true);
+
+      // If destination was also provided, run search:
+      if (cityTo && typeof cityTo === "string" && cityTo.trim()) {
+        fetchRedirectRides(
+          cityFrom,
+          cityTo,
+          location?.state?.date,
+        );
+        setHasSearched(true);
+        setHasManuallySearched(true);
+        setSearching(true);
+      } else {
+        // Destination not provided - DO NOT directly search!
+        setHasSearched(false);
+        setHasManuallySearched(false);
+        setSearching(false);
+        setSearchResults([]);
+        // Prompt for destination:
+        setTimeout(() => {
+          if (toInputRef.current) {
+            toInputRef.current.focus();
+          }
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }, 150);
+      }
+
       setError(null);
       setShowFromPredictions(false);
       setShowToPredictions(false);
@@ -547,6 +569,13 @@ const FindRides = () => {
 
     if (!fromValue && !userCoords) {
       setError("Please enter your starting location or enable location detection.");
+      if (fromInputRef.current) fromInputRef.current.focus();
+      return;
+    }
+
+    if (!toValue.trim()) {
+      setError("Please enter where you want to go (destination).");
+      if (toInputRef.current) toInputRef.current.focus();
       return;
     }
 
@@ -875,7 +904,7 @@ const FindRides = () => {
     if (timeFilter && timeFilter !== "all") {
       list = list.filter((r) => {
         if (!r.departureTime) return false;
-        
+
         let hours = 0;
         // Parse time if it's an ISO string or HH:MM
         if (r.departureTime.includes("T")) {
@@ -1134,7 +1163,7 @@ const FindRides = () => {
                   </div>
                   <input
                     ref={toInputRef}
-                    placeholder="Where to?"
+                    placeholder={fromCity ? `Where to from ${fromCity}?` : "Where to?"}
                     defaultValue={toCity}
                     onChange={(e) => {
                       setToCity(e.target.value);
@@ -1225,11 +1254,10 @@ const FindRides = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassengerDropdown((prev) => !prev)}
-                    className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl border transition-all bg-white cursor-pointer ${
-                      showPassengerDropdown
+                    className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl border transition-all bg-white cursor-pointer ${showPassengerDropdown
                         ? "border-red-400 ring-2 ring-red-100"
                         : "border-gray-200/90 hover:border-gray-300"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <Users className="w-4 h-4 text-gray-400 shrink-0" />
@@ -1238,9 +1266,8 @@ const FindRides = () => {
                       </span>
                     </div>
                     <ChevronDown
-                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0 ${
-                        showPassengerDropdown ? "rotate-180 text-[#E10600]" : ""
-                      }`}
+                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0 ${showPassengerDropdown ? "rotate-180 text-[#E10600]" : ""
+                        }`}
                     />
                   </button>
 
@@ -1265,11 +1292,10 @@ const FindRides = () => {
                                 setSeatPreference(val);
                                 setShowPassengerDropdown(false);
                               }}
-                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                                isSelected
+                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${isSelected
                                   ? "bg-red-50 text-[#E10600] font-bold"
                                   : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                              }`}
+                                }`}
                             >
                               <div className="flex items-center gap-2">
                                 <Users className={`w-3.5 h-3.5 ${isSelected ? "text-[#E10600]" : "text-gray-400"}`} />
@@ -1516,11 +1542,10 @@ const FindRides = () => {
                         key={radius}
                         type="button"
                         onClick={() => handleRadiusChange(radius)}
-                        className={`px-2.5 sm:px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                          maxDistanceKm === radius
+                        className={`px-2.5 sm:px-3 py-1 text-xs font-bold rounded-lg transition-all ${maxDistanceKm === radius
                             ? "bg-emerald-600 text-white shadow-sm"
                             : "bg-[var(--bg-surface)] text-gray-700 hover:bg-gray-100 border border-[var(--border-subtle)]"
-                        }`}
+                          }`}
                       >
                         {radius} km
                       </button>
@@ -1580,11 +1605,10 @@ const FindRides = () => {
                         setShowFilters(!showFilters);
                         setShowSortMenu(false);
                       }}
-                      className={`w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 bg-[var(--bg-surface)] border-2 rounded-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm font-medium ${
-                        showFilters || seatPreference !== "any" || timeFilter !== "all" || priceRange[0] > 0 || priceRange[1] < 5000
+                      className={`w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 bg-[var(--bg-surface)] border-2 rounded-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm font-medium ${showFilters || seatPreference !== "any" || timeFilter !== "all" || priceRange[0] > 0 || priceRange[1] < 5000
                           ? "border-red-500 text-red-600 shadow-sm"
                           : "border-[var(--border-subtle)] text-gray-700 hover:border-red-500"
-                      }`}
+                        }`}
                     >
                       <Filter className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                       <span>Filter</span>
@@ -1638,11 +1662,10 @@ const FindRides = () => {
                                   key={time.id}
                                   type="button"
                                   onClick={() => setTimeFilter(time.id)}
-                                  className={`py-1.5 px-2 text-[11px] font-bold rounded-lg transition-all ${
-                                    timeFilter === time.id
+                                  className={`py-1.5 px-2 text-[11px] font-bold rounded-lg transition-all ${timeFilter === time.id
                                       ? "bg-red-500 text-white shadow-sm"
                                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                  } ${time.id === "all" ? "col-span-2" : ""}`}
+                                    } ${time.id === "all" ? "col-span-2" : ""}`}
                                 >
                                   {time.label}
                                 </button>
@@ -1661,11 +1684,10 @@ const FindRides = () => {
                                   key={seats}
                                   type="button"
                                   onClick={() => setSeatPreference(seats)}
-                                  className={`py-1.5 px-2 text-xs font-bold rounded-lg transition-all ${
-                                    seatPreference === seats
+                                  className={`py-1.5 px-2 text-xs font-bold rounded-lg transition-all ${seatPreference === seats
                                       ? "bg-red-500 text-white shadow-sm"
                                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                  }`}
+                                    }`}
                                 >
                                   {seats === "any" ? "Any" : `${seats}+`}
                                 </button>
@@ -1732,11 +1754,10 @@ const FindRides = () => {
                                 setSortBy(option.id);
                                 setShowSortMenu(false);
                               }}
-                              className={`w-full px-4 py-2.5 sm:py-3 text-left flex items-center gap-3 hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl text-xs sm:text-sm ${
-                                sortBy === option.id
+                              className={`w-full px-4 py-2.5 sm:py-3 text-left flex items-center gap-3 hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl text-xs sm:text-sm ${sortBy === option.id
                                   ? "bg-red-50 text-red-600 font-semibold"
                                   : "text-gray-700"
-                              }`}
+                                }`}
                             >
                               <option.icon className="w-4 h-4 shrink-0" />
                               <span className="truncate">{option.label}</span>
@@ -1754,22 +1775,20 @@ const FindRides = () => {
                   <div className="flex items-center bg-gray-100 rounded-xl p-1 shrink-0">
                     <button
                       onClick={() => setActiveView("grid")}
-                      className={`p-1.5 sm:p-2 rounded-lg transition-all ${
-                        activeView === "grid"
+                      className={`p-1.5 sm:p-2 rounded-lg transition-all ${activeView === "grid"
                           ? "bg-[var(--bg-surface)] text-gray-900 shadow-sm"
                           : "text-gray-600 hover:text-gray-900"
-                      }`}
+                        }`}
                       title="Grid View"
                     >
                       <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                     <button
                       onClick={() => setActiveView("list")}
-                      className={`p-1.5 sm:p-2 rounded-lg transition-all ${
-                        activeView === "list"
+                      className={`p-1.5 sm:p-2 rounded-lg transition-all ${activeView === "list"
                           ? "bg-[var(--bg-surface)] text-gray-900 shadow-sm"
                           : "text-gray-600 hover:text-gray-900"
-                      }`}
+                        }`}
                       title="List View"
                     >
                       <List className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -1815,11 +1834,10 @@ const FindRides = () => {
                         className="absolute top-4 right-4 z-10 p-2 bg-[var(--bg-surface)]/90 backdrop-blur-md rounded-xl hover:bg-red-50 transition-colors shadow-sm"
                       >
                         <Heart
-                          className={`w-4 h-4 ${
-                            favoriteRides.includes(ride._id)
+                          className={`w-4 h-4 ${favoriteRides.includes(ride._id)
                               ? "fill-[#E10600] text-[#E10600]"
                               : "text-gray-400"
-                          }`}
+                            }`}
                         />
                       </button>
 
@@ -1865,7 +1883,7 @@ const FindRides = () => {
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div className="flex flex-col items-end gap-1 shrink-0">
                               <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full whitespace-nowrap">
                                 {ride.isFullSharing ? "Full Vehicle" : `${ride.availableSeats} seats left`}
@@ -1912,7 +1930,7 @@ const FindRides = () => {
                             <div className="text-lg sm:text-xl font-extrabold text-[#111111]">
                               ₹{ride.pricePerSeat}
                               <span className="text-xs font-normal text-gray-500 ml-1">
-                                {!ride?.isFullSharing && "/seat"} 
+                                {!ride?.isFullSharing && "/seat"}
                               </span>
                             </div>
                             <div className="text-[10px] sm:text-[11px] text-gray-400">
@@ -2001,11 +2019,10 @@ const FindRides = () => {
                               className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
                             >
                               <Heart
-                                className={`w-4 h-4 sm:w-5 sm:h-5 ${
-                                  favoriteRides.includes(ride._id)
+                                className={`w-4 h-4 sm:w-5 sm:h-5 ${favoriteRides.includes(ride._id)
                                     ? "fill-red-500 text-red-500"
                                     : "text-gray-400"
-                                }`}
+                                  }`}
                               />
                             </button>
                           </div>

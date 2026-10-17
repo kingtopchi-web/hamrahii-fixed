@@ -156,3 +156,22 @@ body {
   width: max-content;
   animation: marquee-horizontal 20s linear infinite;
 }
+
+/* Swiper Blog Custom Pagination */
+.blog-swiper-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: #D1D5DB;
+  opacity: 1;
+  border-radius: 9999px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 4px !important;
+  cursor: pointer;
+}
+
+.blog-swiper-pagination .swiper-pagination-bullet-active {
+  width: 24px;
+  background-color: #E10600;
+  border-radius: 9999px;
+}
+

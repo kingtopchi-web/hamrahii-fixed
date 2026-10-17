@@ -57,3 +57,19 @@ export const getFallbackBlogImage = (index = 0, category = "") => {
   const safeIndex = typeof index === "number" && !isNaN(index) ? Math.abs(index) : 0;
   return BLOG_FALLBACK_IMAGES[safeIndex % BLOG_FALLBACK_IMAGES.length];
 };
+
+/**
+ * Creates a URL-safe slug from blog title or slug string.
+ * Sanitizes % and other special characters to prevent URI malformed errors in React Router.
+ */
+export const createSafeSlug = (text) => {
+  if (!text) return "article";
+  return String(text)
+    .toLowerCase()
+    .trim()
+    .replace(/%/g, "-percent")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "") || "article";
+};
