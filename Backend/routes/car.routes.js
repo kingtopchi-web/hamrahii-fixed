@@ -2,10 +2,11 @@ import {Router} from "express"
 import { createCar, handleBulkUpdateCarStatus, handleDeactivateCar, handleGetAllCars, handleGetCarsByStatus, handleGetCarsByUserId, handleGetCarVerificationHistory, handleUpdateCarStatus, handleUseSurePassApi } from "../controller/car.controller.js"
 import { auth } from "../middleware/auth.js";
 import { isAdmin } from "../middleware/isAdmin.js";
+import { requireKyc } from "../middleware/requireKyc.js";
 const carRouter = Router()
 
 
-carRouter.post("/add" , auth , createCar);
+carRouter.post("/add" , auth , requireKyc, createCar);
 carRouter.post("/deactivate" , auth , handleDeactivateCar);
 carRouter.get("/get-by-user" , auth , handleGetCarsByUserId);
 carRouter.post("/surepass-api", auth, handleUseSurePassApi);
