@@ -1419,7 +1419,12 @@ export const handleGetRecentRide = async (req, res, next) => {
         {
           $addFields: {
             rideDateTime: {
-              $toDate: "$departureTime", // ✅ FIXED
+              $convert: {
+                input: "$departureTime",
+                to: "date",
+                onError: null,
+                onNull: null,
+              },
             },
           },
         },
@@ -1483,7 +1488,12 @@ export const handleGetRecentRide = async (req, res, next) => {
         {
           $addFields: {
             rideDateTime: {
-              $toDate: "$departureTime", // ✅ FIXED
+              $convert: {
+                input: "$departureTime",
+                to: "date",
+                onError: null,
+                onNull: null,
+              },
             },
           },
         },
@@ -1561,7 +1571,12 @@ export const handleGetRecentRideByUserId = async (req, res, next) => {
       {
         $addFields: {
           rideDateTime: {
-            $toDate: "$departureTime",
+            $convert: {
+              input: "$departureTime",
+              to: "date",
+              onError: null,
+              onNull: null,
+            },
           },
         },
       },
