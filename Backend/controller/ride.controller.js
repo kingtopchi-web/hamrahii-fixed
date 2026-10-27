@@ -305,35 +305,44 @@ export const handleGetOfferdRide = async (req, res, next) => {
     const pipeline = [
       { $match: matchStage },
 
-      /* 🔥 HANDLE ALL DATE CASES (FIX YOUR DB MESS) */
+      /* 🔥 HANDLE ALL DATE CASES SAFELY (WITH onError: null) */
       {
         $addFields: {
           departureDateTime: {
-            $cond: [
-              {
-                $regexMatch: {
-                  input: "$departureDate",
-                  regex: /T/,
-                },
-              },
-              { $toDate: "$departureDate" },
-              {
+            $convert: {
+              input: {
                 $cond: [
                   {
                     $regexMatch: {
-                      input: "$departureTime",
+                      input: { $ifNull: ["$departureDate", ""] },
                       regex: /T/,
                     },
                   },
-                  { $toDate: "$departureTime" },
+                  "$departureDate",
                   {
-                    $toDate: {
-                      $concat: ["$departureDate", "T", "$departureTime"],
-                    },
+                    $cond: [
+                      {
+                        $regexMatch: {
+                          input: { $ifNull: ["$departureTime", ""] },
+                          regex: /T/,
+                        },
+                      },
+                      "$departureTime",
+                      {
+                        $concat: [
+                          { $ifNull: ["$departureDate", ""] },
+                          "T",
+                          { $ifNull: ["$departureTime", ""] },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },
-            ],
+              to: "date",
+              onError: null,
+              onNull: null,
+            },
           },
         },
       },

@@ -1082,11 +1082,16 @@ export const handleGetRidesBooking = async (req, res, next) => {
     const pipeline = [
       { $match: matchStage },
 
-      /* 🔥 Convert string → date */
+      /* 🔥 Convert string → date safely */
       {
         $addFields: {
           departureDateObj: {
-            $toDate: "$departureDate",
+            $convert: {
+              input: "$departureDate",
+              to: "date",
+              onError: null,
+              onNull: null,
+            },
           },
         },
       },
