@@ -1043,20 +1043,21 @@ export const handleDebitAmountFromWallet = async ({
 
 export const handleGetRidesBooking = async (req, res, next) => {
   try {
-    const {
-      userId,
-      page = 1,
-      limit = 10,
-      rideStatus,
-      bookingStatus,
-      fromDate,
-      toDate,
-    } = req.body;
+    const userId = req.userId || req.body?.userId || req.query?.userId;
+    const page = Number(req.query?.page || req.body?.page || 1);
+    const limit = Number(req.query?.limit || req.body?.limit || 10);
+    const status = (req.query?.status || req.body?.status || "").toLowerCase();
+    const rideStatus = req.query?.rideStatus || req.body?.rideStatus;
+    const bookingStatus = req.query?.bookingStatus || req.body?.bookingStatus;
+    const fromDate = req.query?.fromDate || req.body?.fromDate;
+    const toDate = req.query?.toDate || req.body?.toDate;
+    const type = req.query?.type || req.body?.type; // "upcoming" vs "history" / "all"
+    const search = req.query?.search || req.body?.search;
 
     if (!validateObjectId(userId, "User not found", res)) return;
 
-    const pageNumber = Number(page);
-    const limitNumber = Number(limit);
+    const pageNumber = Number(page) || 1;
+    const limitNumber = Number(limit) || 10;
     const skip = (pageNumber - 1) * limitNumber;
 
     const userObjectId = new mongoose.Types.ObjectId(userId);
@@ -1074,6 +1075,44 @@ export const handleGetRidesBooking = async (req, res, next) => {
 
     if (rideStatus) {
       matchStage.status = rideStatus;
+    }
+
+    if (status && status !== "all") {
+      if (status === "completed") {
+        matchStage.$or = [
+          { status: "completed" },
+          { "passengers.status": "completed" },
+        ];
+      } else if (status === "cancelled") {
+        matchStage.$or = [
+          { status: "cancelled" },
+          { "passengers.status": "cancelled" },
+        ];
+      } else if (status === "scheduled") {
+        matchStage.status = "scheduled";
+        matchStage["passengers.status"] = { $in: ["requested", "accepted"] };
+      } else if (status === "ongoing") {
+        matchStage.status = { $in: ["ongoing", "started"] };
+      }
+    }
+
+    if (search && search.trim() !== "") {
+      const searchRegex = new RegExp(search.trim(), "i");
+      const searchConditions = [
+        { "from.city": searchRegex },
+        { "from.address": searchRegex },
+        { "to.city": searchRegex },
+        { "to.address": searchRegex },
+      ];
+      if (matchStage.$or) {
+        matchStage.$and = [
+          { $or: matchStage.$or },
+          { $or: searchConditions },
+        ];
+        delete matchStage.$or;
+      } else {
+        matchStage.$or = searchConditions;
+      }
     }
 
     /* -------------------------
@@ -1096,12 +1135,22 @@ export const handleGetRidesBooking = async (req, res, next) => {
         },
       },
 
-      /* 🔥 FILTER UPCOMING RIDES ONLY */
-      {
-        $match: {
-          departureDateObj: { $gte: today },
-        },
-      },
+      /* 🔥 FILTER UPCOMING RIDES ONLY IF EXPLICITLY REQUESTED */
+      ...(type === "upcoming"
+        ? [
+            {
+              $match: {
+                $or: [
+                  { departureDateObj: { $gte: today } },
+                  { departureDateObj: null },
+                  { status: { $in: ["ongoing", "started", "scheduled"] } },
+                ],
+                status: { $ne: "cancelled" },
+                "passengers.status": { $nin: ["cancelled", "rejected"] },
+              },
+            },
+          ]
+        : []),
 
       /* Optional date filters */
       ...(fromDate || toDate
@@ -1143,12 +1192,19 @@ export const handleGetRidesBooking = async (req, res, next) => {
         },
       },
 
-      /* 🔥 SORT BY NEAREST DEPARTURE */
+      /* 🔥 SORT ORDER */
       {
-        $sort: {
-          departureDateObj: 1, // nearest date first
-          departureTime: 1,    // nearest time first
-        },
+        $sort:
+          type === "upcoming"
+            ? {
+                departureDateObj: 1,
+                departureTime: 1,
+                createdAt: -1,
+              }
+            : {
+                createdAt: -1,
+                departureDateObj: -1,
+              },
       },
 
       {
@@ -1163,9 +1219,23 @@ export const handleGetRidesBooking = async (req, res, next) => {
                 localField: "driver",
                 foreignField: "_id",
                 as: "driver",
+                pipeline: [
+                  {
+                    $project: {
+                      firstName: 1,
+                      lastName: 1,
+                      phone: 1,
+                      email: 1,
+                      profilePhotos: 1,
+                      profilePhoto: 1,
+                      bio: 1,
+                      rating: 1,
+                    },
+                  },
+                ],
               },
             },
-            { $unwind: "$driver" },
+            { $unwind: { path: "$driver", preserveNullAndEmptyArrays: true } },
 
             {
               $lookup: {
@@ -1175,7 +1245,7 @@ export const handleGetRidesBooking = async (req, res, next) => {
                 as: "car",
               },
             },
-            { $unwind: "$car" },
+            { $unwind: { path: "$car", preserveNullAndEmptyArrays: true } },
           ],
           totalCount: [{ $count: "count" }],
         },
@@ -1193,7 +1263,7 @@ export const handleGetRidesBooking = async (req, res, next) => {
       data: rides,
       pagination: {
         currentPage: pageNumber,
-        totalPages: Math.ceil(totalCount / limitNumber),
+        totalPages: Math.ceil(totalCount / limitNumber) || 1,
         totalRecords: totalCount,
         limit: limitNumber,
       },

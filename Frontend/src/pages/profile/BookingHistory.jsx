@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -28,6 +29,8 @@ import ShowBookingDetails from "../ShowBookingDetails";
 import * as XLSX from "xlsx";
 
 const BookingHistory = () => {
+  const currentUser = useSelector((state) => state.user);
+  const currentUserId = currentUser?._id || localStorage.getItem("userId");
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all"); // all, scheduled, completed, cancelled
@@ -64,7 +67,7 @@ const BookingHistory = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const userId = localStorage.getItem("userId") || "696e1d66de3cf9b1654ce165";
+      const userId = currentUserId || localStorage.getItem("userId");
       
       // Build query parameters
       const params = {
@@ -154,47 +157,32 @@ const BookingHistory = () => {
 
   // Process booking data from API response
   const processBookingData = (ride) => {
-    console.log(ride , "these are rides")
     try {
-      // Find the passenger info for current user
-      const userId = localStorage.getItem("userId") || "696e1d66de3cf9b1654ce165";
+      const userId = currentUserId || localStorage.getItem("userId");
       const passengerInfo = ride.passengers?.find(p => 
-        p.user?._id === userId || 
-        p.user?.toString() === userId ||
-        p.user === userId
-      );
+        (p.user?._id || p.user)?.toString() === userId?.toString()
+      ) || ride.passengers?.[0];
 
-      // Calculate total amount
-      const passengerCount = passengerInfo ? 1 : 0;
-      const totalAmount = ride.pricePerSeat ? ride.pricePerSeat * passengerCount : 0;
+      const seatsBooked = passengerInfo?.seatsBooked || 1;
+      const totalAmount = ride.pricePerSeat ? ride.pricePerSeat * seatsBooked : 0;
 
-      // Get ride status - prioritize passenger status if available
-      let status = ride.status || "unknown";
-      if (passengerInfo?.status) {
-        status = passengerInfo.status;
-      }
+      let status = passengerInfo?.status || ride.status || "scheduled";
 
-      // Format date and time
-      let date = "";
       let time = "";
-      if (ride.departureTime) {
-        const departureDate = new Date(ride.departureTime);
-        date = departureDate.toLocaleDateString('en-IN', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        });
-        time = departureDate.toLocaleTimeString('en-IN', {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      } else if (ride.departureDate) {
-        date = new Date(ride.departureDate).toLocaleDateString('en-IN', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        });
+      let departureDateTime = ride.departureTime || "";
+      if (ride.departureTime && !ride.departureTime.includes("T") && ride.departureDate) {
+        departureDateTime = `${ride.departureDate}T${ride.departureTime}`;
       }
+
+      if (departureDateTime) {
+        const departureDate = new Date(departureDateTime);
+        time = !isNaN(departureDate.getTime())
+          ? departureDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })
+          : ride.departureTime || "";
+      }
+
+      const driverObj = ride.driver && typeof ride.driver === 'object' ? ride.driver : null;
+      const carObj = ride.car && typeof ride.car === 'object' ? ride.car : (ride.carDetails || {});
 
       return {
         _id: ride._id,
@@ -205,20 +193,21 @@ const BookingHistory = () => {
         toCity: ride.to?.city || ride.to?.address?.split(',')[0] || "",
         date: ride.departureDate,
         time: time,
-        departureDateTime: ride.departureTime,
+        departureDateTime: departureDateTime,
         status: status,
         amount: passengerInfo?.fare || totalAmount,
         pricePerSeat: ride.pricePerSeat,
+        seatsBooked: seatsBooked,
         passanger: ride?.passengers || [],
-        passengers: ride.availableSeats || ride.totalSeats || 1,
-        carName: ride.car?.model || ride.carDetails?.model || "Car",
-        carBrand: ride.car?.brand || ride.carDetails?.brand || "",
-        carType: ride.car?.type || ride.carDetails?.type || "Vehicle",
+        passengers: ride?.passengers || [],
+        carName: carObj.model || "Car",
+        carBrand: carObj.brand || "",
+        carType: carObj.type || "Vehicle",
         distance: ride.distance ? `${ride.distance} km` : "N/A",
-        driver: ride.driver,
-        driverName: ride.driver?.name || ride.driver?.firstName || "Driver",
-        driverPhone: ride.driver?.phone,
-        passengerStatus: passengerInfo?.status,
+        driver: driverObj,
+        driverName: driverObj ? `${driverObj.firstName || ''} ${driverObj.lastName || ''}`.trim() : (ride.driverName || "Driver"),
+        driverPhone: driverObj?.phone || ride.driverPhone || "",
+        passengerStatus: passengerInfo?.status || status,
         rideStatus: ride.status,
         preferences: ride.preferences,
         stops: ride.stops || [],
@@ -227,10 +216,9 @@ const BookingHistory = () => {
         chatRoomId: ride.chatRoomId,
         createdAt: ride.createdAt,
         updatedAt: ride.updatedAt,
-        isFullSharing :ride?.isFullSharing
+        isFullSharing: ride?.isFullSharing
       };
     } catch (error) {
-      // console.error("Error processing booking data:", error);
       return {
         _id: ride._id || "unknown",
         rideId: ride._id,
@@ -369,7 +357,7 @@ const BookingHistory = () => {
   const loadAllBookingsForExport = async () => {
     try {
       setExportLoading(true);
-      const userId = localStorage.getItem("userId") || "696e1d66de3cf9b1654ce165";
+      const userId = currentUserId || localStorage.getItem("userId");
       
       // Fetch all bookings without pagination
       const params = {
@@ -605,15 +593,15 @@ const BookingHistory = () => {
   };
 
   const handleCancelBooking = async (rideId) => {
-    if (!window.confirm("Are you sure you want to cancel this booking?")) return;
-    
+    if (!window.confirm("Are you sure you want to cancel this booking? Note: Cancellation is only allowed up to 2 hours before departure time.")) return;
     try {
-      // Add your cancel booking API call here
-      // await Axios.post(api.booking.cancelBooking, { rideId });
-      toast.success("Booking cancelled successfully");
-      fetchBookings(); // Refresh the list
+      const res = await Axios.post(api.ride.cancelBooking, { rideId });
+      if (res.data?.success) {
+        toast.success(res.data.message || "Booking cancelled successfully");
+        fetchBookings();
+      }
     } catch (error) {
-      toast.error("Failed to cancel booking");
+      toast.error(error.response?.data?.message || "Failed to cancel booking");
     }
   };
 
@@ -842,14 +830,14 @@ const BookingHistory = () => {
                       >
                         Details
                       </button>
-                      {/* {isScheduled && booking.passengerStatus?.toLowerCase() !== 'cancelled' && (
+                      {isScheduled && booking.passengerStatus?.toLowerCase() !== 'cancelled' && booking.passengerStatus?.toLowerCase() !== 'completed' && (
                         <button 
-                          onClick={() => handleCancelBooking(booking.rideId)}
-                          className="px-3 py-2 bg-red-50 border border-red-200 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm"
+                          onClick={() => handleCancelBooking(booking.rideId || booking._id)}
+                          className="px-3 py-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg hover:bg-rose-100 transition-colors text-xs font-bold cursor-pointer"
                         >
                           Cancel
                         </button>
-                      )} */}
+                      )}
                     </div>
                   </div>
                 </div>
@@ -960,8 +948,12 @@ const BookingHistory = () => {
       {showBookingDetail && (
         <ShowBookingDetails 
           showBookingDetail={showBookingDetail} 
-          setShowBookingDetail={setShowBookingDetail}
-          booking={selectedBooking}
+          setShowBookingDetail={(val) => {
+            setShowBookingDetail(val);
+            if (!val) {
+              fetchBookings();
+            }
+          }}
         />
       )}
     </motion.div>

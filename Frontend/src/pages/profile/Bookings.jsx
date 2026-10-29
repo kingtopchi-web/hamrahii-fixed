@@ -1,46 +1,86 @@
-import React from 'react'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import Axios from '../../services/axios'
-import { api } from '../../services/endpoints'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import Axios from '../../services/axios';
+import { api } from '../../services/endpoints';
+import { useNavigate, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { 
+  Car, MapPin, Calendar, Clock, User, Phone, 
+  CheckCircle, Clock4, XCircle, ArrowRight, 
+  History, Loader2, AlertCircle, ShieldCheck
+} from 'lucide-react';
+import ShowBookingDetails from '../ShowBookingDetails';
 
 const Bookings = () => {
-    const navigate = useNavigate()
-    const [newBookings, setNewBookings] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [cancelLoading, setCancelLoading] = useState({})
+    const navigate = useNavigate();
+    const currentUser = useSelector((state) => state.user);
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [cancelLoading, setCancelLoading] = useState({});
+    const [selectedBooking, setSelectedBooking] = useState(null);
 
     const handleGetBookings = async () => {
         try {
-            setLoading(true)
-            const res = await Axios.get(api.ride.getNewBookings)
-            console.log(res, "this is response")
+            setLoading(true);
+            const res = await Axios.get(api.user.getRidesBookingHistory, {
+                params: {
+                    type: "upcoming",
+                    limit: 50
+                }
+            });
             if (res?.data?.success) {
-                setNewBookings(res.data.bookings)
+                const data = Array.isArray(res.data.data) 
+                    ? res.data.data 
+                    : res.data.data?.bookings || res.data.bookings || [];
+                setBookings(data);
+            } else {
+                setBookings([]);
             }
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+            toast.error("Failed to load your bookings");
+            setBookings([]);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
-        handleGetBookings()
-    }, [])
+        handleGetBookings();
+    }, []);
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        })
-    }
+        if (!dateString) return 'Date not specified';
+        try {
+            return new Date(dateString).toLocaleDateString('en-IN', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        } catch {
+            return dateString;
+        }
+    };
 
-    const handleViewDetails = (ride) => {
-        navigate(
-            `/my-profile/show-offered-rides-details/${ride?._id}$$$${ride.from?.city}-to-${ride.to.city}`,
-        );
+    const formatTime = (timeString) => {
+        if (!timeString) return 'Time not specified';
+        try {
+            if (timeString.includes('T')) {
+                return new Date(timeString).toLocaleTimeString('en-IN', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            }
+            return timeString;
+        } catch {
+            return timeString;
+        }
+    };
+
+    const handleViewDetails = (booking) => {
+        setSelectedBooking(booking);
     };
 
     const handleCancelBooking = async (rideId) => {
@@ -48,7 +88,7 @@ const Bookings = () => {
         try {
             setCancelLoading((prev) => ({ ...prev, [rideId]: true }));
             const res = await Axios.post(api.ride.cancelBooking, { rideId });
-            if (res.data.success) {
+            if (res.data?.success) {
                 toast.success(res.data.message || "Booking cancelled successfully");
                 handleGetBookings();
             }
@@ -59,249 +99,224 @@ const Bookings = () => {
         }
     };
 
-
-    const formatTime = (timeString) => {
-        return new Date(timeString).toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        })
-    }
-
-    const getStatusBadgeColor = (status) => {
-        switch (status?.toLowerCase()) {
-            case 'requested':
-                return 'bg-amber-100 text-amber-800 border-amber-200'
-            case 'confirmed':
-                return 'bg-emerald-100 text-emerald-800 border-emerald-200'
-            case 'cancelled':
-                return 'bg-rose-100 text-rose-800 border-rose-200'
-            case 'completed':
-                return 'bg-blue-100 text-blue-800 border-blue-200'
-            default:
-                return 'bg-gray-100 text-gray-800 border-[var(--border-subtle)]'
-        }
-    }
-
-    const getInitials = (firstName, lastName) => {
-        return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase()
-    }
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-96">
-                <div className="relative">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-                    <p className="mt-4 text-gray-500 font-medium">Loading bookings...</p>
-                </div>
-            </div>
-        )
-    }
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-            <div className="max-w-7xl mx-auto">
+        <div className="min-h-screen bg-gray-50/60 p-4 md:p-8">
+            <div className="max-w-6xl mx-auto">
                 {/* Header Section */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                        My Bookings
-                    </h1>
-                    <p className="text-gray-500 mt-2">
-                        {newBookings.length} {newBookings.length === 1 ? 'booking' : 'bookings'} found
-                    </p>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">
+                            My Bookings
+                        </h1>
+                        <p className="text-gray-500 text-sm mt-1">
+                            Rides you have booked as a passenger
+                        </p>
+                    </div>
+
+                    <Link
+                        to="/my-profile/booking-history"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface)] hover:bg-gray-100 text-gray-700 font-semibold rounded-xl border border-gray-200 text-xs shadow-sm transition"
+                    >
+                        <History size={16} className="text-gray-500" />
+                        <span>View Past Booking History</span>
+                    </Link>
                 </div>
 
-                {newBookings.length === 0 ? (
-                    <div className="text-center py-16 bg-[var(--bg-surface)] rounded-2xl shadow-sm">
-                        <div className="text-6xl mb-4">🚗</div>
-                        <h3 className="text-xl font-semibold text-gray-700 mb-2">No bookings yet</h3>
-                        <p className="text-gray-500">Your upcoming rides will appear here</p>
+                {loading ? (
+                    <div className="flex flex-col justify-center items-center h-80 bg-[var(--bg-surface)] rounded-2xl border border-gray-200 shadow-sm">
+                        <Loader2 className="w-8 h-8 animate-spin text-indigo-600 mb-3" />
+                        <p className="text-gray-500 text-sm font-medium">Loading your booked rides...</p>
+                    </div>
+                ) : bookings.length === 0 ? (
+                    <div className="text-center py-16 bg-[var(--bg-surface)] rounded-2xl shadow-sm border border-gray-200">
+                        <div className="w-16 h-16 mx-auto bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 mb-4">
+                            <Car size={32} />
+                        </div>
+                        <h3 className="text-lg font-bold text-gray-800 mb-1">No active bookings found</h3>
+                        <p className="text-gray-500 text-sm max-w-sm mx-auto mb-6">
+                            You don't have any upcoming rides. Search and book available rides on your route!
+                        </p>
+                        <button
+                            onClick={() => navigate("/rides")}
+                            className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition shadow-sm cursor-pointer"
+                        >
+                            Find & Book a Ride
+                        </button>
                     </div>
                 ) : (
-                    <div className="grid gap-6">
-                        {newBookings.map((booking) => {
-                            const passenger = booking.passengers?.[0] || booking
-                            const user = passenger.user || booking.user
-                            const profilePhoto = user?.profilePhotos?.[0]
+                    <div className="grid gap-5">
+                        {bookings.map((booking) => {
+                            const currentUserId = currentUser?._id || localStorage.getItem("userId");
+                            const myPassenger = Array.isArray(booking.passengers)
+                                ? booking.passengers.find(
+                                      (p) => (p.user?._id || p.user)?.toString() === currentUserId?.toString()
+                                  ) || booking.passengers[0]
+                                : null;
+
+                            const passengerStatus = (myPassenger?.status || booking.status || "requested").toLowerCase();
+                            const isAccepted = passengerStatus === "accepted" || passengerStatus === "confirmed";
+                            const isCancelled = passengerStatus === "cancelled";
+
+                            const driver = booking.driver;
+                            const driverName = driver ? `${driver.firstName || ''} ${driver.lastName || ''}`.trim() : "Driver";
+                            const car = booking.car || booking.carDetails || {};
+                            const carModel = car.model || "Vehicle";
+                            const carBrand = car.brand || "";
+                            const seatsBooked = myPassenger?.seatsBooked || 1;
+                            const totalFare = (booking.pricePerSeat || 0) * seatsBooked;
 
                             return (
                                 <div
                                     key={booking._id}
-                                    className="group bg-[var(--bg-surface)] rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-[var(--border-subtle)] hover:border-indigo-200"
+                                    className="bg-[var(--bg-surface)] rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 overflow-hidden"
                                 >
-                                    <div className="p-6">
-                                        {/* Header with Route and Status */}
-                                        <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
-                                            <div className="flex-1">
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
-                                                        <span className="font-semibold text-gray-700">{booking.from?.city}</span>
-                                                    </div>
-                                                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                                    </svg>
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
-                                                        <span className="font-semibold text-gray-700">{booking.to?.city}</span>
-                                                    </div>
+                                    <div className="p-5 md:p-6">
+                                        {/* Top Route & Status Bar */}
+                                        <div className="flex flex-wrap justify-between items-start gap-4 mb-5 pb-4 border-b border-gray-100">
+                                            <div className="flex-1 min-w-[240px]">
+                                                <div className="flex items-center gap-2 text-base font-bold text-gray-900 mb-1.5">
+                                                    <span className="truncate max-w-[150px] sm:max-w-[200px]">
+                                                        {booking.from?.city || "Origin"}
+                                                    </span>
+                                                    <ArrowRight size={16} className="text-gray-400 flex-shrink-0" />
+                                                    <span className="truncate max-w-[150px] sm:max-w-[200px]">
+                                                        {booking.to?.city || "Destination"}
+                                                    </span>
                                                 </div>
-                                                <div className="flex items-center gap-4 text-sm text-gray-500">
-                                                    <div className="flex items-center gap-1">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                        </svg>
-                                                        <span>{formatDate(booking.departureDate || booking.departureTime)}</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
-                                                        <span>{formatTime(booking.departureTime)}</span>
-                                                    </div>
+
+                                                <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 font-medium">
+                                                    <span className="flex items-center gap-1">
+                                                        <Calendar size={13} className="text-gray-400" />
+                                                        {formatDate(booking.departureDate)}
+                                                    </span>
+                                                    <span className="flex items-center gap-1">
+                                                        <Clock size={13} className="text-gray-400" />
+                                                        {formatTime(booking.departureTime)}
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <span className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${getStatusBadgeColor(booking.status)}`}>
-                                                {booking.status || 'N/A'}
-                                            </span>
-                                        </div>
 
-                                        {/* User Profile Section */}
-                                        {(user || passenger.user) && (
-                                            <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl mb-6">
-                                                {/* Profile Picture */}
-                                                {profilePhoto?.url ? (
-                                                    <img
-                                                        src={import.meta.env.VITE_ASSETS_URL + profilePhoto.url}
-                                                        alt={`${user?.firstName} ${user?.lastName}`}
-                                                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md"
-                                                    />
+                                            {/* Status Badge */}
+                                            <div>
+                                                {isAccepted ? (
+                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                        <CheckCircle size={14} />
+                                                        <span>Booking Confirmed</span>
+                                                    </span>
+                                                ) : isCancelled ? (
+                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                                        <XCircle size={14} />
+                                                        <span>Cancelled</span>
+                                                    </span>
                                                 ) : (
-                                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
-                                                        {getInitials(user?.firstName, user?.lastName)}
-                                                    </div>
+                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                                        <Clock4 size={14} />
+                                                        <span>Waiting Driver Approval</span>
+                                                    </span>
                                                 )}
-
-                                                <div className="flex-1">
-                                                    <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
-                                                        <h3 className="font-semibold text-gray-800 text-lg">
-                                                            {user?.firstName} {user?.lastName}
-                                                        </h3>
-                                                        {user?.phone && (
-                                                            <span className="text-sm text-gray-500 bg-[var(--bg-surface)] px-3 py-1 rounded-full">
-                                                                📞 {user.phone}
-                                                            </span>
-                                                        )}
-                                                    </div>
-
-                                                    {/* Bio */}
-                                                    {user?.bio && (
-                                                        <div className="mt-2">
-                                                            <div className="flex items-start gap-2">
-                                                                <svg className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7"></path>
-                                                                </svg>
-                                                                <p className="text-sm text-gray-600 line-clamp-2">
-                                                                    {user.bio}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Journey Details */}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                            <div className="bg-gray-50 rounded-lg p-3">
-                                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Pickup Location</p>
-                                                <p className="text-sm text-gray-700">{booking.from?.address || booking.from?.city}</p>
-                                            </div>
-                                            <div className="bg-gray-50 rounded-lg p-3">
-                                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Drop Location</p>
-                                                <p className="text-sm text-gray-700">{booking.to?.address || booking.to?.city}</p>
                                             </div>
                                         </div>
 
-                                        {/* Passenger Details & Seats */}
-                                        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[var(--border-subtle)]">
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                        <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs text-gray-500">Passengers</p>
-                                                        <p className="text-sm font-semibold text-gray-700">
-                                                            {booking.passengers?.length || 1} passenger(s)
-                                                        </p>
-                                                    </div>
+                                        {/* Driver & Ride Details Row */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                                            {/* Driver Card */}
+                                            <div className="flex items-center gap-3.5 p-3.5 bg-gray-50/80 rounded-xl border border-gray-100">
+                                                <div className="w-12 h-12 rounded-full bg-indigo-100 text-indigo-700 font-black text-lg flex items-center justify-center flex-shrink-0 border border-white shadow-sm">
+                                                    {driverName.charAt(0) || "D"}
                                                 </div>
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                                                        <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs text-gray-500">Seats</p>
-                                                        <p className="text-sm font-semibold text-gray-700">
-                                                            {booking.seatsBooked || booking.passengers?.[0]?.seatsBooked || 1} seat(s)
-                                                        </p>
-                                                    </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-xs text-gray-500 font-medium">Driver</p>
+                                                    <p className="font-bold text-gray-900 text-sm truncate">{driverName}</p>
+                                                    <p className="text-xs text-gray-500 truncate">
+                                                        {carBrand} {carModel}
+                                                    </p>
                                                 </div>
+                                                {isAccepted && driver?.phone && (
+                                                    <a
+                                                        href={`tel:${driver.phone}`}
+                                                        className="p-2.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-xl transition flex-shrink-0"
+                                                        title="Call Driver"
+                                                    >
+                                                        <Phone size={16} />
+                                                    </a>
+                                                )}
                                             </div>
 
-                                            {/* Action Buttons */}
+                                            {/* Booking Fare & Seats Info */}
+                                            <div className="flex items-center justify-between p-3.5 bg-gray-50/80 rounded-xl border border-gray-100">
+                                                <div>
+                                                    <p className="text-xs text-gray-500 font-medium">Seats Booked</p>
+                                                    <p className="text-sm font-bold text-gray-900">
+                                                        {seatsBooked} seat{seatsBooked > 1 ? 's' : ''}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500">
+                                                        ₹{booking.pricePerSeat || 0} / seat
+                                                    </p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-xs text-gray-500 font-medium">Total Fare</p>
+                                                    <p className="text-lg font-black text-emerald-600">
+                                                        ₹{totalFare}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Actions Footer */}
+                                        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100">
+                                            <div className="text-xs text-gray-500">
+                                                {isAccepted ? (
+                                                    <span className="text-emerald-700 font-medium flex items-center gap-1">
+                                                        <ShieldCheck size={14} /> Ready for ride. Contact driver for pickup coordination.
+                                                    </span>
+                                                ) : isCancelled ? (
+                                                    <span className="text-gray-400">This booking was cancelled.</span>
+                                                ) : (
+                                                    <span className="text-amber-700 font-medium">Driver will confirm or decline your request.</span>
+                                                )}
+                                            </div>
+
                                             <div className="flex items-center gap-2">
-                                                {booking.status !== "cancelled" && booking.status !== "completed" && (
+                                                {!isCancelled && passengerStatus !== "completed" && (
                                                     <button
                                                         onClick={() => handleCancelBooking(booking._id)}
                                                         disabled={cancelLoading[booking._id]}
-                                                        className="px-4 py-2 text-sm font-medium text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50"
+                                                        className="px-4 py-2 text-xs font-bold text-rose-700 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition cursor-pointer disabled:opacity-50"
                                                     >
                                                         {cancelLoading[booking._id] ? "Cancelling..." : "Cancel Booking"}
                                                     </button>
                                                 )}
-                                                <button onClick={(e) => handleViewDetails(booking)} className="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors duration-200 cursor-pointer">
+
+                                                <button
+                                                    onClick={() => handleViewDetails(booking)}
+                                                    className="px-4 py-2 text-xs font-bold text-indigo-700 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition cursor-pointer"
+                                                >
                                                     View Details
                                                 </button>
                                             </div>
                                         </div>
-
-                                        {/* Additional Passengers if more than 1 */}
-                                        {booking.passengers && booking.passengers.length > 1 && (
-                                            <div className="mt-4 pt-3 border-t border-[var(--border-subtle)]">
-                                                <details className="text-sm">
-                                                    <summary className="text-indigo-600 cursor-pointer font-medium hover:text-indigo-700">
-                                                        + {booking.passengers.length - 1} more passenger(s)
-                                                    </summary>
-                                                    <div className="mt-2 space-y-2">
-                                                        {booking.passengers.slice(1).map((passenger, idx) => (
-                                                            <div key={idx} className="bg-gray-50 rounded p-2 text-sm">
-                                                                <span className="font-medium">
-                                                                    {passenger.user?.firstName} {passenger.user?.lastName}
-                                                                </span>
-                                                                {passenger.user?.phone && (
-                                                                    <span className="text-gray-500 ml-2">({passenger.user.phone})</span>
-                                                                )}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </details>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-                            )
+                            );
                         })}
                     </div>
                 )}
             </div>
-        </div>
-    )
-}
 
-export default Bookings
+            {/* View Booking Details Modal */}
+            {selectedBooking && (
+                <ShowBookingDetails
+                    showBookingDetail={selectedBooking}
+                    setShowBookingDetail={(val) => {
+                        setSelectedBooking(val);
+                        if (!val) {
+                            handleGetBookings();
+                        }
+                    }}
+                />
+            )}
+        </div>
+    );
+};
+
+export default Bookings;
