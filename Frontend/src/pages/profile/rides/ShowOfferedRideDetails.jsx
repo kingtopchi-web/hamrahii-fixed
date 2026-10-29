@@ -218,6 +218,42 @@ const ShowOfferedRideDetails = () => {
     }
   };
 
+  const handleCancelRide = async () => {
+    if (!window.confirm("Are you sure you want to cancel this ride offer? This cannot be undone.")) return;
+    try {
+      setActionLoading((prev) => ({ ...prev, cancelRide: true }));
+      const res = await Axios.post(api.ride.cancelOfferedRide, { rideId: ride._id });
+      if (res.data.success) {
+        toast.success("Ride offer cancelled successfully");
+        setRide((prev) => ({ ...prev, status: "cancelled" }));
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to cancel ride offer");
+    } finally {
+      setActionLoading((prev) => ({ ...prev, cancelRide: false }));
+    }
+  };
+
+  const handleCancelParcel = async (parcelId) => {
+    if (!window.confirm("Are you sure you want to cancel this parcel delivery?")) return;
+    setParcelActionLoading((prev) => ({ ...prev, [parcelId]: true }));
+    try {
+      const res = await Axios.post(api.parcel.cancelByRider(parcelId), {
+        reason: "Cancelled by rider before pickup",
+      });
+      if (res.data.success) {
+        toast.success("Parcel delivery cancelled successfully");
+        setParcels((prev) =>
+          prev.map((p) => (p._id === parcelId ? { ...p, status: "CANCELLED" } : p))
+        );
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to cancel parcel");
+    } finally {
+      setParcelActionLoading((prev) => ({ ...prev, [parcelId]: false }));
+    }
+  };
+
   // Format date and time
   const formatDateTime = (dateString) => {
     if (!dateString) return { date: "N/A", time: "N/A" };
@@ -578,13 +614,22 @@ const ShowOfferedRideDetails = () => {
                   )}
 
                   {parcel.status === "ACCEPTED" && (
-                    <button
-                      onClick={() => handleUpdateParcelStatus(parcel._id, "PICKED_UP", "")}
-                      disabled={parcelActionLoading[parcel._id]}
-                      className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700"
-                    >
-                      {parcelActionLoading[parcel._id] ? <Loader2 className="w-4 h-4 animate-spin mx-auto"/> : "Confirm Pickup"}
-                    </button>
+                    <>
+                      <button
+                        onClick={() => handleUpdateParcelStatus(parcel._id, "PICKED_UP", "")}
+                        disabled={parcelActionLoading[parcel._id]}
+                        className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700"
+                      >
+                        {parcelActionLoading[parcel._id] ? <Loader2 className="w-4 h-4 animate-spin mx-auto"/> : "Confirm Pickup"}
+                      </button>
+                      <button
+                        onClick={() => handleCancelParcel(parcel._id)}
+                        disabled={parcelActionLoading[parcel._id]}
+                        className="px-3 py-2 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-sm font-semibold transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </>
                   )}
 
                   {parcel.status === "PICKED_UP" && (
@@ -1162,6 +1207,25 @@ const ShowOfferedRideDetails = () => {
             </div>
 
             <div className="flex items-center gap-1 sm:gap-2">
+              {/* Cancel Ride Button (Only if no passenger has been accepted) */}
+              {ride.status !== "cancelled" && ride.status !== "completed" && (
+                !ride.passengers?.some((p) => p.status === "accepted" || p.status === "confirmed") ? (
+                  <button
+                    onClick={handleCancelRide}
+                    disabled={actionLoading.cancelRide}
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                  >
+                    {actionLoading.cancelRide ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <XCircle className="w-3.5 h-3.5" />}
+                    <span>Cancel Offer</span>
+                  </button>
+                ) : null
+              )}
+
+              {ride.status === "cancelled" && (
+                <span className="px-3 py-1 bg-red-100 text-red-700 border border-red-200 rounded-full text-xs font-bold">
+                  Ride Cancelled
+                </span>
+              )}
               {/* Desktop Actions */}
               {/* <div className="hidden sm:flex items-center gap-2">
                 <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg">

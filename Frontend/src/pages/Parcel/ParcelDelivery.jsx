@@ -84,6 +84,25 @@ const ParcelDelivery = () => {
     }
   };
 
+  const handleCancelParcel = async (parcelId) => {
+    if (!window.confirm("Are you sure you want to cancel this parcel delivery?")) return;
+    setActionLoading((prev) => ({ ...prev, [parcelId]: true }));
+    try {
+      const res = await Axios.post(
+        api.parcel.cancelByRider ? api.parcel.cancelByRider(parcelId) : `/parcel/${parcelId}/cancel-by-rider`,
+        { reason: "Cancelled by rider before pickup" }
+      );
+      if (res.data?.success) {
+        toast.success(res.data.message || "Parcel delivery cancelled successfully");
+        fetchDeliveries();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to cancel parcel");
+    } finally {
+      setActionLoading((prev) => ({ ...prev, [parcelId]: false }));
+    }
+  };
+
   const handleCashReceived = async (parcelId) => {
     if (actionLoading[parcelId]) return;
     setActionLoading((prev) => ({ ...prev, [parcelId]: true }));
@@ -414,22 +433,31 @@ const ParcelDelivery = () => {
                                             Collect the parcel from the sender and click Confirm Pickup below.
                                           </p>
                                         </div>
-                                        <button
-                                          onClick={() =>
-                                            handleUpdateStatus(parcel._id, "PICKED_UP")
-                                          }
-                                          disabled={isProcessing}
-                                          className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-sm"
-                                        >
-                                          {isProcessing ? (
-                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                          ) : (
-                                            <>
-                                              <CheckCircle2 size={16} />
-                                              <span>Confirm Pickup</span>
-                                            </>
-                                          )}
-                                        </button>
+                                        <div className="flex gap-2">
+                                          <button
+                                            onClick={() =>
+                                              handleUpdateStatus(parcel._id, "PICKED_UP")
+                                            }
+                                            disabled={isProcessing}
+                                            className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-sm cursor-pointer"
+                                          >
+                                            {isProcessing ? (
+                                              <Loader2 className="w-4 h-4 animate-spin" />
+                                            ) : (
+                                              <>
+                                                <CheckCircle2 size={16} />
+                                                <span>Confirm Pickup</span>
+                                              </>
+                                            )}
+                                          </button>
+                                          <button
+                                            onClick={() => handleCancelParcel(parcel._id)}
+                                            disabled={isProcessing}
+                                            className="px-4 py-2.5 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-xl text-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1"
+                                          >
+                                            Cancel
+                                          </button>
+                                        </div>
                                       </div>
                                     )}
 

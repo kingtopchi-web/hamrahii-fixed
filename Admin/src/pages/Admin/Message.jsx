@@ -53,7 +53,7 @@ const Message = () => {
     if (clean.startsWith("http://") || clean.startsWith("https://") || clean.startsWith("data:")) {
       return clean;
     }
-    const baseUrl = (import.meta.env.VITE_ASSETS_URL || "http://localhost:9898").trim().replace(/\/$/, "");
+    const baseUrl = (import.meta.env.VITE_ASSETS_URL || "http://localhost:9899").trim().replace(/\/$/, "");
     const normalized = clean.startsWith("/") ? clean : `/${clean}`;
     return `${baseUrl}${normalized}`;
   };

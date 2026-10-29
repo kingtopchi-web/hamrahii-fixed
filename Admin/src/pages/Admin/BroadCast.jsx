@@ -22,7 +22,7 @@ const getPreviewUrl = (url) => {
   if (url.startsWith('data:') || url.startsWith('blob:') || url.startsWith('http://') || url.startsWith('https://')) {
     return url;
   }
-  const baseUrl = (import.meta.env.VITE_ASSETS_URL || 'http://localhost:9898').replace(/\/$/, '');
+  const baseUrl = (import.meta.env.VITE_ASSETS_URL || 'http://localhost:9899').replace(/\/$/, '');
   const normalized = url.startsWith('/') ? url : `/${url}`;
   return `${baseUrl}${normalized}`;
 };

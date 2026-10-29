@@ -67,7 +67,7 @@ export const getCarImageUrl = (carOrPhoto) => {
     return clean;
   }
 
-  const rawBase = (import.meta.env.VITE_ASSETS_URL || "http://localhost:9898").trim().replace(/\/$/, "");
+  const rawBase = (import.meta.env.VITE_ASSETS_URL || "http://localhost:9899").trim().replace(/\/$/, "");
   let baseUrl = rawBase;
   if (typeof window !== "undefined" && window.location.protocol === "https:" && baseUrl.startsWith("http://localhost")) {
     baseUrl = "https://server.humrahii.com";

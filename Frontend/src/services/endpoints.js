@@ -57,7 +57,9 @@ export const api = {
         acceptRideRequest: base_url + "/ride/accept-ride",
         rejectRideRequest: base_url + "/ride/reject-ride",
         getRecentRides: base_url + "/ride/recent-ride",
-        getNewBookings: base_url + "/ride/get-new-bookings"
+        getNewBookings: base_url + "/ride/get-new-bookings",
+        cancelBooking: base_url + "/ride/cancel-booking",
+        cancelOfferedRide: base_url + "/ride/cancel-offered-ride"
     },
     location: {
         getSuggetsions: base_url + "/location/get-suggetions",
@@ -92,6 +94,7 @@ export const api = {
         track: (parcelId) => base_url + `/parcel/${parcelId}/track`,
         getNearbyRiders: (parcelId) => base_url + `/parcel/${parcelId}/nearby-riders`,
         refreshSearch: (parcelId) => base_url + `/parcel/${parcelId}/refresh-search`,
+        cancelByRider: (parcelId) => base_url + `/parcel/${parcelId}/cancel-by-rider`,
     },
     kyc: {
         status: base_url + "/kyc/status",

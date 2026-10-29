@@ -30,7 +30,7 @@ export const getVehicleTypeImageUrl = (img) => {
   if (clean.startsWith("/vehicles/")) {
     return clean;
   }
-  const baseUrl = (import.meta.env.VITE_ASSETS_URL || "http://localhost:9898").trim().replace(/\/$/, "");
+  const baseUrl = (import.meta.env.VITE_ASSETS_URL || "http://localhost:9899").trim().replace(/\/$/, "");
   const normalized = clean.startsWith("/") ? clean : `/${clean}`;
   return `${baseUrl}${normalized}`;
 };

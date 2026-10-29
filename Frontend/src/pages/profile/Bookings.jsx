@@ -10,6 +10,7 @@ const Bookings = () => {
     const navigate = useNavigate()
     const [newBookings, setNewBookings] = useState([])
     const [loading, setLoading] = useState(false)
+    const [cancelLoading, setCancelLoading] = useState({})
 
     const handleGetBookings = async () => {
         try {
@@ -40,6 +41,22 @@ const Bookings = () => {
         navigate(
             `/my-profile/show-offered-rides-details/${ride?._id}$$$${ride.from?.city}-to-${ride.to.city}`,
         );
+    };
+
+    const handleCancelBooking = async (rideId) => {
+        if (!window.confirm("Are you sure you want to cancel this booking? Note: Cancellation is only allowed up to 2 hours before departure time.")) return;
+        try {
+            setCancelLoading((prev) => ({ ...prev, [rideId]: true }));
+            const res = await Axios.post(api.ride.cancelBooking, { rideId });
+            if (res.data.success) {
+                toast.success(res.data.message || "Booking cancelled successfully");
+                handleGetBookings();
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to cancel booking");
+        } finally {
+            setCancelLoading((prev) => ({ ...prev, [rideId]: false }));
+        }
     };
 
 
@@ -237,10 +254,21 @@ const Bookings = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Action Button */}
-                                            <button onClick={(e) => handleViewDetails(booking)} className="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors duration-200">
-                                                View Details
-                                            </button>
+                                            {/* Action Buttons */}
+                                            <div className="flex items-center gap-2">
+                                                {booking.status !== "cancelled" && booking.status !== "completed" && (
+                                                    <button
+                                                        onClick={() => handleCancelBooking(booking._id)}
+                                                        disabled={cancelLoading[booking._id]}
+                                                        className="px-4 py-2 text-sm font-medium text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors duration-200 cursor-pointer disabled:opacity-50"
+                                                    >
+                                                        {cancelLoading[booking._id] ? "Cancelling..." : "Cancel Booking"}
+                                                    </button>
+                                                )}
+                                                <button onClick={(e) => handleViewDetails(booking)} className="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors duration-200 cursor-pointer">
+                                                    View Details
+                                                </button>
+                                            </div>
                                         </div>
 
                                         {/* Additional Passengers if more than 1 */}

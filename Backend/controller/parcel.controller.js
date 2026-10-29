@@ -7,6 +7,7 @@ import { sendToMany } from "../utils/sendNotification/sendToMany.js";
 import vehicleTypeModel from "../models/vehicleType.model.js";
 import Commision from "../models/commision.model.js";
 import { sendSms } from "../utils/sendOtpOnMobile.js";
+import { sendToMultiple } from "../config/firebase/sendMobileNotification.js";
 
 import parcelWeightSlabModel from "../models/parcelWeightSlab.model.js";
 
@@ -1182,5 +1183,95 @@ export const handleRefreshParcelSearch = async (req, res) => {
   } catch (error) {
     console.error("Error refreshing parcel search:", error);
     res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+  }
+};
+
+
+// --------------------------------------------------------------------------
+// 3. CANCEL PARCEL REQUEST BY RIDER
+// Restriction: Cannot cancel if parcel has already been picked up.
+// --------------------------------------------------------------------------
+export const handleCancelParcelByRider = async (req, res) => {
+  try {
+    const parcelId = req.params.parcelId || req.body.parcelId;
+    const { reason } = req.body;
+    const riderId = req.userId;
+
+    if (!parcelId) {
+      return res.status(400).json({ success: false, message: "Parcel ID is required" });
+    }
+
+    const parcel = await parcelModel.findById(parcelId).populate("sender", "firstName lastName phone mobileFcm fcm");
+    if (!parcel) {
+      return res.status(404).json({ success: false, message: "Parcel not found" });
+    }
+
+    // Check if requester is assigned rider/driver OR has an active parcel request
+    const isDriver = parcel.driver?.toString() === riderId?.toString();
+    const riderRequest = await parcelRequestModel.findOne({ parcelId: parcel._id, riderId });
+
+    if (!isDriver && !riderRequest) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized. You are not assigned to this parcel."
+      });
+    }
+
+    // If parcel is already picked up, rider CANNOT cancel
+    const nonCancellableStatuses = [
+      "PICKUP_CONFIRMED",
+      "PICKED_UP",
+      "IN_TRANSIT",
+      "OUT_FOR_DELIVERY",
+      "DELIVERED",
+      "COMPLETED"
+    ];
+
+    if (nonCancellableStatuses.includes(parcel.status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot cancel parcel. The parcel has already been picked up."
+      });
+    }
+
+    if (parcel.status === "CANCELLED") {
+      return res.status(400).json({ success: false, message: "Parcel is already cancelled." });
+    }
+
+    // Cancel the parcel delivery commitment
+    parcel.status = "CANCELLED";
+    parcel.cancellationReason = reason || "Cancelled by rider before pickup";
+    parcel.statusHistory.push({
+      status: "CANCELLED",
+      updatedBy: riderId,
+      updatedAt: new Date()
+    });
+
+    await parcel.save();
+
+    // Expire/cancel any requests associated with this parcel
+    await parcelRequestModel.updateMany(
+      { parcelId: parcel._id },
+      { $set: { status: "CANCELLED", respondedAt: new Date() } }
+    );
+
+    // Notify sender via mobile notification
+    if (parcel.sender?.mobileFcm && parcel.sender.mobileFcm.length > 0) {
+      sendToMultiple({
+        tokens: parcel.sender.mobileFcm,
+        title: "Parcel Pickup Cancelled",
+        body: `Rider has cancelled the pickup for your parcel. Reason: ${reason || "Cancelled before pickup"}`,
+        route: "/my-parcels"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Parcel delivery cancelled successfully by rider",
+      data: parcel
+    });
+  } catch (error) {
+    console.error("Error in handleCancelParcelByRider:", error);
+    return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
   }
 };

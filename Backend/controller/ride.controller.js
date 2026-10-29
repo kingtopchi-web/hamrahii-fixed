@@ -1773,3 +1773,239 @@ export const handleGetNewBookingRequests = async (req, res, next) => {
     next(error);
   }
 };
+
+
+// Helper: parse departure date & time accurately
+const resolveRideDepartureDateTime = (ride) => {
+  if (!ride) return null;
+  if (ride.departureTime && typeof ride.departureTime === "string" && ride.departureTime.includes("T")) {
+    const d = new Date(ride.departureTime);
+    if (!isNaN(d.getTime())) return d;
+  }
+  if (ride.departureDate && ride.departureTime) {
+    const combinedIso = new Date(`${ride.departureDate}T${ride.departureTime}`);
+    if (!isNaN(combinedIso.getTime())) return combinedIso;
+
+    const combinedStr = new Date(`${ride.departureDate} ${ride.departureTime}`);
+    if (!isNaN(combinedStr.getTime())) return combinedStr;
+  }
+  if (ride.departureDate) {
+    const d = new Date(ride.departureDate);
+    if (!isNaN(d.getTime())) return d;
+  }
+  return null;
+};
+
+// --------------------------------------------------------------------------
+// 1. CANCEL BOOKING (Passenger cancels a booked seat/request)
+// Restriction: Only allowed up to 2 hours before departure time.
+// --------------------------------------------------------------------------
+export const handleCancelBooking = async (req, res, next) => {
+  try {
+    const { rideId, passengerId, reason } = req.body;
+    const effectiveUserId = req.userId || req.body.userId;
+
+    if (!validateObjectId(effectiveUserId, "Invalid user id", res)) return;
+    if (!validateObjectId(rideId, "Invalid ride id", res)) return;
+
+    const ride = await rideModel
+      .findById(rideId)
+      .populate("driver", "firstName lastName email phone mobileFcm fcm");
+
+    if (!ride) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "Ride not found",
+      });
+    }
+
+    if (ride.isDeleted || ride.status === "cancelled" || ride.status === "completed") {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: `Ride is already ${ride.status || "unavailable"}. Cannot cancel booking.`,
+      });
+    }
+
+    // Identify passenger entry
+    const targetUserId = passengerId || effectiveUserId;
+    if (!Array.isArray(ride.passengers) || ride.passengers.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "No passengers found for this ride",
+      });
+    }
+
+    const passenger = ride.passengers.find((p) => {
+      const pUserId = p.user ? (p.user._id ? p.user._id.toString() : p.user.toString()) : null;
+      const pId = p._id ? p._id.toString() : null;
+      const matches = pUserId === targetUserId.toString() || pId === targetUserId.toString();
+      return matches && p.status !== "cancelled" && p.status !== "rejected";
+    });
+
+    if (!passenger) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "No active booking found for this passenger on this ride",
+      });
+    }
+
+    // 2-hour departure time restriction
+    const departureDate = resolveRideDepartureDateTime(ride);
+    if (departureDate) {
+      const now = new Date();
+      const diffMs = departureDate.getTime() - now.getTime();
+      const twoHoursMs = 2 * 60 * 60 * 1000;
+
+      if (diffMs < twoHoursMs) {
+        return res.status(400).json({
+          success: false,
+          error: true,
+          message: "Cancellation is only allowed up to 2 hours before the departure time. Less than 2 hours remaining.",
+        });
+      }
+    }
+
+    const previousStatus = passenger.status;
+    passenger.status = "cancelled";
+    passenger.cancelledAt = new Date();
+    passenger.cancellationReason = reason || "Cancelled by passenger";
+
+    // Free up seats if passenger was already accepted
+    if (previousStatus === "accepted") {
+      const seatsToFree = Number(passenger.seatsBooked) || 1;
+      ride.availableSeats = Math.min(ride.totalSeats, (ride.availableSeats || 0) + seatsToFree);
+    }
+
+    await ride.save();
+
+    // Notify driver
+    if (ride.driver?.mobileFcm) {
+      sendToMultiple({
+        tokens: ride.driver.mobileFcm,
+        title: "Passenger Cancelled Booking",
+        body: `A passenger has cancelled their booking for your ride from ${ride.from?.city} to ${ride.to?.city}.`,
+        route: "/"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: "Booking cancelled successfully",
+      ride,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// --------------------------------------------------------------------------
+// 2. CANCEL OFFERED RIDE (Driver cancels their offered ride)
+// Restriction: Cannot cancel if any user/passenger booking has already been accepted.
+// --------------------------------------------------------------------------
+export const handleCancelOfferedRide = async (req, res, next) => {
+  try {
+    const { rideId, reason } = req.body;
+    const effectiveUserId = req.userId || req.body.userId;
+
+    if (!validateObjectId(effectiveUserId, "Invalid user id", res)) return;
+    if (!validateObjectId(rideId, "Invalid ride id", res)) return;
+
+    const ride = await rideModel
+      .findById(rideId)
+      .populate("passengers.user", "firstName lastName email phone mobileFcm fcm");
+
+    if (!ride) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "Ride not found",
+      });
+    }
+
+    // Verify driver
+    if (ride.driver.toString() !== effectiveUserId.toString()) {
+      return res.status(403).json({
+        success: false,
+        error: true,
+        message: "Unauthorized. Only the driver can cancel this ride offer.",
+      });
+    }
+
+    if (ride.status === "cancelled") {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "This ride is already cancelled.",
+      });
+    }
+
+    if (ride.status === "completed") {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "Completed ride cannot be cancelled.",
+      });
+    }
+
+    // Check if any passenger is already accepted
+    const hasAcceptedPassenger =
+      Array.isArray(ride.passengers) &&
+      ride.passengers.some((p) => p.status === "accepted" || p.status === "confirmed");
+
+    if (hasAcceptedPassenger) {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "Cannot cancel ride because one or more passengers have already been accepted.",
+      });
+    }
+
+    // Update ride status
+    ride.status = "cancelled";
+
+    // Mark any pending requests as rejected
+    if (Array.isArray(ride.passengers)) {
+      ride.passengers.forEach((p) => {
+        if (p.status === "requested") {
+          p.status = "rejected";
+          p.cancellationReason = "Ride offer cancelled by driver";
+        }
+      });
+    }
+
+    // Refund creation fee to driver wallet if applicable
+    if (ride.creationFee && ride.creationFee > 0) {
+      await userModel.findByIdAndUpdate(effectiveUserId, {
+        $inc: { "wallet.balance": ride.creationFee },
+        $push: {
+          "wallet.transactions": {
+            userId: effectiveUserId,
+            amount: ride.creationFee,
+            type: "credit",
+            source: "ride_cancellation_refund",
+            status: "success",
+            referenceId: `REFUND_RIDE_${ride._id}_${Date.now()}`,
+            description: `Refund for cancelled ride offer from ${ride.from?.city} to ${ride.to?.city}`,
+            createdAt: new Date(),
+          },
+        },
+      });
+    }
+
+    await ride.save();
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: "Ride offer cancelled successfully",
+      ride,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

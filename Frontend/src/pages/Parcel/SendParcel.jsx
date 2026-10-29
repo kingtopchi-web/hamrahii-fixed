@@ -778,7 +778,7 @@ const SendParcel = () => {
                       {/* Removed card backgrounds and borders as requested */}
                       <div className="w-8 h-8 sm:w-12 sm:h-10 flex items-center justify-center bg-transparent transition-transform duration-300">
                         <img 
-                          src={v.image?.startsWith('http') ? v.image : `${import.meta.env.VITE_ASSETS_URL || 'http://localhost:9898'}/${(v.image || '').replace(/^[\/\\]/, '').replace(/\\/g, '/')}`} 
+                          src={v.image?.startsWith('http') ? v.image : `${import.meta.env.VITE_ASSETS_URL || 'http://localhost:9899'}/${(v.image || '').replace(/^[\/\\]/, '').replace(/\\/g, '/')}`} 
                           alt={v.type} 
                           className="w-full h-full object-contain mix-blend-multiply" 
                         />

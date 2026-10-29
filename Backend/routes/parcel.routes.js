@@ -15,7 +15,8 @@ import {
   handleCalculateFare,
   handleGetParcelTracking,
   handleGetNearbyRiders,
-  handleRefreshParcelSearch
+  handleRefreshParcelSearch,
+  handleCancelParcelByRider
 } from "../controller/parcel.controller.js";
 
 const router = express.Router();
@@ -36,5 +37,7 @@ router.post("/:parcelId/accept", requireKyc, handleAcceptParcel);
 router.post("/:parcelId/reject", handleRejectParcel);
 router.post("/:parcelId/verify-payment", handleVerifyOnlinePayment);
 router.post("/:parcelId/cash-received", handleCashReceived);
+router.post("/:parcelId/cancel-by-rider", handleCancelParcelByRider);
+router.post("/cancel-by-rider", handleCancelParcelByRider);
 
 export default router;
