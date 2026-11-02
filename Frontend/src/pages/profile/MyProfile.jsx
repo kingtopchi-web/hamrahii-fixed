@@ -26,7 +26,7 @@ const MyProfile = () => {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="min-h-screen bg-gradient-to-br from-white via-[#F9FAFB] to-[#F3F4F6] pt-20 sm:pt-24 pb-12"
+      className="min-h-screen bg-gradient-to-br from-white via-[#F9FAFB] to-[#F3F4F6] pt-1 sm:pt-2 pb-10"
     >
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         {/* Mobile menu toggle (optional, Navbar handles top level, but if they need it here) */}

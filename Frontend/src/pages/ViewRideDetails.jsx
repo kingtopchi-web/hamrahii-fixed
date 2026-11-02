@@ -204,7 +204,7 @@ const ViewRideDetails = () => {
   const carImages = rideDetails.carDetails?.images || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-[#F7F7F7] to-white pt-16 sm:pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#F7F7F7] to-white">
       {/* Header Section */}
       <div className="bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] px-4 py-4 md:px-6">
         <div className="max-w-7xl mx-auto">
