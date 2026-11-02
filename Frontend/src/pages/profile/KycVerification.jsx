@@ -87,16 +87,30 @@ const KycVerification = () => {
             return;
         }
 
+        if (!frontFile) {
+            toast.warning("Please upload the front side photo of your document.");
+            return;
+        }
+
+        if (!backFile) {
+            toast.warning("Please upload the back side photo of your document.");
+            return;
+        }
+
         setSubmitting(true);
         try {
-            let frontImageUrl = null;
-            let backImageUrl = null;
-
-            if (frontFile) {
-                frontImageUrl = await uploadImage(frontFile, "kyc");
+            const frontImageUrl = await uploadImage(frontFile, "kyc");
+            if (!frontImageUrl) {
+                toast.error("Failed to upload document front photo. Please try again.");
+                setSubmitting(false);
+                return;
             }
-            if (backFile) {
-                backImageUrl = await uploadImage(backFile, "kyc");
+
+            const backImageUrl = await uploadImage(backFile, "kyc");
+            if (!backImageUrl) {
+                toast.error("Failed to upload document back photo. Please try again.");
+                setSubmitting(false);
+                return;
             }
 
             const payload = {
@@ -352,9 +366,9 @@ const KycVerification = () => {
                             {/* Front Image */}
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                                    Document Front Photo (Optional)
+                                    Document Front Photo <span className="text-[#E10600]">*</span>
                                 </label>
-                                <div className="border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center hover:border-red-300 transition bg-gray-50 relative">
+                                <div className={`border-2 border-dashed rounded-2xl p-4 text-center transition bg-gray-50 relative ${frontPreview ? 'border-emerald-300 bg-emerald-50/20' : 'border-gray-300 hover:border-red-400'}`}>
                                     {frontPreview ? (
                                         <div className="relative">
                                             <img
@@ -365,7 +379,7 @@ const KycVerification = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => { setFrontFile(null); setFrontPreview(null); }}
-                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 text-xs shadow"
+                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 text-xs shadow hover:bg-red-700"
                                             >
                                                 ✕
                                             </button>
@@ -373,8 +387,8 @@ const KycVerification = () => {
                                     ) : (
                                         <label className="cursor-pointer block py-4">
                                             <Upload className="mx-auto text-gray-400 mb-2" size={24} />
-                                            <span className="text-xs font-semibold text-gray-600 block">Upload Front Side</span>
-                                            <span className="text-[10px] text-gray-400">PNG, JPG up to 5MB</span>
+                                            <span className="text-xs font-semibold text-gray-800 block">Upload Front Side *</span>
+                                            <span className="text-[10px] text-gray-500">PNG, JPG up to 5MB (Required)</span>
                                             <input
                                                 type="file"
                                                 accept="image/*"
@@ -389,9 +403,9 @@ const KycVerification = () => {
                             {/* Back Image */}
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                                    Document Back Photo (Optional)
+                                    Document Back Photo <span className="text-[#E10600]">*</span>
                                 </label>
-                                <div className="border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center hover:border-red-300 transition bg-gray-50 relative">
+                                <div className={`border-2 border-dashed rounded-2xl p-4 text-center transition bg-gray-50 relative ${backPreview ? 'border-emerald-300 bg-emerald-50/20' : 'border-gray-300 hover:border-red-400'}`}>
                                     {backPreview ? (
                                         <div className="relative">
                                             <img
@@ -402,7 +416,7 @@ const KycVerification = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => { setBackFile(null); setBackPreview(null); }}
-                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 text-xs shadow"
+                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 text-xs shadow hover:bg-red-700"
                                             >
                                                 ✕
                                             </button>
@@ -410,8 +424,8 @@ const KycVerification = () => {
                                     ) : (
                                         <label className="cursor-pointer block py-4">
                                             <Upload className="mx-auto text-gray-400 mb-2" size={24} />
-                                            <span className="text-xs font-semibold text-gray-600 block">Upload Back Side</span>
-                                            <span className="text-[10px] text-gray-400">PNG, JPG up to 5MB</span>
+                                            <span className="text-xs font-semibold text-gray-800 block">Upload Back Side *</span>
+                                            <span className="text-[10px] text-gray-500">PNG, JPG up to 5MB (Required)</span>
                                             <input
                                                 type="file"
                                                 accept="image/*"

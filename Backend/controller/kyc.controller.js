@@ -14,6 +14,14 @@ export const submitKycDetails = async (req, res) => {
             return res.status(400).json({ success: false, message: "Full Name (as per document) is required." });
         }
 
+        if (!frontImage || typeof frontImage !== 'string' || !frontImage.trim()) {
+            return res.status(400).json({ success: false, message: "Front side photo of the document is required." });
+        }
+
+        if (!backImage || typeof backImage !== 'string' || !backImage.trim()) {
+            return res.status(400).json({ success: false, message: "Back side photo of the document is required." });
+        }
+
         const user = await User.findById(req.userId);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found." });
