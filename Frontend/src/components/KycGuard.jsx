@@ -110,7 +110,7 @@ const KycGuard = ({ children, fallback, className = "" }) => {
 
             {/* The Modal */}
             {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
                         <div className="flex justify-between items-center p-4 border-b border-gray-100">
                             <h3 className="font-bold text-lg text-gray-800">Verification Required</h3>

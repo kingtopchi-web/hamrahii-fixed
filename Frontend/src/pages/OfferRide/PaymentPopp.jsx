@@ -93,22 +93,28 @@ const PaymentPopup = ({
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-      >
+      <div className="fixed inset-0 z-[9999] overflow-y-auto">
+        {/* Backdrop */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          className="relative w-full max-w-sm"
-        >
-          <div className="bg-[var(--bg-surface)] rounded-3xl shadow-2xl overflow-hidden border border-[var(--border-subtle)]">
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+        />
+
+        {/* Centering container */}
+        <div className="min-h-full flex items-center justify-center p-4 py-8 sm:py-12">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            className="relative w-full max-w-sm sm:max-w-md max-h-[85vh] sm:max-h-[88vh] flex flex-col z-10"
+          >
+          <div className="bg-[var(--bg-surface)] rounded-3xl shadow-2xl overflow-hidden border border-[var(--border-subtle)] flex flex-col max-h-[88vh]">
 
             {/* HEADER */}
-            <div className="p-5 bg-gradient-to-r from-[#E10600] to-[#FF3B30]">
+            <div className="p-4 sm:p-5 bg-gradient-to-r from-[#E10600] to-[#FF3B30] flex-shrink-0">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-xl bg-[var(--bg-surface)]/20 backdrop-blur-sm flex items-center justify-center">
@@ -129,7 +135,7 @@ const PaymentPopup = ({
             </div>
 
             {/* CONTENT */}
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-3.5 overflow-y-auto flex-1 overscroll-contain">
 
               {/* MAIN AMOUNT DISPLAY */}
               <div className="text-center">
@@ -354,8 +360,9 @@ const PaymentPopup = ({
 
             </div>
           </div>
-        </motion.div>
-      </motion.div>
+          </motion.div>
+        </div>
+      </div>
     </AnimatePresence>
   );
 };

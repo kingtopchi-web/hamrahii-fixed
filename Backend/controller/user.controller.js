@@ -1858,6 +1858,9 @@ export const handleUpdateUserLocation = async (req , res , next) => {
 export const handleGetUserNotifications = async (req, res, next) => {
   try {
     const userId = req.userId;
+    const user = await userModel.findById(userId).select("createdAt");
+    const userRegisteredAt = user?.createdAt || (user?._id ? user._id.getTimestamp() : null);
+
     const query = {
       $or: [
         { reciever: userId },
@@ -1866,6 +1869,11 @@ export const handleGetUserNotifications = async (req, res, next) => {
       ],
       deletedBy: { $ne: userId }
     };
+
+    // Only show notifications created at or after the user registered
+    if (userRegisteredAt) {
+      query.createdAt = { $gte: userRegisteredAt };
+    }
 
     const notifications = await notificationModel
       .find(query)
@@ -1894,6 +1902,9 @@ export const handleGetUserNotifications = async (req, res, next) => {
 export const handleMarkNotificationsAsRead = async (req, res, next) => {
   try {
     const userId = req.userId;
+    const user = await userModel.findById(userId).select("createdAt");
+    const userRegisteredAt = user?.createdAt || (user?._id ? user._id.getTimestamp() : null);
+
     const { notificationId } = req.body || {};
     if (notificationId) {
       await notificationModel.findByIdAndUpdate(notificationId, {
@@ -1901,15 +1912,19 @@ export const handleMarkNotificationsAsRead = async (req, res, next) => {
         $addToSet: { readBy: userId }
       });
     } else {
+      const updateQuery = {
+        $or: [
+          { reciever: userId },
+          { reciever: null },
+          { type: "broadcast" }
+        ],
+        deletedBy: { $ne: userId }
+      };
+      if (userRegisteredAt) {
+        updateQuery.createdAt = { $gte: userRegisteredAt };
+      }
       await notificationModel.updateMany(
-        {
-          $or: [
-            { reciever: userId },
-            { reciever: null },
-            { type: "broadcast" }
-          ],
-          deletedBy: { $ne: userId }
-        },
+        updateQuery,
         {
           isRead: true,
           $addToSet: { readBy: userId }
@@ -1928,6 +1943,9 @@ export const handleMarkNotificationsAsRead = async (req, res, next) => {
 export const handleDeleteNotifications = async (req, res, next) => {
   try {
     const userId = req.userId;
+    const user = await userModel.findById(userId).select("createdAt");
+    const userRegisteredAt = user?.createdAt || (user?._id ? user._id.getTimestamp() : null);
+
     const { notificationId } = req.body || {};
 
     if (notificationId) {
@@ -1938,15 +1956,19 @@ export const handleDeleteNotifications = async (req, res, next) => {
       // If it belongs exclusively to this user, delete permanently from DB
       await notificationModel.deleteOne({ _id: notificationId, reciever: userId });
     } else {
+      const deleteQuery = {
+        $or: [
+          { reciever: userId },
+          { reciever: null },
+          { type: "broadcast" }
+        ]
+      };
+      if (userRegisteredAt) {
+        deleteQuery.createdAt = { $gte: userRegisteredAt };
+      }
       // Mark all visible notifications as deleted for this user
       await notificationModel.updateMany(
-        {
-          $or: [
-            { reciever: userId },
-            { reciever: null },
-            { type: "broadcast" }
-          ]
-        },
+        deleteQuery,
         {
           $addToSet: { deletedBy: userId }
         }

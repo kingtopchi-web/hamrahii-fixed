@@ -198,26 +198,27 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[9999] overflow-y-auto">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleClose}
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm"
         />
         
-        {/* Modal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl bg-[var(--bg-surface)] shadow-2xl flex flex-col"
-        >
+        {/* Scrollable centering container */}
+        <div className="min-h-full flex items-center justify-center p-3 sm:p-6 py-6 sm:py-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="relative w-full max-w-4xl max-h-[85vh] sm:max-h-[88vh] overflow-hidden rounded-2xl bg-[var(--bg-surface)] shadow-2xl flex flex-col z-10"
+          >
           {/* Header */}
-          <div className="p-6 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+          <div className="p-4 sm:p-5 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] flex-shrink-0">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-600">
@@ -577,7 +578,8 @@ const ShowBookingDetails = ({ showBookingDetail, setShowBookingDetail }) => {
               </button>
             </div>
           </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </AnimatePresence>
   );

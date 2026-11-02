@@ -26,7 +26,7 @@ const MyProfile = () => {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="min-h-screen bg-gradient-to-br from-white via-[#F9FAFB] to-[#F3F4F6] pt-2"
+      className="min-h-screen bg-gradient-to-br from-white via-[#F9FAFB] to-[#F3F4F6] pt-20 sm:pt-24 pb-12"
     >
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         {/* Mobile menu toggle (optional, Navbar handles top level, but if they need it here) */}
@@ -40,7 +40,7 @@ const MyProfile = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-8rem)] lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-10rem)]">
           
           <UserSidebar 
             mobileMenuOpen={mobileMenuOpen} 
@@ -48,7 +48,7 @@ const MyProfile = () => {
           />
 
           {/* Main Content */}
-          <main className="lg:col-span-9 space-y-6 lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar pb-16 lg:pb-0 px-4 lg:px-0">
+          <main className="lg:col-span-9 space-y-6 pb-16 lg:pb-0 px-4 lg:px-0">
             <div
               key={location.pathname}
               className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm overflow-hidden min-h-[500px]"

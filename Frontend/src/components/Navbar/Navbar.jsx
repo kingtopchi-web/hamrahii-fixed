@@ -93,7 +93,15 @@ const Navbar = () => {
       setLoadingNotifications(true);
       const res = await Axios.get(api.user.notifications);
       if (res?.data?.success) {
-        const list = res?.data?.data || [];
+        let list = res?.data?.data || [];
+        // Ensure user only sees notifications created at or after their registration
+        if (user?.createdAt) {
+          const userRegTime = new Date(user.createdAt).getTime();
+          list = list.filter((n) => {
+            if (!n.createdAt) return true;
+            return new Date(n.createdAt).getTime() >= userRegTime;
+          });
+        }
         setNotifications(list);
         setUnreadCount(res?.data?.unreadCount !== undefined ? res?.data?.unreadCount : list.filter((n) => !n.isRead).length);
       }

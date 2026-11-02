@@ -198,7 +198,7 @@ const ParcelDelivery = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-gradient-to-br from-white via-[#F9FAFB] to-[#F3F4F6] pt-2"
+      className="min-h-screen bg-gradient-to-br from-white via-[#F9FAFB] to-[#F3F4F6] pt-20 sm:pt-24 pb-12"
     >
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="lg:hidden flex justify-between items-center px-4 mb-4">
@@ -211,13 +211,13 @@ const ParcelDelivery = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-8rem)] lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-10rem)]">
           <UserSidebar
             mobileMenuOpen={mobileMenuOpen}
             setMobileMenuOpen={setMobileMenuOpen}
           />
 
-          <main className="lg:col-span-9 space-y-6 lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar pb-16 lg:px-0 px-4">
+          <main className="lg:col-span-9 space-y-6 pb-16 lg:px-0 px-4">
             <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm p-6 lg:p-8 min-h-[500px]">
               {/* Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-6 border-b border-[var(--border-subtle)]">
@@ -604,7 +604,7 @@ const ParcelDelivery = () => {
       {/* Insufficient Wallet Balance Modal */}
       <AnimatePresence>
         {insufficientModalOpen && insufficientData && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}

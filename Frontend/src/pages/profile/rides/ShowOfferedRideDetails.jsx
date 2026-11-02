@@ -351,30 +351,40 @@ const ShowOfferedRideDetails = () => {
     if (!ride?.passengers)
       return { total: 0, requested: 0, accepted: 0, rejected: 0 };
 
+    // Exclude cancelled passengers from stats
+    const activePassengers = ride.passengers.filter(
+      (p) => p.status !== "cancelled"
+    );
+
     return {
-      total: ride.passengers.length,
-      requested: ride.passengers.filter((p) => p.status === "requested").length,
-      accepted: ride.passengers.filter(
+      total: activePassengers.length,
+      requested: activePassengers.filter((p) => p.status === "requested").length,
+      accepted: activePassengers.filter(
         (p) => p.status === "accepted" || p.status === "confirmed",
       ).length,
-      rejected: ride.passengers.filter((p) => p.status === "rejected").length,
+      rejected: activePassengers.filter((p) => p.status === "rejected").length,
     };
   };
 
   const getFilteredPassengers = () => {
     if (!ride?.passengers) return [];
 
+    // Exclude cancelled passengers from list
+    const activePassengers = ride.passengers.filter(
+      (p) => p.status !== "cancelled"
+    );
+
     switch (activeTab) {
       case "pending":
-        return ride.passengers.filter((p) => p.status === "requested");
+        return activePassengers.filter((p) => p.status === "requested");
       case "confirmed":
-        return ride.passengers.filter(
+        return activePassengers.filter(
           (p) => p.status === "accepted" || p.status === "confirmed",
         );
       case "rejected":
-        return ride.passengers.filter((p) => p.status === "rejected");
+        return activePassengers.filter((p) => p.status === "rejected");
       default:
-        return ride.passengers;
+        return activePassengers;
     }
   };
 
@@ -698,6 +708,12 @@ const ShowOfferedRideDetails = () => {
         icon: XCircle,
         text: "Rejected",
         badgeColor: "bg-red-500",
+      },
+      cancelled: {
+        color: "bg-gray-100 text-gray-700",
+        icon: XCircle,
+        text: "Cancelled",
+        badgeColor: "bg-gray-500",
       },
     };
 
@@ -1207,18 +1223,16 @@ const ShowOfferedRideDetails = () => {
             </div>
 
             <div className="flex items-center gap-1 sm:gap-2">
-              {/* Cancel Ride Button (Only if no passenger has been accepted) */}
+              {/* Cancel Ride Button (Allowed up to 2 hours before departure) */}
               {ride.status !== "cancelled" && ride.status !== "completed" && (
-                !ride.passengers?.some((p) => p.status === "accepted" || p.status === "confirmed") ? (
-                  <button
-                    onClick={handleCancelRide}
-                    disabled={actionLoading.cancelRide}
-                    className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
-                  >
-                    {actionLoading.cancelRide ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <XCircle className="w-3.5 h-3.5" />}
-                    <span>Cancel Offer</span>
-                  </button>
-                ) : null
+                <button
+                  onClick={handleCancelRide}
+                  disabled={actionLoading.cancelRide}
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                >
+                  {actionLoading.cancelRide ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <XCircle className="w-3.5 h-3.5" />}
+                  <span>Cancel Offer</span>
+                </button>
               )}
 
               {ride.status === "cancelled" && (

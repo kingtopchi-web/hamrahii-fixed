@@ -1,3 +1,4 @@
+import notificationModel from "../models/notification.model.js";
 import Ride from "../models/ride.model.js";
 import userModel from "../models/user.model.js";
 import { Car } from "../models/car.model.js";
@@ -926,12 +927,12 @@ export const handleRequestRide = async (req, res, next) => {
       });
     }
 
-    // 🚫 Prevent duplicate request
-    const alreadyRequested = ride.passengers.some(
-      (p) => p.user.toString() === userId,
+    // 🚫 Check for existing request
+    const existingPassenger = ride.passengers.find(
+      (p) => (p.user?._id || p.user).toString() === userId.toString(),
     );
 
-    if (alreadyRequested) {
+    if (existingPassenger && existingPassenger.status !== "cancelled" && existingPassenger.status !== "rejected") {
       return res.status(409).json({
         success: false,
         message: "You have already requested this ride",
@@ -954,11 +955,18 @@ export const handleRequestRide = async (req, res, next) => {
       });
     }
 
-    // ✅ Push passenger
-    ride.passengers.push({
-      user: userId,
-      seatsBooked,
-    });
+    // ✅ Push or reactivate passenger
+    if (existingPassenger) {
+      existingPassenger.status = "requested";
+      existingPassenger.seatsBooked = seatsBooked;
+      existingPassenger.cancelledAt = null;
+      existingPassenger.cancellationReason = null;
+    } else {
+      ride.passengers.push({
+        user: userId,
+        seatsBooked,
+      });
+    }
 
     await ride.save();
 
@@ -1026,11 +1034,19 @@ export const handleGetOfferdRideDetails = async (req, res, next) => {
       });
     }
 
+    // Filter out cancelled passengers so rider never sees bookings cancelled by users
+    const rideObj = ride.toObject();
+    if (Array.isArray(rideObj.passengers)) {
+      rideObj.passengers = rideObj.passengers.filter(
+        (p) => p.status !== "cancelled"
+      );
+    }
+
     return res.status(200).json({
       message: "This is ride details",
       error: false,
       success: true,
-      ride,
+      ride: rideObj,
     });
   } catch (error) {
     next(error);
@@ -1905,7 +1921,7 @@ export const handleCancelBooking = async (req, res, next) => {
 
 // --------------------------------------------------------------------------
 // 2. CANCEL OFFERED RIDE (Driver cancels their offered ride)
-// Restriction: Cannot cancel if any user/passenger booking has already been accepted.
+// Restriction: Allowed up to 2 hours before departure time, even if passengers are accepted.
 // --------------------------------------------------------------------------
 export const handleCancelOfferedRide = async (req, res, next) => {
   try {
@@ -1952,28 +1968,35 @@ export const handleCancelOfferedRide = async (req, res, next) => {
       });
     }
 
-    // Check if any passenger is already accepted
-    const hasAcceptedPassenger =
-      Array.isArray(ride.passengers) &&
-      ride.passengers.some((p) => p.status === "accepted" || p.status === "confirmed");
+    // 2-Hour departure restriction: Rider can cancel up to 2 hours before departure time
+    const departureDateTime = resolveRideDepartureDateTime(ride);
+    if (departureDateTime) {
+      const diffMs = departureDateTime.getTime() - Date.now();
+      const twoHoursMs = 2 * 60 * 60 * 1000;
 
-    if (hasAcceptedPassenger) {
-      return res.status(400).json({
-        success: false,
-        error: true,
-        message: "Cannot cancel ride because one or more passengers have already been accepted.",
-      });
+      if (diffMs < twoHoursMs) {
+        return res.status(400).json({
+          success: false,
+          error: true,
+          message: "Cancellation is only allowed up to 2 hours before the departure time. Less than 2 hours remaining.",
+        });
+      }
     }
 
     // Update ride status
     ride.status = "cancelled";
 
-    // Mark any pending requests as rejected
+    // Collect passengers to notify and update their status to cancelled
+    const notifiedUsers = [];
     if (Array.isArray(ride.passengers)) {
       ride.passengers.forEach((p) => {
-        if (p.status === "requested") {
-          p.status = "rejected";
-          p.cancellationReason = "Ride offer cancelled by driver";
+        if (p.status !== "cancelled" && p.status !== "rejected") {
+          p.status = "cancelled";
+          p.cancelledAt = new Date();
+          p.cancellationReason = reason || "Ride offer cancelled by driver";
+          if (p.user) {
+            notifiedUsers.push(p.user);
+          }
         }
       });
     }
@@ -1999,10 +2022,44 @@ export const handleCancelOfferedRide = async (req, res, next) => {
 
     await ride.save();
 
+    // Send notifications to all affected passengers
+    for (const passengerUser of notifiedUsers) {
+      try {
+        const pUserId = passengerUser._id || passengerUser;
+        const fromCity = ride.from?.city || "Origin";
+        const toCity = ride.to?.city || "Destination";
+        const notifTitle = "Ride Cancelled by Driver";
+        const notifMsg = `Your booking for ride from ${fromCity} to ${toCity} has been cancelled by the driver. You can now search and book another ride.`;
+
+        // 1. In-App Notification (saved to notificationModel so user sees it in notifications bell / popup)
+        await notificationModel.create({
+          reciever: pUserId,
+          sender: effectiveUserId,
+          title: notifTitle,
+          message: notifMsg,
+          type: "ride_cancelled",
+          link: "/my-profile/bookings",
+        });
+
+        // 2. Push Notification via FCM
+        const tokens = passengerUser.mobileFcm || [];
+        if (Array.isArray(tokens) && tokens.length > 0) {
+          sendToMultiple({
+            tokens,
+            title: notifTitle,
+            body: notifMsg,
+            route: "/my-profile/bookings",
+          });
+        }
+      } catch (notifErr) {
+        console.error("Error sending passenger cancellation notification:", notifErr);
+      }
+    }
+
     return res.status(200).json({
       success: true,
       error: false,
-      message: "Ride offer cancelled successfully",
+      message: "Ride offer cancelled successfully and passengers have been notified",
       ride,
     });
   } catch (error) {

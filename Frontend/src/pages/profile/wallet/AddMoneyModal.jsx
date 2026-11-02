@@ -212,7 +212,7 @@ const AddMoneyModal = ({
   return (
     <AnimatePresence>
 
-      {isCencelled ? <PaymentCancelledModal amount={amount} closeModel={closeModel} /> : <div className="fixed inset-0 z-50 overflow-y-auto">
+      {isCencelled ? <PaymentCancelledModal amount={amount} closeModel={closeModel} /> : <div className="fixed inset-0 z-[9999] overflow-y-auto">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -379,7 +379,7 @@ export default AddMoneyModal;
 
 const PaymentCancelledModal = ({ amount, closeModel }) => {
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-[9999] p-4">
       <div className="w-full max-w-sm bg-[var(--bg-surface)] rounded-xl shadow-lg p-6 relative">
         {/* Close button */}
         <button

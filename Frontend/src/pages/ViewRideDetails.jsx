@@ -78,14 +78,18 @@ const ViewRideDetails = () => {
 
 
   useEffect(() => {
-    const passangers = rideDetails?.passengers
-    console.log(passangers, "these are passangers")
-    const userId = user?._id
-    const data = passangers?.find((passanger) => passanger?.user == userId)
-    if (data?.user) {
-      setIsBooked(true)
+    const passangers = rideDetails?.passengers;
+    const userId = user?._id;
+    const data = passangers?.find((passanger) => {
+      const pId = (passanger?.user?._id || passanger?.user)?.toString();
+      return pId === userId?.toString() && passanger?.status !== "cancelled" && passanger?.status !== "rejected";
+    });
+    if (data) {
+      setIsBooked(true);
+    } else {
+      setIsBooked(false);
     }
-  }, [user, rideDetails])
+  }, [user, rideDetails]);
 
 
   const handleGetRideDetails = async (rideId) => {
@@ -200,7 +204,7 @@ const ViewRideDetails = () => {
   const carImages = rideDetails.carDetails?.images || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-[#F7F7F7] to-white">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#F7F7F7] to-white pt-16 sm:pt-20">
       {/* Header Section */}
       <div className="bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] px-4 py-4 md:px-6">
         <div className="max-w-7xl mx-auto">
