@@ -77,14 +77,14 @@ const MyParcels = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-8rem)] lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-5.5rem)]">
 
           <UserSidebar
             mobileMenuOpen={mobileMenuOpen}
             setMobileMenuOpen={setMobileMenuOpen}
           />
 
-          <main className="lg:col-span-9 space-y-6 lg:h-[90vh] lg:overflow-y-scroll hide-scrollbar pb-16 lg:px-0 px-4">
+          <main className="lg:col-span-9 space-y-6 lg:h-full lg:overflow-y-auto hide-scrollbar pb-16 lg:pb-6 lg:px-0 px-4">
             {findingParcel ? (
               <FindingDriverScreen
                 parcel={findingParcel}

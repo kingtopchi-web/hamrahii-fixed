@@ -211,13 +211,13 @@ const ParcelDelivery = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[calc(100vh-10rem)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-5.5rem)]">
           <UserSidebar
             mobileMenuOpen={mobileMenuOpen}
             setMobileMenuOpen={setMobileMenuOpen}
           />
 
-          <main className="lg:col-span-9 space-y-6 pb-16 lg:px-0 px-4">
+          <main className="lg:col-span-9 space-y-6 lg:h-full lg:overflow-y-auto hide-scrollbar pb-16 lg:pb-6 lg:px-0 px-4">
             <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm p-6 lg:p-8 min-h-[500px]">
               {/* Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-6 border-b border-[var(--border-subtle)]">

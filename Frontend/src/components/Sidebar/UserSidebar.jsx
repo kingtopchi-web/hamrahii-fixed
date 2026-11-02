@@ -85,7 +85,7 @@ const UserSidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   };
 
   const DesktopSidebar = () => (
-    <motion.aside variants={itemVariants} className="lg:col-span-3 space-y-6 hidden lg:block hide-scrollbar">
+    <motion.aside variants={itemVariants} className="lg:col-span-3 space-y-6 hidden lg:block hide-scrollbar lg:h-full lg:overflow-y-auto pb-6">
       {/* User Profile Card - Only on Personal Details */}
       {isPersonalDetails && (
         <motion.div variants={fadeIn} className="bg-gradient-to-br from-white to-[#F9FAFB] rounded-2xl p-6 border border-[var(--border-subtle)]/50 shadow-sm">
@@ -152,7 +152,7 @@ const UserSidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
       )}
 
       {/* Navigation */}
-      <motion.nav variants={fadeIn} className="bg-[var(--bg-surface)] rounded-2xl p-4 border border-[var(--border-subtle)]/50 shadow-sm sticky top-24">
+      <motion.nav variants={fadeIn} className="bg-[var(--bg-surface)] rounded-2xl p-4 border border-[var(--border-subtle)]/50 shadow-sm">
         <div className="space-y-4">
           {categories.map((category, idx) => (
             <div key={idx}>
