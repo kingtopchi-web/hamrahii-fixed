@@ -501,6 +501,66 @@ const getTodayDateIST = () => {
   }
 };
 
+// Safely extract { lat, lng } from a coordinate pair or object (handles both [lat, lng] and [lng, lat] GeoJSON formats)
+const extractSafeLatLng = (coords) => {
+  if (!coords) return null;
+  if (typeof coords === "object" && !Array.isArray(coords)) {
+    const lat = Number(coords.lat ?? coords.latitude);
+    const lng = Number(coords.lng ?? coords.longitude ?? coords.lon);
+    if (!isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0)) {
+      return { lat, lng };
+    }
+    return null;
+  }
+  if (!Array.isArray(coords) || coords.length < 2) return null;
+  const c0 = Number(coords[0]);
+  const c1 = Number(coords[1]);
+  if (isNaN(c0) || isNaN(c1)) return null;
+  if (c0 === 0 && c1 === 0) return null;
+
+  // In India: Latitude is ~6° to 38° N, Longitude is ~68° to 98° E.
+  // If c0 > 50 and c1 < 50, then c0 is Longitude and c1 is Latitude ([lng, lat])
+  if (c0 > 50 && c1 < 50) {
+    return { lat: c1, lng: c0 };
+  }
+  // If c0 < 50 and c1 > 50, then c0 is Latitude and c1 is Longitude ([lat, lng])
+  if (c0 < 50 && c1 > 50) {
+    return { lat: c0, lng: c1 };
+  }
+  return { lat: c0, lng: c1 };
+};
+
+// Build robust location search condition that matches city or full formatted address
+const buildLocationSearchConditions = (fieldPrefix, locationStr) => {
+  if (!locationStr || typeof locationStr !== "string") return null;
+  const raw = locationStr.trim();
+  if (!raw) return null;
+
+  // Primary part before first comma (e.g. "Lucknow" from "Lucknow, Uttar Pradesh, India")
+  const primaryPart = raw.split(",")[0].trim().replace(/[^\w\s]/gi, "");
+  const cleanTokens = raw
+    .replace(/[^\w\s]/gi, " ")
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length >= 2 && !["india", "pradesh", "state", "division"].includes(t));
+
+  const orConditions = [];
+  if (primaryPart.length >= 2) {
+    const primaryRegex = new RegExp(primaryPart, "i");
+    orConditions.push(
+      { [`${fieldPrefix}.city`]: primaryRegex },
+      { [`${fieldPrefix}.address`]: primaryRegex }
+    );
+  }
+
+  for (const token of cleanTokens) {
+    const tokenRegex = new RegExp(`\\b${token}`, "i");
+    orConditions.push({ [`${fieldPrefix}.city`]: tokenRegex });
+  }
+
+  return orConditions.length > 0 ? { $or: orConditions } : null;
+};
+
 // Check if a ride has already departed based on departureDate & departureTime
 const isRideDeparted = (departureDate, departureTime) => {
   if (!departureDate) return false;
@@ -619,21 +679,17 @@ export const handleFindRides = async (req, res, next) => {
 
     // Destination filter if provided
     if (toLocation && toLocation.trim()) {
-      const toRegex = buildFuzzyRegex(toLocation);
-      if (toRegex) {
-        filterConditions.push({
-          $or: [{ "to.city": toRegex }, { "to.address": toRegex }],
-        });
+      const toCond = buildLocationSearchConditions("to", toLocation);
+      if (toCond) {
+        filterConditions.push(toCond);
       }
     }
 
-    // Origin filter if text provided and no coordinates
-    if (!hasUserCoords && fromLocation && fromLocation.trim()) {
-      const fromRegex = buildFuzzyRegex(fromLocation);
-      if (fromRegex) {
-        filterConditions.push({
-          $or: [{ "from.city": fromRegex }, { "from.address": fromRegex }],
-        });
+    // Origin filter if text provided
+    if (fromLocation && fromLocation.trim()) {
+      const fromCond = buildLocationSearchConditions("from", fromLocation);
+      if (fromCond) {
+        filterConditions.push(fromCond);
       }
     }
 
@@ -650,21 +706,21 @@ export const handleFindRides = async (req, res, next) => {
     const maxRadius = maxDistanceKm ? Number(maxDistanceKm) : 50;
 
     if (hasUserCoords) {
-      const uLat = Number(userLat);
-      const uLng = Number(userLng);
+      let uLat = Number(userLat);
+      let uLng = Number(userLng);
+      // Normalize user coords if inverted ([lng, lat])
+      if (uLat > 50 && uLng < 50) {
+        const tmp = uLat;
+        uLat = uLng;
+        uLng = tmp;
+      }
 
       rides = rides
         .map((ride) => {
           let distanceKm = null;
-          if (
-            Array.isArray(ride.from?.coordinates) &&
-            ride.from.coordinates.length >= 2 &&
-            !isNaN(Number(ride.from.coordinates[0])) &&
-            !isNaN(Number(ride.from.coordinates[1]))
-          ) {
-            const rideLat = Number(ride.from.coordinates[0]);
-            const rideLng = Number(ride.from.coordinates[1]);
-            const dist = calculateHaversineDistanceKm(uLat, uLng, rideLat, rideLng);
+          const rideCoords = extractSafeLatLng(ride.from?.coordinates);
+          if (rideCoords) {
+            const dist = calculateHaversineDistanceKm(uLat, uLng, rideCoords.lat, rideCoords.lng);
             distanceKm = Math.round(dist * 10) / 10;
           }
           return {
@@ -673,10 +729,10 @@ export const handleFindRides = async (req, res, next) => {
           };
         })
         .filter((ride) => {
-          if (ride.distanceKm !== null) {
-            return ride.distanceKm <= maxRadius;
+          if (ride.distanceKm !== null && ride.distanceKm <= maxRadius) {
+            return true;
           }
-          // If ride doesn't have coordinates, but origin text matched, keep it
+          // If user explicitly provided fromLocation text, keep it even if distance from current GPS is larger
           if (fromLocation && fromLocation.trim()) {
             return true;
           }
@@ -1826,7 +1882,8 @@ export const handleCancelBooking = async (req, res, next) => {
 
     const ride = await rideModel
       .findById(rideId)
-      .populate("driver", "firstName lastName email phone mobileFcm fcm");
+      .populate("driver", "firstName lastName email phone mobileFcm fcm")
+      .populate("passengers.user", "firstName lastName email phone mobileFcm fcm");
 
     if (!ride) {
       return res.status(404).json({
@@ -1844,8 +1901,20 @@ export const handleCancelBooking = async (req, res, next) => {
       });
     }
 
-    // Identify passenger entry
-    const targetUserId = passengerId || effectiveUserId;
+    const isDriver =
+      ride.driver?._id?.toString() === effectiveUserId.toString() ||
+      ride.driver?.toString() === effectiveUserId.toString();
+
+    // Identify target passenger entry
+    const targetUserId = passengerId || req.body.passangerId || (!isDriver ? effectiveUserId : null);
+    if (!targetUserId) {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "Passenger ID is required to cancel a booking",
+      });
+    }
+
     if (!Array.isArray(ride.passengers) || ride.passengers.length === 0) {
       return res.status(404).json({
         success: false,
@@ -1888,30 +1957,85 @@ export const handleCancelBooking = async (req, res, next) => {
     const previousStatus = passenger.status;
     passenger.status = "cancelled";
     passenger.cancelledAt = new Date();
-    passenger.cancellationReason = reason || "Cancelled by passenger";
+    passenger.cancellationReason = reason || (isDriver ? "Cancelled by rider" : "Cancelled by passenger");
 
-    // Free up seats if passenger was already accepted
-    if (previousStatus === "accepted") {
+    // Free up seats if passenger was already accepted or confirmed
+    if (previousStatus === "accepted" || previousStatus === "confirmed") {
       const seatsToFree = Number(passenger.seatsBooked) || 1;
       ride.availableSeats = Math.min(ride.totalSeats, (ride.availableSeats || 0) + seatsToFree);
     }
 
     await ride.save();
 
-    // Notify driver
-    if (ride.driver?.mobileFcm) {
-      sendToMultiple({
-        tokens: ride.driver.mobileFcm,
-        title: "Passenger Cancelled Booking",
-        body: `A passenger has cancelled their booking for your ride from ${ride.from?.city} to ${ride.to?.city}.`,
-        route: "/"
-      });
+    // Notify appropriate party
+    if (isDriver) {
+      // Driver cancelled passenger's booking -> Notify passenger
+      const passengerUser = passenger.user;
+      const passUserId = passengerUser?._id || passengerUser;
+
+      if (passUserId) {
+        try {
+          await notificationModel.create({
+            userId: passUserId,
+            title: "Booking Cancelled by Rider",
+            message: `The rider has cancelled your booking for ride from ${ride.from?.city || "origin"} to ${ride.to?.city || "destination"}. You can now book another ride.`,
+            type: "ride",
+            link: "/my-profile/bookings",
+            read: false,
+          });
+        } catch (e) {
+          console.error("Failed to create in-app notification for passenger:", e);
+        }
+      }
+
+      if (passengerUser?.mobileFcm && passengerUser.mobileFcm.length > 0) {
+        sendToMultiple({
+          tokens: passengerUser.mobileFcm,
+          title: "Booking Cancelled by Rider",
+          body: `Your booking for ride from ${ride.from?.city || "origin"} to ${ride.to?.city || "destination"} was cancelled by the rider.`,
+          route: "/my-profile/bookings",
+        });
+      }
+
+      if (passengerUser?.fcm && passengerUser.fcm.length > 0) {
+        sendToMany({
+          tokens: passengerUser.fcm,
+          title: "Booking Cancelled by Rider",
+          body: `Your booking for ride from ${ride.from?.city || "origin"} to ${ride.to?.city || "destination"} was cancelled by the rider.`,
+          link: `${process.env.FRONTEND_URL || "https://humrahii.com"}/my-profile/bookings`,
+        });
+      }
+    } else {
+      // Passenger cancelled -> Notify driver
+      if (ride.driver?._id) {
+        try {
+          await notificationModel.create({
+            userId: ride.driver._id,
+            title: "Passenger Cancelled Booking",
+            message: `A passenger has cancelled their booking for your ride from ${ride.from?.city || "origin"} to ${ride.to?.city || "destination"}.`,
+            type: "ride",
+            link: `/my-profile/offered-rides`,
+            read: false,
+          });
+        } catch (e) {
+          console.error("Failed to create in-app notification for driver:", e);
+        }
+      }
+
+      if (ride.driver?.mobileFcm && ride.driver.mobileFcm.length > 0) {
+        sendToMultiple({
+          tokens: ride.driver.mobileFcm,
+          title: "Passenger Cancelled Booking",
+          body: `A passenger has cancelled their booking for your ride from ${ride.from?.city} to ${ride.to?.city}.`,
+          route: "/",
+        });
+      }
     }
 
     return res.status(200).json({
       success: true,
       error: false,
-      message: "Booking cancelled successfully",
+      message: isDriver ? "Passenger booking cancelled successfully" : "Booking cancelled successfully",
       ride,
     });
   } catch (error) {

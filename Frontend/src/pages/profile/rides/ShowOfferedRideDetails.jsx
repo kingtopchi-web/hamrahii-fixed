@@ -203,6 +203,81 @@ const ShowOfferedRideDetails = () => {
     }
   };
 
+  // Check if cancellation is allowed (allowed up to 2 hours before departure time)
+  const isCancellationAllowed = () => {
+    if (!ride) return false;
+    let departureDateTime = null;
+
+    if (ride.departureTime && typeof ride.departureTime === "string" && ride.departureTime.includes("T")) {
+      const d = new Date(ride.departureTime);
+      if (!isNaN(d.getTime())) departureDateTime = d;
+    }
+
+    if (!departureDateTime && ride.departureDate && ride.departureTime) {
+      const combinedIso = new Date(`${ride.departureDate}T${ride.departureTime}`);
+      if (!isNaN(combinedIso.getTime())) {
+        departureDateTime = combinedIso;
+      } else {
+        const combinedStr = new Date(`${ride.departureDate} ${ride.departureTime}`);
+        if (!isNaN(combinedStr.getTime())) departureDateTime = combinedStr;
+      }
+    }
+
+    if (!departureDateTime && ride.departureDate) {
+      const d = new Date(ride.departureDate);
+      if (!isNaN(d.getTime())) departureDateTime = d;
+    }
+
+    if (!departureDateTime) return true;
+
+    const diffMs = departureDateTime.getTime() - Date.now();
+    const twoHoursMs = 2 * 60 * 60 * 1000;
+    return diffMs >= twoHoursMs;
+  };
+
+  // Rider cancels an accepted/confirmed passenger booking
+  const handleCancelPassengerBooking = async (passenger) => {
+    if (!isCancellationAllowed()) {
+      toast.error("Cancellation is only allowed up to 2 hours before the departure time.");
+      return;
+    }
+
+    const passengerName = `${passenger.user?.firstName || "this passenger"} ${passenger.user?.lastName || ""}`.trim();
+    if (!window.confirm(`Are you sure you want to cancel the booking for ${passengerName}? The user will be notified and their booked seats will be freed.`)) {
+      return;
+    }
+
+    const passengerId = passenger.user?._id || passenger._id;
+    setActionLoading((prev) => ({ ...prev, [passenger._id]: true }));
+
+    try {
+      const res = await Axios.post(api.ride.cancelBooking, {
+        rideId: ride._id,
+        passengerId: passengerId,
+        passangerId: passengerId,
+        reason: "Cancelled by rider",
+      });
+
+      if (res.data.success) {
+        toast.success(`Booking for ${passengerName} cancelled successfully`);
+        const seatsFreed = Number(passenger.seatsBooked) || 1;
+        setRide((prev) => ({
+          ...prev,
+          availableSeats: Math.min(prev.totalSeats, (prev.availableSeats || 0) + seatsFreed),
+          passengers: prev.passengers.map((p) =>
+            p._id === passenger._id || (p.user && p.user._id === passengerId)
+              ? { ...p, status: "cancelled" }
+              : p
+          ),
+        }));
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to cancel passenger booking");
+    } finally {
+      setActionLoading((prev) => ({ ...prev, [passenger._id]: false }));
+    }
+  };
+
   const handleUpdateParcelStatus = async (parcelId, status, otp) => {
     setParcelActionLoading((prev) => ({ ...prev, [parcelId]: true }));
     try {
@@ -850,6 +925,38 @@ const ShowOfferedRideDetails = () => {
                           </>
                         )}
                       </button>
+                    </div>
+                  )}
+                  {(passenger.status === "accepted" || passenger.status === "confirmed") && (
+                    <div className="pt-1">
+                      <button
+                        onClick={() => handleCancelPassengerBooking(passenger)}
+                        disabled={actionLoading[passenger._id] || !isCancellationAllowed()}
+                        className="w-full bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white py-2 sm:py-2.5 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm cursor-pointer shadow-sm"
+                        title={
+                          !isCancellationAllowed()
+                            ? "Cancellation is only allowed up to 2 hours before departure"
+                            : "Cancel this booking"
+                        }
+                      >
+                        {actionLoading[passenger._id] ? (
+                          <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
+                        ) : (
+                          <>
+                            <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            <span>
+                              {isCancellationAllowed()
+                                ? "Cancel Booking"
+                                : "Cancellation Closed (<2h to departure)"}
+                            </span>
+                          </>
+                        )}
+                      </button>
+                      {!isCancellationAllowed() && (
+                        <p className="text-[11px] text-gray-500 text-center mt-1">
+                          Cancellation is only allowed up to 2 hours before departure.
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
